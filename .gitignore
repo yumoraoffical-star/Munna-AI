@@ -1,3 +1,9 @@
+# Environment files (CRITICAL: Never commit secrets to Git)
+.env
+.env.local
+.env.*.local
+*.env
+
 # OS Generated files
 Thumbs.db
 ehthumbs.db
