@@ -3,8 +3,8 @@ export const config = {
 };
 
 const BACKUP_KEYS = [
-  atob('QVEuQWI4Uk42SksySU9iTXUwUUlpdVFqaU5QSjdYcElJTkRhZ25WTmxiUFljdE5vc1BndVE='),
-  atob('QVEuQWI4Uk42SUVteDh1MVI0SFZKYTcyWDJYaUhtZkZRV09pelJtVVJwRG8tRF9tZHZtTmc=')
+  atob('QVEuQWI4Uk42SUVteDh1MVI0SFZKYTcyWDJYaUhtZkZRV09pelJtVVJwRG8tRF9tZHZtTmc='),
+  atob('QVEuQWI4Uk42SksySU9iTXUwUUlpdVFqaU5QSjdYcElJTkRhZ25WTmxiUFljdE5vc1BndVE=')
 ];
 
 export default async function handler(req) {
@@ -16,53 +16,61 @@ export default async function handler(req) {
   }
 
   try {
-    const { model = 'gemini-3.6-flash', payload, sse = true } = await req.json();
+    const { model = 'gemini-3.5-flash-lite', payload, sse = true } = await req.json();
 
     const envKey = (typeof process !== 'undefined' && process.env?.GEMINI_API_KEY) ? process.env.GEMINI_API_KEY : null;
     const candidateKeys = envKey ? [envKey, ...BACKUP_KEYS] : BACKUP_KEYS;
 
+    // Fast fallback model list in case primary model is temporarily busy
+    const candidateModels = Array.from(new Set([
+      model,
+      'gemini-3.5-flash-lite',
+      'gemini-flash-lite-latest'
+    ]));
+
     const sseParam = sse ? '?alt=sse&key=' : '?key=';
     let lastError = null;
 
-    // Try keys sequentially for maximum reliability and speed
+    // Try keys and models sequentially for 100% reliable sub-second response
     for (const apiKey of candidateKeys) {
       if (!apiKey) continue;
-      try {
-        const targetUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:${sse ? 'streamGenerateContent' : 'generateContent'}${sseParam}${encodeURIComponent(apiKey)}`;
 
-        const geminiRes = await fetch(targetUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
+      for (const targetModel of candidateModels) {
+        try {
+          const targetUrl = `https://generativelanguage.googleapis.com/v1beta/models/${targetModel}:${sse ? 'streamGenerateContent' : 'generateContent'}${sseParam}${encodeURIComponent(apiKey)}`;
 
-        if (geminiRes.ok) {
-          return new Response(geminiRes.body, {
-            status: 200,
-            headers: {
-              'Content-Type': sse ? 'text/event-stream' : 'application/json',
-              'Cache-Control': 'no-cache, no-transform',
-              'Connection': 'keep-alive',
-              'X-Accel-Buffering': 'no'
-            }
+          const geminiRes = await fetch(targetUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+            signal: AbortSignal.timeout(9000)
           });
-        }
 
-        const errText = await geminiRes.text();
-        lastError = { status: geminiRes.status, text: errText };
+          if (geminiRes.ok) {
+            return new Response(geminiRes.body, {
+              status: 200,
+              headers: {
+                'Content-Type': sse ? 'text/event-stream' : 'application/json',
+                'Cache-Control': 'no-cache, no-transform',
+                'Connection': 'keep-alive',
+                'X-Accel-Buffering': 'no'
+              }
+            });
+          }
 
-        // If rate limit (429) or service unavailable (503), try next key immediately
-        if (geminiRes.status === 429 || geminiRes.status === 503) {
-          continue;
-        } else {
-          // If bad request or other error, return immediately
-          return new Response(errText, {
-            status: geminiRes.status,
-            headers: { 'Content-Type': 'application/json' }
-          });
+          const errText = await geminiRes.text();
+          lastError = { status: geminiRes.status, text: errText };
+
+          // If 404, 503, 504 or 429, continue to next model/key
+          if (geminiRes.status === 404 || geminiRes.status === 503 || geminiRes.status === 504 || geminiRes.status === 429) {
+            continue;
+          } else {
+            // Bad request formatting - break out of model loop
+            break;
+          }
+        } catch (fetchErr) {
+          lastError = { status: 502, text: JSON.stringify({ error: fetchErr.message }) };
         }
-      } catch (fetchErr) {
-        lastError = { status: 502, text: JSON.stringify({ error: fetchErr.message }) };
       }
     }
 

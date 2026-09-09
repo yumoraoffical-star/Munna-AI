@@ -4343,7 +4343,7 @@
     }
 
     // --- 3. GEMINI AI CONFIGURATION (Secured via /api/chat) ---
-    const activeModel = "gemini-3.6-flash";
+    const activeModel = "gemini-3.5-flash-lite";
     const initialGreeting = "Haan bolo be, ka kaam hai? Kuch poochna hai ya koi photo/file bhejni hai? Humare paas har cheez ka pakka prabandh hai!";
 
     function getSystemPrompt() {
@@ -5727,7 +5727,14 @@ CORE CAPABILITIES:
         if (res.status === 429) {
           showMunnaToast("⚠️ Google Gemini ka daily free quota poora ho gaya hai! Kripya thoda intezaar karein.");
         }
-        throw new Error(`HTTP ${res.status}`);
+        console.warn("Chat API status:", res.status);
+        fullIncomingText = getOfflineMunnaReply(userMessage, attachment);
+        streamEnded = true;
+        await animFinishedPromise;
+        session.history.push({ role: "model", parts: [{ text: fullIncomingText }] });
+        session.messages.push({ sender: "munna", text: fullIncomingText });
+        saveSessions();
+        return fullIncomingText;
       }
 
       const reader = res.body.getReader();
@@ -5851,15 +5858,22 @@ CORE CAPABILITIES:
 
       isSending = true;
       showTyping();
+      let bubbleElem = null;
       try {
         hideTyping();
-        const { bubble } = createMessageElement("munna");
-        bubble.innerHTML = `<span class="streaming-cursor"></span>`;
-        await streamMunnaReply(lastUser.text, bubble, lastUser.attachment || null);
+        const msgObj = createMessageElement("munna");
+        bubbleElem = msgObj.bubble;
+        bubbleElem.innerHTML = `<span class="streaming-cursor"></span>`;
+        await streamMunnaReply(lastUser.text, bubbleElem, lastUser.attachment || null);
       } catch (e) {
+        console.warn("Regenerate failed:", e);
         hideTyping();
         const fallback = getOfflineMunnaReply(lastUser.text, lastUser.attachment || null);
-        bubble.innerHTML = formatMunnaMarkdown(fallback, false);
+        if (bubbleElem) {
+          bubbleElem.innerHTML = formatMunnaMarkdown(fallback, false);
+        } else {
+          renderMessage(fallback, "munna");
+        }
         session.messages.push({ sender: "munna", text: fallback });
         saveSessions();
       } finally {
@@ -5960,16 +5974,22 @@ CORE CAPABILITIES:
         sendBtn.innerHTML = '<span class="send-icon">⏳</span>';
       }
 
+      let bubbleElem = null;
       try {
         hideTyping();
-        const { bubble } = createMessageElement("munna");
-        bubble.innerHTML = `<span class="streaming-cursor"></span>`;
-        await streamMunnaReply(text, bubble, currentAttachment);
+        const msgObj = createMessageElement("munna");
+        bubbleElem = msgObj.bubble;
+        bubbleElem.innerHTML = `<span class="streaming-cursor"></span>`;
+        await streamMunnaReply(text, bubbleElem, currentAttachment);
       } catch (err) {
         console.warn("AI streaming failed, using fallback:", err);
         hideTyping();
         const fallback = getOfflineMunnaReply(text, currentAttachment);
-        bubble.innerHTML = formatMunnaMarkdown(fallback, false);
+        if (bubbleElem) {
+          bubbleElem.innerHTML = formatMunnaMarkdown(fallback, false);
+        } else {
+          renderMessage(fallback, "munna");
+        }
         session.messages.push({ sender: "munna", text: fallback });
         saveSessions();
       } finally {
