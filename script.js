@@ -38,7 +38,7 @@
       voiceSpeed: parseFloat(safeGet("munna_setting_voice_speed", "1")),
       language: safeGet("munna_setting_language", "hinglish"),
       theme: safeGet("munna_theme", "light_obsidian"),
-      autoSpeak: safeGet("munna_setting_auto_speak", "true") === "true"
+      autoSpeak: safeGet("munna_setting_auto_speak", "false") === "true"
     };
 
     // --- SUPABASE CLOUD INITIALIZATION ---
@@ -277,7 +277,7 @@ CORE CAPABILITIES:
       const voiceSpeedSel = document.getElementById("voiceSpeedSelect");
       if (voiceSpeedSel) voiceSpeedSel.value = String(userData.voiceSpeed);
       const autoSpeakToggle = document.getElementById("autoSpeakToggle");
-      if (autoSpeakToggle) autoSpeakToggle.checked = userData.autoSpeak !== false;
+      if (autoSpeakToggle) autoSpeakToggle.checked = Boolean(userData.autoSpeak);
       const langSel = document.getElementById("languageSelect");
       if (langSel) langSel.value = userData.language;
       const themeSel = document.getElementById("themeSelect");
@@ -1553,8 +1553,8 @@ CORE CAPABILITIES:
       session.messages.push({ sender: "munna", text: accumulatedText });
       saveSessions();
 
-      // Automatically speak in realistic voice if autoSpeak is enabled
-      if (userData && userData.autoSpeak) {
+      // Automatically speak only if explicitly enabled by user
+      if (userData && userData.autoSpeak === true) {
         setTimeout(() => {
           const parentMsg = bubbleElement.closest(".msg.munna");
           const voiceBtn = parentMsg ? parentMsg.querySelector(".btn-voice-ai") : null;
@@ -2573,6 +2573,13 @@ CORE CAPABILITIES:
           showMunnaToast("🎙️ Munna Bhaiya bol rahe hain...");
           speakText("Arey bhai, hum hain Munna AI! King of AI Models! Poori duniya me jalwa hai hamara! Har masle ka pakka prabandh karte hain!", testVoiceBtn);
         };
+      }
+
+      // Ensure auto-speak is disabled by default for all users
+      if (localStorage.getItem("munna_auto_speak_migrated") !== "done") {
+        userData.autoSpeak = false;
+        safeSet("munna_setting_auto_speak", "false");
+        localStorage.setItem("munna_auto_speak_migrated", "done");
       }
 
       syncUserUI();
