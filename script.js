@@ -1534,16 +1534,24 @@ CORE CAPABILITIES:
             if (jsonStr && jsonStr !== "[DONE]") {
               try {
                 const data = JSON.parse(jsonStr);
-                const part = data.candidates?.[0]?.content?.parts?.[0]?.text;
-                if (part) {
-                  accumulatedText += part;
-                  bubbleElement.innerHTML = formatMunnaMarkdown(accumulatedText, true);
-                  if (chatMessages) chatMessages.scrollTop = chatMessages.scrollHeight;
+                const candidate = data.candidates?.[0];
+                if (candidate?.content?.parts) {
+                  for (const p of candidate.content.parts) {
+                    if (p.text) {
+                      accumulatedText += p.text;
+                      bubbleElement.innerHTML = formatMunnaMarkdown(accumulatedText, true);
+                      if (chatMessages) chatMessages.scrollTop = chatMessages.scrollHeight;
+                    }
+                  }
                 }
               } catch (e) {}
             }
           }
         }
+      }
+
+      if (!accumulatedText.trim()) {
+        accumulatedText = getOfflineMunnaReply(userMessage, attachment);
       }
 
       bubbleElement.innerHTML = formatMunnaMarkdown(accumulatedText, false);
@@ -1599,7 +1607,7 @@ CORE CAPABILITIES:
       } catch (e) {
         hideTyping();
         const fallback = getOfflineMunnaReply(lastUser.text, lastUser.attachment || null);
-        renderMessage(fallback, "munna");
+        bubble.innerHTML = formatMunnaMarkdown(fallback, false);
         session.messages.push({ sender: "munna", text: fallback });
         saveSessions();
       } finally {
@@ -1709,7 +1717,7 @@ CORE CAPABILITIES:
         console.warn("AI streaming failed, using fallback:", err);
         hideTyping();
         const fallback = getOfflineMunnaReply(text, currentAttachment);
-        renderMessage(fallback, "munna");
+        bubble.innerHTML = formatMunnaMarkdown(fallback, false);
         session.messages.push({ sender: "munna", text: fallback });
         saveSessions();
       } finally {
