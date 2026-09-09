@@ -4245,6 +4245,11 @@
     let supabaseClient = null;
     let currentUser = null;
 
+    // --- 2. ERROR NOTICE HELPER (No fake dialogues, transparent errors) ---
+    function getAIErrorMessage(err) {
+      return "⚠️ **Connection Error:** Gemini AI se connect nahi ho paya (" + (err?.message || "Network issue") + "). Kripya apna message dobara bhejein!";
+    }
+
     try {
       if (window.supabase && typeof window.supabase.createClient === "function") {
         supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -4252,96 +4257,6 @@
     } catch (e) {
       console.warn("Supabase init exception:", e);
     }
-
-    // --- 2. OFFLINE DIALOGUES FALLBACK ENGINE ---
-    const MUNNA_DIALOGUES = {
-      greetings: [
-        "Aao be! Ka haal chaal? Munna Bhaiya ke darbar mein swagat hai tumhara.",
-        "Haan bolo! Kaun ho tum aur kyu dimaag kharab karne chale aaye? Jaldi bolo, humare paas faltu time nahi hai.",
-        "Bolo be... Mirzapur ke hone wale raja se baat karne ki himmat kaise hui tumhari? Waise achha laga tumhara confidence!"
-      ],
-      topics: [
-        {
-          keywords: ["hi", "hello", "namaste", "pranam", "hey", "sup", "kaise ho", "kya haal"],
-          responses: [
-            "Pranam-wranam theek hai, seedha kaam ki baat karo. Mirzapur ke raja ke paas faltu baatein sunne ka time nahi hai!",
-            "Haal chaal ekdum jordaar hai! Poore shehar mein jalwa hai hamara. Tum apna batao, sab theek thaak ya koi pareshan kar raha hai?",
-            "Aao aao! Darr lag raha hai kya humse? Daro... darr hona bhi chahiye!"
-          ]
-        },
-        {
-          keywords: ["prabandh", "help", "madad", "problem", "pareshani", "musibat", "tension"],
-          responses: [
-            "Tum bilkul chinta mat karo... Hum karte hain prabandh! Batao kiski gaddi ulatni hai?",
-            "Abe jab tak Munna Bhaiya zinda hain, kisi baat ka tension lene ki zaroorat nahi hai. Hum khade hain na peeche!",
-            "Dekho baat aisi hai... kaam tumhara ho jayega, par hume kya milega? Khair chodo, hum karte hain prabandh!"
-          ]
-        },
-        {
-          keywords: ["gaddi", "raja", "mirzapur", "king", "kursi", "bauji", "kaleen"],
-          responses: [
-            "Ek baat kaan khol ke sun lo... Gaddi pe chahe hum baithein ya Bauji, niyam same rahega!",
-            "Mirzapur ke agle raja hum hi hain! Kisi ko koi shaq hai kya? Guddu-Bablu ko bol dena, zyada ucchlein na!",
-            "Bauji bolte hain 'dimaag se chalo', par humara maanna hai - darr aisa hona chahiye ki dimaag kaam hi na kare!"
-          ]
-        },
-        {
-          keywords: ["jalwa", "swag", "attitude", "power", "bhaiya"],
-          responses: [
-            "Jalwa hai hamara yahan! Poori duniya thar-thar kaanpti hai Munna AI ke naam se.",
-            "Attitude hum paidaishi leke ghoomte hain. Kisi ke baap ka udhaar nahi khaye hain!",
-            "Hum jo ek baar bol dete hain na, uske baad toh hum apne Bauji ki bhi nahi sunte!"
-          ]
-        },
-        {
-          keywords: ["image", "photo", "pic", "picture", "file", "pdf", "screenshot", "dekho", "batao"],
-          responses: [
-            "Arey photo dekhe hum tumhari! Bilkul chinta mat karo! Hum khade hain na peeche! Hum karte hain iska poora prabandh!",
-            "Ye jo file bheje ho na, iska poora hisaab hamare dimaag mein ghus gaya hai! Poori problem hal karke denge, barfi khilao yaar sabko!",
-            "Jalwa hai hamara! Photo mein saaf dikh raha hai kya mamla hai. Chinta mat karo, raja ke raaj mein sabka hisaab hota hai!"
-          ]
-        }
-      ],
-      defaultResponses: [
-        "Dekho baat aisi hai, jo tum pooch rahe ho uspar hum dhyan de rahe hain. Jalwa hai hamara yahan! Poori problem solve karke denge!",
-        "Chinta mat karo partner, hum khade hain na peeche! Hum karte hain iska poora prabandh! Barfi khilao yaar sabko!",
-        "Gaddi pe chahe hum baithein ya Bauji, niyam same rahega! Tumhara kaam 100% solve hoga, nishchint raho!"
-      ]
-    };
-
-    function getOfflineMunnaReply(userText = "", attachment = null) {
-      if (attachment) {
-        if (attachment.isImage) {
-          return `Arey photo dekhe hum tumhari! Bilkul chinta mat karo! Hum khade hain na peeche! Gaddi pe chahe hum baithein ya Bauji, niyam same rahega! Humne tumhari photo ka poora hisaab dekh liya hai — iska pakka prabandh hum karenge! Jalwa hai hamara!`;
-        } else {
-          return `Arey file dekhe hum tumhari — "${escapeHTML(attachment.name)}"! Poora data hamare dimaag mein ghus gaya hai! Tension mat lo, hum karte hain iska poora prabandh! Barfi khilao yaar sabko!`;
-        }
-      }
-      const lower = userText.toLowerCase();
-
-      // If user writes in English or has English setting
-      const isEnglish = (userData && userData.language === "english") ||
-        /\b(hello|hi|hey|how|what|why|can|please|help|teach|write|code|bug|explain|project|learn)\b/i.test(lower);
-
-      if (isEnglish) {
-        const englishResponses = [
-          "Don't you worry about a thing, partner! Munna AI — King of AI Models has got your back. Consider your problem 100% handled!",
-          "Listen up, partner! When you're dealing with Munna AI, failure is not an option. Here to solve any code, logic, or strategy you throw at me!",
-          "Relax and take a seat. King of AI Models is analyzing your question right now — we run the show here!"
-        ];
-        return englishResponses[Math.floor(Math.random() * englishResponses.length)];
-      }
-
-      for (const topic of MUNNA_DIALOGUES.topics) {
-        for (const kw of topic.keywords) {
-          if (lower.includes(kw)) {
-            return topic.responses[Math.floor(Math.random() * topic.responses.length)];
-          }
-        }
-      }
-      return MUNNA_DIALOGUES.defaultResponses[Math.floor(Math.random() * MUNNA_DIALOGUES.defaultResponses.length)];
-    }
-
     // --- 3. GEMINI AI CONFIGURATION (Secured via /api/chat) ---
     const activeModel = "gemini-3.5-flash-lite";
     const initialGreeting = "Haan bolo be, ka kaam hai? Kuch poochna hai ya koi photo/file bhejni hai? Humare paas har cheez ka pakka prabandh hai!";
@@ -5714,32 +5629,6 @@ CORE CAPABILITIES:
       };
 
       let fullIncomingText = "";
-      let displayedLength = 0;
-      let streamEnded = false;
-      let animResolve;
-      const animFinishedPromise = new Promise(r => { animResolve = r; });
-
-      const typewriterTick = () => {
-        if (displayedLength < fullIncomingText.length) {
-          const backlog = fullIncomingText.length - displayedLength;
-          const step = backlog > 60 ? 6 : (backlog > 25 ? 3 : (backlog > 8 ? 2 : 1));
-          displayedLength = Math.min(displayedLength + step, fullIncomingText.length);
-
-          const currentSlice = fullIncomingText.slice(0, displayedLength);
-          bubbleElement.innerHTML = formatMunnaMarkdown(currentSlice, true);
-          if (chatMessages) chatMessages.scrollTop = chatMessages.scrollHeight;
-
-          setTimeout(typewriterTick, 18);
-        } else if (!streamEnded) {
-          setTimeout(typewriterTick, 25);
-        } else {
-          bubbleElement.innerHTML = formatMunnaMarkdown(fullIncomingText, false);
-          if (chatMessages) chatMessages.scrollTop = chatMessages.scrollHeight;
-          if (animResolve) animResolve();
-        }
-      };
-
-      typewriterTick();
 
       try {
         const res = await fetch("/api/chat", {
@@ -5748,58 +5637,54 @@ CORE CAPABILITIES:
           body: JSON.stringify({
             model: activeModel,
             payload: payload,
-            sse: true
+            sse: false
           })
         });
 
         if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          const errMsg = errData.error || `HTTP ${res.status}`;
           if (res.status === 429) {
             showMunnaToast("⚠️ Google Gemini ka daily free quota poora ho gaya hai! Kripya thoda intezaar karein.");
           }
-          throw new Error(`HTTP ${res.status}`);
+          throw new Error(errMsg);
         }
 
-        const reader = res.body.getReader();
-        const decoder = new TextDecoder("utf-8");
-        let buffer = "";
-
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-
-          buffer += decoder.decode(value, { stream: true });
-          const lines = buffer.split("\n");
-          buffer = lines.pop();
-
-          for (const line of lines) {
-            const trimmed = line.trim();
-            if (trimmed.startsWith("data:")) {
-              const jsonStr = trimmed.replace(/^data:\s*/, "").trim();
-              if (jsonStr && jsonStr !== "[DONE]") {
-                try {
-                  const data = JSON.parse(jsonStr);
-                  const candidate = data.candidates?.[0];
-                  if (candidate?.content?.parts) {
-                    for (const p of candidate.content.parts) {
-                      if (p.text) {
-                        fullIncomingText += p.text;
-                      }
-                    }
-                  }
-                } catch (e) {}
-              }
-            }
-          }
-        }
-      } catch (streamErr) {
-        console.warn("Stream reading interrupted or failed:", streamErr);
+        const data = await res.json();
+        fullIncomingText = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
+      } catch (err) {
+        console.error("AI Generation error:", err);
+        fullIncomingText = "⚠️ **Gemini AI Connection Error:** " + (err.message || "Network error") + ". Kripya dobara try karein!";
       }
 
       if (!fullIncomingText.trim()) {
-        fullIncomingText = getOfflineMunnaReply(userMessage, attachment);
+        fullIncomingText = "⚠️ **No Content:** Gemini AI se response prapt nahi hua. Kripya apna message dobara bhejein.";
       }
 
-      streamEnded = true;
+      // Smooth fluid typewriter animation for the real Google Gemini AI response
+      let displayedLength = 0;
+      let animResolve;
+      const animFinishedPromise = new Promise(r => { animResolve = r; });
+
+      const typewriterTick = () => {
+        if (displayedLength < fullIncomingText.length) {
+          const backlog = fullIncomingText.length - displayedLength;
+          const step = backlog > 80 ? 6 : (backlog > 30 ? 3 : (backlog > 10 ? 2 : 1));
+          displayedLength = Math.min(displayedLength + step, fullIncomingText.length);
+
+          const currentSlice = fullIncomingText.slice(0, displayedLength);
+          bubbleElement.innerHTML = formatMunnaMarkdown(currentSlice, true);
+          if (chatMessages) chatMessages.scrollTop = chatMessages.scrollHeight;
+
+          setTimeout(typewriterTick, 16);
+        } else {
+          bubbleElement.innerHTML = formatMunnaMarkdown(fullIncomingText, false);
+          if (chatMessages) chatMessages.scrollTop = chatMessages.scrollHeight;
+          if (animResolve) animResolve();
+        }
+      };
+
+      typewriterTick();
       await animFinishedPromise;
 
       session.history.push({ role: "model", parts: [{ text: fullIncomingText }] });
@@ -5857,7 +5742,7 @@ CORE CAPABILITIES:
         if (bubbleElem && bubbleElem.textContent.trim().length > 10) {
           // Response already received from AI, do not overwrite
         } else {
-          const fallback = getOfflineMunnaReply(lastUser.text, lastUser.attachment || null);
+          const fallback = getAIErrorMessage(e);
           if (bubbleElem) {
             bubbleElem.innerHTML = formatMunnaMarkdown(fallback, false);
           } else {
@@ -5977,7 +5862,7 @@ CORE CAPABILITIES:
         if (bubbleElem && bubbleElem.textContent.trim().length > 10) {
           // Response already received from AI, do not overwrite
         } else {
-          const fallback = getOfflineMunnaReply(text, currentAttachment);
+          const fallback = getAIErrorMessage(err);
           if (bubbleElem) {
             bubbleElem.innerHTML = formatMunnaMarkdown(fallback, false);
           } else {
