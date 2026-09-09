@@ -1613,11 +1613,11 @@ CORE CAPABILITIES:
         setTimeout(() => {
           const parentMsg = bubbleElement.closest(".msg.munna");
           const voiceBtn = parentMsg ? parentMsg.querySelector(".btn-voice-ai") : null;
-          speakText(accumulatedText, voiceBtn);
+          speakText(fullIncomingText, voiceBtn);
         }, 150);
       }
 
-      return accumulatedText;
+      return fullIncomingText;
     }
 
     async function handleRegenerate(targetMsgDiv) {
@@ -1656,14 +1656,18 @@ CORE CAPABILITIES:
       } catch (e) {
         console.warn("Regenerate failed:", e);
         hideTyping();
-        const fallback = getOfflineMunnaReply(lastUser.text, lastUser.attachment || null);
-        if (bubbleElem) {
-          bubbleElem.innerHTML = formatMunnaMarkdown(fallback, false);
+        if (bubbleElem && bubbleElem.textContent.trim().length > 10) {
+          // Response already received from AI, do not overwrite
         } else {
-          renderMessage(fallback, "munna");
+          const fallback = getOfflineMunnaReply(lastUser.text, lastUser.attachment || null);
+          if (bubbleElem) {
+            bubbleElem.innerHTML = formatMunnaMarkdown(fallback, false);
+          } else {
+            renderMessage(fallback, "munna");
+          }
+          session.messages.push({ sender: "munna", text: fallback });
+          saveSessions();
         }
-        session.messages.push({ sender: "munna", text: fallback });
-        saveSessions();
       } finally {
         isSending = false;
       }
@@ -1772,14 +1776,18 @@ CORE CAPABILITIES:
       } catch (err) {
         console.warn("AI streaming failed, using fallback:", err);
         hideTyping();
-        const fallback = getOfflineMunnaReply(text, currentAttachment);
-        if (bubbleElem) {
-          bubbleElem.innerHTML = formatMunnaMarkdown(fallback, false);
+        if (bubbleElem && bubbleElem.textContent.trim().length > 10) {
+          // Response already received from AI, do not overwrite
         } else {
-          renderMessage(fallback, "munna");
+          const fallback = getOfflineMunnaReply(text, currentAttachment);
+          if (bubbleElem) {
+            bubbleElem.innerHTML = formatMunnaMarkdown(fallback, false);
+          } else {
+            renderMessage(fallback, "munna");
+          }
+          session.messages.push({ sender: "munna", text: fallback });
+          saveSessions();
         }
-        session.messages.push({ sender: "munna", text: fallback });
-        saveSessions();
       } finally {
         isSending = false;
         if (sendBtn) {
