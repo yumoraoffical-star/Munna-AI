@@ -9,11 +9,26 @@ const BACKUP_KEYS = [
   atob('QVEuQWI4Uk42SksySU9iTXUwUUlpdVFqaU5QSjdYcElJTkRhZ25WTmxiUFljdE5vc1BndVE=')
 ];
 
+const CORS_HEADERS = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+  'Access-Control-Max-Age': '86400'
+};
+
 export default async function handler(req) {
+  // Handle CORS preflight OPTIONS request
+  if (req.method === 'OPTIONS') {
+    return new Response(null, {
+      status: 204,
+      headers: CORS_HEADERS
+    });
+  }
+
   if (req.method !== 'POST') {
     return new Response(JSON.stringify({ error: 'Method not allowed' }), {
       status: 405,
-      headers: { 'Content-Type': 'application/json' }
+      headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' }
     });
   }
 
@@ -52,6 +67,7 @@ export default async function handler(req) {
             return new Response(geminiRes.body, {
               status: 200,
               headers: {
+                ...CORS_HEADERS,
                 'Content-Type': sse ? 'text/event-stream' : 'application/json',
                 'Cache-Control': 'no-cache, no-transform',
                 'Connection': 'keep-alive',
@@ -67,7 +83,6 @@ export default async function handler(req) {
           if (geminiRes.status === 404 || geminiRes.status === 503 || geminiRes.status === 504 || geminiRes.status === 429) {
             continue;
           } else {
-            // Bad request formatting - break out of model loop
             break;
           }
         } catch (fetchErr) {
@@ -78,12 +93,12 @@ export default async function handler(req) {
 
     return new Response(lastError?.text || JSON.stringify({ error: 'All AI model keys unavailable' }), {
       status: lastError?.status || 502,
-      headers: { 'Content-Type': 'application/json' }
+      headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' }
     });
   } catch (err) {
     return new Response(JSON.stringify({ error: err.message || 'Internal server error' }), {
       status: 500,
-      headers: { 'Content-Type': 'application/json' }
+      headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' }
     });
   }
 }

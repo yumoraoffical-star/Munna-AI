@@ -5713,46 +5713,14 @@ CORE CAPABILITIES:
         }
       };
 
-      const res = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          model: activeModel,
-          payload: payload,
-          sse: true
-        })
-      });
-
-      if (!res.ok) {
-        if (res.status === 429) {
-          showMunnaToast("⚠️ Google Gemini ka daily free quota poora ho gaya hai! Kripya thoda intezaar karein.");
-        }
-        console.warn("Chat API status:", res.status);
-        fullIncomingText = getOfflineMunnaReply(userMessage, attachment);
-        streamEnded = true;
-        await animFinishedPromise;
-        session.history.push({ role: "model", parts: [{ text: fullIncomingText }] });
-        session.messages.push({ sender: "munna", text: fullIncomingText });
-        saveSessions();
-        return fullIncomingText;
-      }
-
-      const reader = res.body.getReader();
-      const decoder = new TextDecoder("utf-8");
       let fullIncomingText = "";
       let displayedLength = 0;
-      let buffer = "";
       let streamEnded = false;
-
-      // High-speed smooth typewriter animation ticker
       let animResolve;
       const animFinishedPromise = new Promise(r => { animResolve = r; });
 
       const typewriterTick = () => {
         if (displayedLength < fullIncomingText.length) {
-          // Dynamic adaptive typing speed:
-          // If network buffered several words, type them faster (up to 6 chars/frame)
-          // If close, type 1-2 chars for silky smooth typewriter cadence
           const backlog = fullIncomingText.length - displayedLength;
           const step = backlog > 60 ? 6 : (backlog > 25 ? 3 : (backlog > 8 ? 2 : 1));
           displayedLength = Math.min(displayedLength + step, fullIncomingText.length);
@@ -5763,20 +5731,38 @@ CORE CAPABILITIES:
 
           setTimeout(typewriterTick, 18);
         } else if (!streamEnded) {
-          // Still receiving chunks from the network stream
           setTimeout(typewriterTick, 25);
         } else {
-          // Streaming and typewriter animation complete!
           bubbleElement.innerHTML = formatMunnaMarkdown(fullIncomingText, false);
           if (chatMessages) chatMessages.scrollTop = chatMessages.scrollHeight;
           if (animResolve) animResolve();
         }
       };
 
-      // Kick off typewriter animation loop
       typewriterTick();
 
       try {
+        const res = await fetch("/api/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            model: activeModel,
+            payload: payload,
+            sse: true
+          })
+        });
+
+        if (!res.ok) {
+          if (res.status === 429) {
+            showMunnaToast("⚠️ Google Gemini ka daily free quota poora ho gaya hai! Kripya thoda intezaar karein.");
+          }
+          throw new Error(`HTTP ${res.status}`);
+        }
+
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder("utf-8");
+        let buffer = "";
+
         while (true) {
           const { done, value } = await reader.read();
           if (done) break;
@@ -5806,7 +5792,7 @@ CORE CAPABILITIES:
           }
         }
       } catch (streamErr) {
-        console.warn("Stream reading interrupted:", streamErr);
+        console.warn("Stream reading interrupted or failed:", streamErr);
       }
 
       if (!fullIncomingText.trim()) {
