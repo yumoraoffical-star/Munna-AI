@@ -826,28 +826,48 @@
       font-weight: 500;
     }
 
-    @keyframes blinkCursor {
+    @keyframes blinkMunnaCursor {
       0%, 100% {
         opacity: 1;
-        box-shadow: 0 0 10px rgba(212, 175, 55, 0.9), 0 0 3px #ffd700;
         transform: scaleY(1);
+        box-shadow: 0 0 14px rgba(255, 215, 0, 0.95), 0 0 5px #ffd700;
       }
       50% {
         opacity: 0.15;
+        transform: scaleY(0.75);
         box-shadow: none;
-        transform: scaleY(0.85);
       }
     }
 
     .streaming-cursor {
       display: inline-block;
-      width: 7px;
-      height: 16px;
-      background: var(--gold-primary);
+      width: 8px;
+      height: 1.15em;
+      background: linear-gradient(180deg, #ffe066, #c49216);
       margin-left: 4px;
       border-radius: 2px;
-      vertical-align: middle;
-      animation: blinkCursor 0.75s ease-in-out infinite;
+      vertical-align: -2px;
+      box-shadow: 0 0 12px rgba(255, 215, 0, 0.9), 0 0 4px rgba(196, 146, 22, 0.9);
+      animation: blinkMunnaCursor 0.65s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    }
+
+    .msg.munna .msg-bubble {
+      transition: all 0.2s ease-out;
+    }
+
+    .msg.munna .md-p, .msg.munna .md-li {
+      animation: fadeInStreamText 0.22s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    @keyframes fadeInStreamText {
+      from {
+        opacity: 0.82;
+        transform: translateY(1px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
         /* ==========================================================================

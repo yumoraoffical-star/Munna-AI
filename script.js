@@ -1491,10 +1491,28 @@ CORE CAPABILITIES:
 
       session.history.push({ role: "user", parts: userParts });
 
+      // Lightweight history payload for instant response (prevents slow multi-turn latency)
+      const recentHistory = (session.history || []).slice(-10).map((turn, index, arr) => {
+        if (index === arr.length - 1) return turn;
+        if (turn.parts) {
+          return {
+            role: turn.role,
+            parts: turn.parts.map(p => {
+              if (p.inline_data) return { text: "[Attached File/Photo]" };
+              return p;
+            })
+          };
+        }
+        return turn;
+      });
+
       const payload = {
         system_instruction: { parts: [{ text: getSystemPrompt() }] },
-        contents: session.history,
-        generationConfig: { temperature: 0.85, maxOutputTokens: 2500 }
+        contents: recentHistory,
+        generationConfig: {
+          temperature: 0.75,
+          maxOutputTokens: 1200
+        }
       };
 
       const res = await fetch("/api/chat", {
@@ -1516,49 +1534,85 @@ CORE CAPABILITIES:
 
       const reader = res.body.getReader();
       const decoder = new TextDecoder("utf-8");
-      let accumulatedText = "";
+      let fullIncomingText = "";
+      let displayedLength = 0;
       let buffer = "";
+      let streamEnded = false;
 
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
+      // High-speed smooth typewriter animation ticker
+      let animResolve;
+      const animFinishedPromise = new Promise(r => { animResolve = r; });
 
-        buffer += decoder.decode(value, { stream: true });
-        const lines = buffer.split("\n");
-        buffer = lines.pop();
+      const typewriterTick = () => {
+        if (displayedLength < fullIncomingText.length) {
+          // Dynamic adaptive typing speed:
+          // If network buffered several words, type them faster (up to 6 chars/frame)
+          // If close, type 1-2 chars for silky smooth typewriter cadence
+          const backlog = fullIncomingText.length - displayedLength;
+          const step = backlog > 60 ? 6 : (backlog > 25 ? 3 : (backlog > 8 ? 2 : 1));
+          displayedLength = Math.min(displayedLength + step, fullIncomingText.length);
 
-        for (const line of lines) {
-          const trimmed = line.trim();
-          if (trimmed.startsWith("data:")) {
-            const jsonStr = trimmed.replace(/^data:\s*/, "").trim();
-            if (jsonStr && jsonStr !== "[DONE]") {
-              try {
-                const data = JSON.parse(jsonStr);
-                const candidate = data.candidates?.[0];
-                if (candidate?.content?.parts) {
-                  for (const p of candidate.content.parts) {
-                    if (p.text) {
-                      accumulatedText += p.text;
-                      bubbleElement.innerHTML = formatMunnaMarkdown(accumulatedText, true);
-                      if (chatMessages) chatMessages.scrollTop = chatMessages.scrollHeight;
+          const currentSlice = fullIncomingText.slice(0, displayedLength);
+          bubbleElement.innerHTML = formatMunnaMarkdown(currentSlice, true);
+          if (chatMessages) chatMessages.scrollTop = chatMessages.scrollHeight;
+
+          setTimeout(typewriterTick, 18);
+        } else if (!streamEnded) {
+          // Still receiving chunks from the network stream
+          setTimeout(typewriterTick, 25);
+        } else {
+          // Streaming and typewriter animation complete!
+          bubbleElement.innerHTML = formatMunnaMarkdown(fullIncomingText, false);
+          if (chatMessages) chatMessages.scrollTop = chatMessages.scrollHeight;
+          if (animResolve) animResolve();
+        }
+      };
+
+      // Kick off typewriter animation loop
+      typewriterTick();
+
+      try {
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          buffer += decoder.decode(value, { stream: true });
+          const lines = buffer.split("\n");
+          buffer = lines.pop();
+
+          for (const line of lines) {
+            const trimmed = line.trim();
+            if (trimmed.startsWith("data:")) {
+              const jsonStr = trimmed.replace(/^data:\s*/, "").trim();
+              if (jsonStr && jsonStr !== "[DONE]") {
+                try {
+                  const data = JSON.parse(jsonStr);
+                  const candidate = data.candidates?.[0];
+                  if (candidate?.content?.parts) {
+                    for (const p of candidate.content.parts) {
+                      if (p.text) {
+                        fullIncomingText += p.text;
+                      }
                     }
                   }
-                }
-              } catch (e) {}
+                } catch (e) {}
+              }
             }
           }
         }
+      } catch (streamErr) {
+        console.warn("Stream reading interrupted:", streamErr);
       }
 
-      if (!accumulatedText.trim()) {
-        accumulatedText = getOfflineMunnaReply(userMessage, attachment);
+      if (!fullIncomingText.trim()) {
+        fullIncomingText = getOfflineMunnaReply(userMessage, attachment);
       }
 
-      bubbleElement.innerHTML = formatMunnaMarkdown(accumulatedText, false);
-      if (chatMessages) chatMessages.scrollTop = chatMessages.scrollHeight;
+      streamEnded = true;
+      await animFinishedPromise;
 
-      session.history.push({ role: "model", parts: [{ text: accumulatedText }] });
-      session.messages.push({ sender: "munna", text: accumulatedText });
+      session.history.push({ role: "model", parts: [{ text: fullIncomingText }] });
+      session.messages.push({ sender: "munna", text: fullIncomingText });
       saveSessions();
 
       // Automatically speak only if explicitly enabled by user
