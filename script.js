@@ -232,6 +232,424 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       if (m) m.classList.remove("show");
     }
 
+    // --- KATTA VISION AUDIO SYNTHESIZER (Web Audio API) ---
+    let audioCtx = null;
+    function getAudioContext() {
+      if (!audioCtx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (AudioContext) audioCtx = new AudioContext();
+      }
+      if (audioCtx && audioCtx.state === "suspended") {
+        audioCtx.resume();
+      }
+      return audioCtx;
+    }
+
+    function playKattaAudio(type) {
+      if (!userData || !userData.soundEffects) return;
+      const ctx = getAudioContext();
+      if (!ctx) return;
+
+      try {
+        const now = ctx.currentTime;
+        if (type === "lock") {
+          [0, 0.08].forEach((delay, idx) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = "sine";
+            osc.frequency.setValueAtTime(idx === 0 ? 880 : 1320, now + delay);
+            gain.gain.setValueAtTime(0.2, now + delay);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + delay + 0.06);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(now + delay);
+            osc.stop(now + delay + 0.06);
+          });
+        } else if (type === "laser") {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = "sawtooth";
+          osc.frequency.setValueAtTime(400, now);
+          osc.frequency.exponentialRampToValueAtTime(1600, now + 0.25);
+          gain.gain.setValueAtTime(0.12, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.25);
+        } else if (type === "fire") {
+          const bufferSize = ctx.sampleRate * 0.35;
+          const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+          const data = buffer.getChannelData(0);
+          for (let i = 0; i < bufferSize; i++) {
+            data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (ctx.sampleRate * 0.08));
+          }
+          const noise = ctx.createBufferSource();
+          noise.buffer = buffer;
+          const filter = ctx.createBiquadFilter();
+          filter.type = "lowpass";
+          filter.frequency.setValueAtTime(1000, now);
+          filter.frequency.linearRampToValueAtTime(80, now + 0.3);
+
+          const gain = ctx.createGain();
+          gain.gain.setValueAtTime(0.4, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
+
+          noise.connect(filter);
+          filter.connect(gain);
+          gain.connect(ctx.destination);
+          noise.start(now);
+        }
+      } catch (e) {
+        console.warn("Audio synthesis error:", e);
+      }
+    }
+
+    // --- KATTA VISION AI SCANNER ENGINE ---
+    let kattaStream = null;
+    let kattaCapturedDataUrl = null;
+    let kattaSelectedPreset = "selfie";
+
+    const KATTA_VISION_PROMPTS = {
+      selfie: "🎯 [KATTA VISION: SELFIE DRIP & SWAG SCAN]\nMunna Bhaiya, is photo/selfie ka poora Mirzapur Gangster Assessment aur Brutal Roast Report taiyaar karo!\n1. TARGET DIAGNOSIS: Is bande ka look, expression, hairstyle aur attitude kaisa hai.\n2. PURVANCHAL GANGSTER RATING: X/10 Katta Points (funny reason ke saath).\n3. THE BRUTAL ROAST: Munna Bhaiya ka raw, funny aur bina kisi raham ka roast!\n4. MUNNA KA FAISLA / ADVICE: Isko Bahubali banne ke liye kya karna chahiye.",
+      diet: "🎯 [KATTA VISION: DIET & NUTRITION CHECK]\nMunna Bhaiya, is khane/peene ki photo ka Gangster Nutrition Check aur Roast Report karo!\n1. TARGET DIAGNOSIS: Thaali me kya kya bawasir ya lazeez cheez dikh rahi hai.\n2. PURVANCHAL GANGSTER RATING: X/10 Katta Points.\n3. THE BRUTAL ROAST: Ye khana Mirzapur ke bahubali ke layak hai ya churan hai?\n4. MUNNA KA FAISLA: Asli purvanchal diet ki salah.",
+      room: "🎯 [KATTA VISION: CRIME SCENE & ROOM SCAN]\nMunna Bhaiya, is kamre / room ki halat ka Crime Scene Investigation aur Roast Report karo!\n1. TARGET DIAGNOSIS: Kamra kitna bikhra hua hai.\n2. PURVANCHAL GANGSTER RATING: X/10 Katta Points.\n3. THE BRUTAL ROAST: Ye kamra hai ya Lalit ka adda?\n4. MUNNA KA FAISLA: Safai aur dabdaba banaye rakhne ki advice.",
+      vehicle: "🎯 [KATTA VISION: GAADI / BIKE SWAG SCAN]\nMunna Bhaiya, is gaadi / bike / ride ka Gangster Swag aur Asla Rating check karo!\n1. TARGET DIAGNOSIS: Ride kaisi hai.\n2. PURVANCHAL GANGSTER RATING: X/10 Katta Points.\n3. THE BRUTAL ROAST: Mirzapur ki sadko par ye gaadi chalegi ya police utha le jayegi?\n4. MUNNA KA FAISLA: Swag badhane ka nuskha.",
+      setup: "🎯 [KATTA VISION: DESK & CODE SETUP SCAN]\nMunna Bhaiya, is coding desk / setup / laptop ka Brutal Gangster Review karo!\n1. TARGET DIAGNOSIS: Screen, cables, laptop aur vibe ka inspection.\n2. PURVANCHAL GANGSTER RATING: X/10 Katta Points.\n3. THE BRUTAL ROAST: Ye launda coder banega ya computer operator?\n4. MUNNA KA FAISLA: Asli pro coder banne ki advice.",
+      general: "🎯 [KATTA VISION: FULL BAWAL SCAN]\nMunna Bhaiya, is photo ka poora Mirzapur Gangster Assessment aur Roast Report bina kisi raham ke taiyaar karo!\n1. TARGET DIAGNOSIS\n2. PURVANCHAL GANGSTER RATING (X/10 Katta Points)\n3. THE BRUTAL ROAST\n4. MUNNA KA FAISLA"
+    };
+
+    function openKattaVisionModal() {
+      const modal = document.getElementById("kattaVisionModal");
+      if (!modal) return;
+      modal.classList.add("show");
+      resetKattaVisionUI();
+    }
+
+    function closeKattaVisionModal() {
+      const modal = document.getElementById("kattaVisionModal");
+      if (modal) modal.classList.remove("show");
+      stopKattaCamera();
+    }
+
+    function resetKattaVisionUI() {
+      stopKattaCamera();
+      kattaCapturedDataUrl = null;
+      const img = document.getElementById("kattaImagePreview");
+      const video = document.getElementById("kattaVideo");
+      const emptyState = document.getElementById("kattaEmptyState");
+      const hudOverlay = document.getElementById("kattaHudOverlay");
+      const scanBtn = document.getElementById("kattaScanExecuteBtn");
+      const camBtn = document.getElementById("kattaCameraToggleBtn");
+
+      if (img) { img.src = ""; img.style.display = "none"; }
+      if (video) { video.style.display = "none"; }
+      if (emptyState) emptyState.style.display = "flex";
+      if (hudOverlay) hudOverlay.style.display = "none";
+      if (scanBtn) scanBtn.disabled = true;
+      if (camBtn) camBtn.innerHTML = "<span>📷 Camera</span>";
+    }
+
+    function stopKattaCamera() {
+      if (kattaStream) {
+        try {
+          kattaStream.getTracks().forEach(t => t.stop());
+        } catch (e) {}
+        kattaStream = null;
+      }
+    }
+
+    async function toggleKattaCamera() {
+      const video = document.getElementById("kattaVideo");
+      const img = document.getElementById("kattaImagePreview");
+      const emptyState = document.getElementById("kattaEmptyState");
+      const hudOverlay = document.getElementById("kattaHudOverlay");
+      const scanBtn = document.getElementById("kattaScanExecuteBtn");
+      const camBtn = document.getElementById("kattaCameraToggleBtn");
+
+      if (kattaStream) {
+        captureFromVideo();
+      } else {
+        try {
+          if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+            showMunnaToast("⚠️ Camera support uplabdh nahi hai. Gallery se photo upload karein.");
+            return;
+          }
+          kattaStream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: "environment", width: { ideal: 1280 }, height: { ideal: 720 } }
+          });
+          if (video) {
+            video.srcObject = kattaStream;
+            video.style.display = "block";
+            await video.play().catch(() => {});
+          }
+          if (img) img.style.display = "none";
+          if (emptyState) emptyState.style.display = "none";
+          if (hudOverlay) hudOverlay.style.display = "block";
+          if (camBtn) camBtn.innerHTML = "<span>📸 Photo Kheecho</span>";
+          playKattaAudio("laser");
+        } catch (err) {
+          console.error("Camera access error:", err);
+          showMunnaToast("⚠️ Camera permission nahi mili. Gallery se upload karein!");
+        }
+      }
+    }
+
+    function captureFromVideo() {
+      const video = document.getElementById("kattaVideo");
+      const img = document.getElementById("kattaImagePreview");
+      const camBtn = document.getElementById("kattaCameraToggleBtn");
+      const scanBtn = document.getElementById("kattaScanExecuteBtn");
+      if (!video) return;
+
+      const canvas = document.createElement("canvas");
+      canvas.width = video.videoWidth || 640;
+      canvas.height = video.videoHeight || 480;
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+      kattaCapturedDataUrl = canvas.toDataURL("image/jpeg", 0.88);
+      stopKattaCamera();
+
+      if (video) video.style.display = "none";
+      if (img) {
+        img.src = kattaCapturedDataUrl;
+        img.style.display = "block";
+      }
+      if (camBtn) camBtn.innerHTML = "<span>📷 Retake Camera</span>";
+      if (scanBtn) {
+        scanBtn.disabled = false;
+        scanBtn.classList.add("pulse");
+      }
+      playKattaAudio("lock");
+      showMunnaToast("🎯 Target Locked! Ab 'Nishana Lagao' dabayein!");
+    }
+
+    function handleKattaFileUpload(file) {
+      if (!file || !file.type.startsWith("image/")) {
+        showMunnaToast("⚠️ Kripya valid photo file chunein!");
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        stopKattaCamera();
+        kattaCapturedDataUrl = e.target.result;
+        const img = document.getElementById("kattaImagePreview");
+        const video = document.getElementById("kattaVideo");
+        const emptyState = document.getElementById("kattaEmptyState");
+        const hudOverlay = document.getElementById("kattaHudOverlay");
+        const scanBtn = document.getElementById("kattaScanExecuteBtn");
+        const camBtn = document.getElementById("kattaCameraToggleBtn");
+
+        if (video) video.style.display = "none";
+        if (emptyState) emptyState.style.display = "none";
+        if (img) {
+          img.src = kattaCapturedDataUrl;
+          img.style.display = "block";
+        }
+        if (hudOverlay) hudOverlay.style.display = "block";
+        if (camBtn) camBtn.innerHTML = "<span>📷 Camera</span>";
+        if (scanBtn) {
+          scanBtn.disabled = false;
+          scanBtn.classList.add("pulse");
+        }
+        playKattaAudio("lock");
+        showMunnaToast("🎯 Target Locked! 'Nishana Lagao' dabayein!");
+      };
+      reader.readAsDataURL(file);
+    }
+
+    async function executeKattaScan() {
+      if (!kattaCapturedDataUrl) {
+        showMunnaToast("⚠️ Pehle koi photo kheecho ya upload karo!");
+        return;
+      }
+
+      playKattaAudio("fire");
+      const base64Data = kattaCapturedDataUrl.includes(",") ? kattaCapturedDataUrl.split(",")[1] : kattaCapturedDataUrl;
+
+      pendingAttachment = {
+        name: `KattaVision_${kattaSelectedPreset}.jpg`,
+        formattedSize: "HD Target",
+        isImage: true,
+        isPdf: false,
+        dataUrl: kattaCapturedDataUrl,
+        base64Data: base64Data,
+        mimeType: "image/jpeg",
+        isKattaVision: true,
+        kattaPreset: kattaSelectedPreset
+      };
+
+      const promptText = KATTA_VISION_PROMPTS[kattaSelectedPreset] || KATTA_VISION_PROMPTS.general;
+
+      closeKattaVisionModal();
+
+      const textarea = document.getElementById("userInput");
+      if (textarea) textarea.value = promptText;
+
+      if (window.handleSend) {
+        window.handleSend();
+      }
+    }
+
+    async function downloadGangsterReportCard(btn) {
+      try {
+        btn.disabled = true;
+        btn.textContent = "⏳ Generating Report Card...";
+
+        const bubble = btn.closest(".message-bubble") || btn.parentElement;
+        const msgContainer = btn.closest(".chat-message");
+        let imgSrc = null;
+
+        if (msgContainer) {
+          const prevMsg = msgContainer.previousElementSibling;
+          if (prevMsg) {
+            const img = prevMsg.querySelector("img.attachment-image-preview");
+            if (img) imgSrc = img.src;
+          }
+        }
+        if (!imgSrc && pendingAttachment && pendingAttachment.dataUrl) {
+          imgSrc = pendingAttachment.dataUrl;
+        }
+
+        const text = bubble.innerText || "";
+        let scoreMatch = text.match(/(\d+(\.\d+)?)\s*\/\s*10/);
+        let scoreText = scoreMatch ? `${scoreMatch[1]} / 10 KATTA POINTS` : "8.5 / 10 KATTA POINTS";
+
+        let roastLine = "Jalwa hai hamara! Mirzapur ke bahubali ka pakka prabandh.";
+        const roastMatch = text.match(/ROAST:?[\s\S]*?(?=(MUNNA KA FAISLA|$))/i);
+        if (roastMatch && roastMatch[0]) {
+          const lines = roastMatch[0].replace(/ROAST:?/i, "").trim().split("\n").filter(l => l.trim());
+          if (lines.length > 0) roastLine = lines[0].replace(/^[-*•]\s*/, "");
+        }
+        if (roastLine.length > 90) roastLine = roastLine.substring(0, 90) + "...";
+
+        const canvas = document.createElement("canvas");
+        canvas.width = 1080;
+        canvas.height = 1350;
+        const ctx = canvas.getContext("2d");
+
+        const bgGrad = ctx.createRadialGradient(540, 675, 100, 540, 675, 800);
+        bgGrad.addColorStop(0, "#1c141d");
+        bgGrad.addColorStop(0.6, "#0d0a10");
+        bgGrad.addColorStop(1, "#050306");
+        ctx.fillStyle = bgGrad;
+        ctx.fillRect(0, 0, 1080, 1350);
+
+        ctx.strokeStyle = "#c49216";
+        ctx.lineWidth = 8;
+        ctx.strokeRect(30, 30, 1020, 1290);
+
+        ctx.strokeStyle = "rgba(217, 4, 41, 0.6)";
+        ctx.lineWidth = 2;
+        ctx.strokeRect(42, 42, 996, 1266);
+
+        ctx.fillStyle = "#ff2a51";
+        const corners = [[30, 30], [1050, 30], [30, 1320], [1050, 1320]];
+        corners.forEach(([cx, cy]) => {
+          ctx.beginPath();
+          ctx.arc(cx, cy, 14, 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+        ctx.textAlign = "center";
+        ctx.fillStyle = "#ff2a51";
+        ctx.font = "bold 26px sans-serif";
+        ctx.fillText("● KATTA VISION AI // OFFICIAL INSPECTION ●", 540, 95);
+
+        ctx.fillStyle = "#ffd166";
+        ctx.font = "bold 44px 'Outfit', sans-serif";
+        ctx.fillText("MIRZAPUR GANGSTER ASSESSMENT", 540, 155);
+
+        ctx.fillStyle = "#a0a0b8";
+        ctx.font = "20px monospace";
+        ctx.fillText("FILE NO: MZP-" + Math.floor(100000 + Math.random() * 900000) + " • CALIBER: .315 DESI", 540, 195);
+
+        let contentTop = 230;
+        if (imgSrc) {
+          const imgObj = new Image();
+          imgObj.crossOrigin = "anonymous";
+          await new Promise((resolve) => {
+            imgObj.onload = resolve;
+            imgObj.onerror = resolve;
+            imgObj.src = imgSrc;
+          });
+
+          if (imgObj.complete && imgObj.naturalWidth) {
+            const pX = 190, pY = 230, pW = 700, pH = 520;
+            ctx.save();
+            ctx.beginPath();
+            ctx.roundRect(pX, pY, pW, pH, 20);
+            ctx.clip();
+            ctx.drawImage(imgObj, pX, pY, pW, pH);
+            ctx.restore();
+
+            ctx.strokeStyle = "#c49216";
+            ctx.lineWidth = 4;
+            ctx.beginPath();
+            ctx.roundRect(pX, pY, pW, pH, 20);
+            ctx.stroke();
+
+            contentTop = 790;
+          }
+        }
+
+        const bW = 680, bH = 100, bX = (1080 - bW) / 2, bY = contentTop + 20;
+        const badgeGrad = ctx.createLinearGradient(bX, bY, bX + bW, bY);
+        badgeGrad.addColorStop(0, "#d90429");
+        badgeGrad.addColorStop(1, "#c49216");
+        ctx.fillStyle = badgeGrad;
+        ctx.beginPath();
+        ctx.roundRect(bX, bY, bW, bH, 16);
+        ctx.fill();
+
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "bold 38px 'Outfit', sans-serif";
+        ctx.fillText("🎯 " + scoreText, 540, bY + 62);
+
+        const rY = bY + 140;
+        ctx.fillStyle = "rgba(255, 255, 255, 0.04)";
+        ctx.strokeStyle = "rgba(196, 146, 22, 0.35)";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.roundRect(100, rY, 880, 150, 16);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = "#fca311";
+        ctx.font = "bold 22px monospace";
+        ctx.fillText("MUNNA BHAIYA VERDICT:", 540, rY + 45);
+
+        ctx.fillStyle = "#f0f0f5";
+        ctx.font = "italic 26px 'Outfit', sans-serif";
+        ctx.fillText(`"${roastLine}"`, 540, rY + 95);
+
+        ctx.fillStyle = "#d90429";
+        ctx.font = "bold 26px monospace";
+        ctx.fillText("👑 VERIFIED BY PHOOLCHAND TRIPATHI • KING OF MIRZAPUR", 540, 1220);
+
+        ctx.fillStyle = "#7a7a92";
+        ctx.font = "18px sans-serif";
+        ctx.fillText("Generated at munnaai.youmika.site • Zero Mercy • 100% Swag", 540, 1260);
+
+        const a = document.createElement("a");
+        a.download = `MunnaAI_Gangster_Report_${Date.now()}.png`;
+        a.href = canvas.toDataURL("image/png");
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+
+        btn.disabled = false;
+        btn.innerHTML = "<span>📸 Download Official Gangster Report Card</span>";
+        showMunnaToast("📸 Gangster Report Card download ho gaya! Status pe lagao!");
+      } catch (err) {
+        console.error("Report card generation error:", err);
+        btn.disabled = false;
+        btn.innerHTML = "<span>📸 Download Official Gangster Report Card</span>";
+        showMunnaToast("⚠️ Card download nahi ho paya, dobara try karein!");
+      }
+    }
+
     function openHelpModal() {
       const m = document.getElementById("helpModal");
       if (m) m.classList.add("show");
@@ -849,6 +1267,16 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
 
       if (isStreaming) {
         htmlResult += '<span class="streaming-cursor"></span>';
+      } else {
+        if (rawText.includes("TARGET DIAGNOSIS") || rawText.includes("PURVANCHAL GANGSTER RATING") || rawText.includes("KATTA VISION")) {
+          htmlResult += `
+            <div class="katta-download-card-wrapper" style="margin-top:14px;">
+              <button type="button" class="katta-download-card-btn" onclick="downloadGangsterReportCard(this)">
+                <span>📸 Download Official Gangster Report Card</span>
+              </button>
+            </div>
+          `;
+        }
       }
 
       return htmlResult;
@@ -1493,6 +1921,9 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           setTimeout(typewriterTick, 16);
         } else {
           bubbleElement.innerHTML = formatMunnaMarkdown(fullIncomingText, false);
+          if ((attachment && attachment.isKattaVision) || fullIncomingText.includes("TARGET DIAGNOSIS") || fullIncomingText.includes("GANGSTER RATING")) {
+            bubbleElement.classList.add("katta-report-card");
+          }
           if (chatMessages) chatMessages.scrollTop = chatMessages.scrollHeight;
           if (animResolve) animResolve();
         }
@@ -1754,6 +2185,10 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           if (plusBtn) plusBtn.classList.remove("active");
 
           const tool = item.getAttribute("data-tool");
+          if (tool === "katta-vision") {
+            openKattaVisionModal();
+            return;
+          }
           if (!fileInput) return;
 
           if (tool === "file") {
@@ -1788,6 +2223,10 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       // 4. Quick Action Chips
       document.querySelectorAll(".quick-chip").forEach(chip => {
         chip.addEventListener("click", () => {
+          if (chip.id === "kattaVisionBtn") {
+            openKattaVisionModal();
+            return;
+          }
           const action = chip.getAttribute("data-action");
           if (!textarea) return;
 
@@ -2080,6 +2519,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           closeVipModal();
           closeLightbox();
           closeAuthModal();
+          closeKattaVisionModal();
         }
       });
 
@@ -2148,14 +2588,59 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       const cancelLogoutBtn = document.getElementById("cancelLogoutBtn");
       if (cancelLogoutBtn) cancelLogoutBtn.onclick = closeLogoutModal;
 
+      const closeKattaBtn = document.getElementById("closeKattaVisionBtn");
+      if (closeKattaBtn) closeKattaBtn.onclick = closeKattaVisionModal;
+
       // Close modals when clicking backdrop
       const profModal = document.getElementById("profileModal");
       const setModal = document.getElementById("settingsModal");
       const hModal = document.getElementById("helpModal");
       const logModal = document.getElementById("logoutConfirmModal");
       const aModal = document.getElementById("authModal");
+      const kattaModalElem = document.getElementById("kattaVisionModal");
       [profModal, setModal, hModal, logModal, aModal].forEach(m => {
         if (m) m.onclick = (e) => { if (e.target === m) m.classList.remove("show"); };
+      });
+      if (kattaModalElem) {
+        kattaModalElem.onclick = (e) => {
+          if (e.target === kattaModalElem) closeKattaVisionModal();
+        };
+      }
+
+      // Katta Vision Modal Controls
+      const kattaUploadBtn = document.getElementById("kattaUploadBtn");
+      const kattaFileInput = document.getElementById("kattaFileInput");
+      if (kattaUploadBtn && kattaFileInput) {
+        kattaUploadBtn.onclick = () => kattaFileInput.click();
+        kattaFileInput.onchange = (e) => {
+          if (e.target.files && e.target.files[0]) {
+            handleKattaFileUpload(e.target.files[0]);
+          }
+        };
+      }
+
+      const kattaCamToggleBtn = document.getElementById("kattaCameraToggleBtn");
+      if (kattaCamToggleBtn) {
+        kattaCamToggleBtn.onclick = () => {
+          toggleKattaCamera();
+        };
+      }
+
+      const kattaScanExecuteBtn = document.getElementById("kattaScanExecuteBtn");
+      if (kattaScanExecuteBtn) {
+        kattaScanExecuteBtn.onclick = () => {
+          executeKattaScan();
+        };
+      }
+
+      // Katta Preset Selection Chips
+      document.querySelectorAll(".katta-preset-chip").forEach((chip) => {
+        chip.onclick = () => {
+          document.querySelectorAll(".katta-preset-chip").forEach((c) => c.classList.remove("active"));
+          chip.classList.add("active");
+          kattaSelectedPreset = chip.getAttribute("data-preset") || "general";
+          playKattaAudio("beep");
+        };
       });
 
       // Profile Modal Actions
