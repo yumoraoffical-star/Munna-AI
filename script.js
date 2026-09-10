@@ -137,9 +137,9 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
     function syncUserUI() {
       const displayName = userData.name && userData.name.trim() ? userData.name.trim() : "Munna User";
       const initial = displayName.charAt(0).toUpperCase();
-      const planText = isVip ? "ðŸ‘‘ VIP Plan" : "Free Plan";
-      const headerPlanText = isVip ? "ðŸ‘‘ Bahubali VIP" : "Free Plan";
-      const modalPlanText = isVip ? "ðŸ‘‘ Bahubali VIP Pass" : "Free Plan";
+      const planText = isVip ? "<span class="material-symbols-outlined" style="font-size:18px; color:var(--gold-primary); vertical-align:middle;">workspace_premium</span> VIP Plan" : "Free Plan";
+      const headerPlanText = isVip ? "<span class="material-symbols-outlined" style="font-size:18px; color:var(--gold-primary); vertical-align:middle;">workspace_premium</span> Bahubali VIP" : "Free Plan";
+      const modalPlanText = isVip ? "<span class="material-symbols-outlined" style="font-size:18px; color:var(--gold-primary); vertical-align:middle;">workspace_premium</span> Bahubali VIP Pass" : "Free Plan";
 
       // 1. Sidebar trigger
       const sbInit = document.getElementById("sidebarAvatarInitial");
@@ -192,7 +192,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       const setPlanText = document.getElementById("settingsPlanText");
       if (setPlanText) {
         setPlanText.textContent = isVip ?
-          "ðŸ‘‘ Bahubali VIP Pass (Unlimited Messages)" :
+          "<span class="material-symbols-outlined" style="font-size:18px; color:var(--gold-primary); vertical-align:middle;">workspace_premium</span> Bahubali VIP Pass (Unlimited Messages)" :
           "Free Plan (10 messages/day)";
       }
       const enterToggle = document.getElementById("enterToSendToggle");
@@ -626,7 +626,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
 
         ctx.fillStyle = "#d90429";
         ctx.font = "bold 26px monospace";
-        ctx.fillText("ðŸ‘‘ VERIFIED BY PHOOLCHAND TRIPATHI â€¢ KING OF MIRZAPUR", 540, 1220);
+        ctx.fillText("<span class="material-symbols-outlined" style="font-size:18px; color:var(--gold-primary); vertical-align:middle;">workspace_premium</span> VERIFIED BY PHOOLCHAND TRIPATHI â€¢ KING OF MIRZAPUR", 540, 1220);
 
         ctx.fillStyle = "#7a7a92";
         ctx.font = "18px sans-serif";
@@ -727,7 +727,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       const bubbleElem = msgObj.bubble;
       bubbleElem.innerHTML = `
         <div class="image-generating-skeleton">
-          <div class="skeleton-art-pulse">ðŸ‘‘</div>
+          <div class="skeleton-art-pulse"><span class="material-symbols-outlined" style="font-size:18px; color:var(--gold-primary); vertical-align:middle;">workspace_premium</span></div>
           <div class="skeleton-art-text">Munna Bhaiya ka karigar painting bana raha hai...</div>
           <div class="skeleton-art-sub">Aesthetic: <strong>${styleName.toUpperCase()}</strong> â€¢ 1024x1024 HD</div>
           <div class="skeleton-bar-wrap">
@@ -1122,7 +1122,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       const badge = document.getElementById("quotaBadge");
       if (!badge) return;
       if (isVip) {
-        badge.textContent = "ðŸ‘‘ VIP Unlimited";
+        badge.textContent = "<span class="material-symbols-outlined" style="font-size:18px; color:var(--gold-primary); vertical-align:middle;">workspace_premium</span> VIP Unlimited";
         badge.classList.add("unlimited");
       } else {
         badge.textContent = `${dailyQuota} Free Left`;
@@ -1816,7 +1816,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       typingDiv.className = "msg munna document-style";
       typingDiv.innerHTML = `
         <div class="ai-header">
-          <div class="ai-avatar">ðŸ‘‘</div>
+          <div class="ai-avatar"><span class="material-symbols-outlined" style="font-size:18px; color:var(--gold-primary); vertical-align:middle;">workspace_premium</span></div>
           <div class="ai-identity">
             <span class="ai-name">Munna AI</span>
             <span class="ai-status">Dimaag chala rahe hain...</span>
@@ -3029,7 +3029,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           }
 
           syncUserUI();
-          showMunnaToast("ðŸ‘‘ Profile update ho gayi bhai!");
+          showMunnaToast("<span class="material-symbols-outlined" style="font-size:18px; color:var(--gold-primary); vertical-align:middle;">workspace_premium</span> Profile update ho gayi bhai!");
           closeProfileModal();
         };
       }
@@ -3181,7 +3181,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           try {
             const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
             if (error) throw error;
-            showMunnaToast("ðŸ‘‘ Dakhila safal! Darbar me swagat hai.");
+            showMunnaToast("<span class="material-symbols-outlined" style="font-size:18px; color:var(--gold-primary); vertical-align:middle;">workspace_premium</span> Dakhila safal! Darbar me swagat hai.");
             closeAuthModal();
           } catch (err) {
             showMunnaToast("âš ï¸ " + (err.message || "Login nahi ho paya"));
@@ -3296,7 +3296,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
             updateAuthUI(currentUser);
             loadSessionsFromCloud();
             hideAuthScreen();
-            showMunnaToast("ðŸ‘‘ Darbar me swagat hai, " + (currentUser.user_metadata?.full_name || currentUser.email.split("@")[0]) + "!");
+            showMunnaToast("<span class="material-symbols-outlined" style="font-size:18px; color:var(--gold-primary); vertical-align:middle;">workspace_premium</span> Darbar me swagat hai, " + (currentUser.user_metadata?.full_name || currentUser.email.split("@")[0]) + "!");
           } catch (err) {
             console.error("Sign in error:", err);
             let msg = err.message || "Unable to sign in";
@@ -3339,7 +3339,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
               sessionStorage.removeItem("munna_guest_mode");
               updateAuthUI(currentUser);
               hideAuthScreen();
-              showMunnaToast("ðŸ‘‘ Khata ban gaya aur dakhila safal! Swagat hai, " + name + "!");
+              showMunnaToast("<span class="material-symbols-outlined" style="font-size:18px; color:var(--gold-primary); vertical-align:middle;">workspace_premium</span> Khata ban gaya aur dakhila safal! Swagat hai, " + name + "!");
               loadSessionsFromCloud();
             } else {
               showMunnaToast("âœ… Khata ban gaya! Kripya Sign In karein.");
@@ -3394,7 +3394,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
             sessionStorage.removeItem("munna_guest_mode");
             updateAuthUI(currentUser);
             hideAuthScreen();
-            showMunnaToast("ðŸ‘‘ Welcome to Munna AI, " + (currentUser.user_metadata?.full_name || currentUser.email.split("@")[0]) + "!");
+            showMunnaToast("<span class="material-symbols-outlined" style="font-size:18px; color:var(--gold-primary); vertical-align:middle;">workspace_premium</span> Welcome to Munna AI, " + (currentUser.user_metadata?.full_name || currentUser.email.split("@")[0]) + "!");
             loadSessionsFromCloud();
           } else if (event === "SIGNED_OUT") {
             currentUser = null;
@@ -3452,7 +3452,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           activeModel = engineId || "gemini-3.6-flash";
           if (label && label.includes("Ultra")) {
             document.getElementById("optModelUltra")?.classList.add("active");
-            showMunnaToast("ðŸ‘‘ Munna Ultra v4.5 Flagship Active (Gemini 3.6)");
+            showMunnaToast("<span class="material-symbols-outlined" style="font-size:18px; color:var(--gold-primary); vertical-align:middle;">workspace_premium</span> Munna Ultra v4.5 Flagship Active (Gemini 3.6)");
           } else {
             document.getElementById("optModelFlash")?.classList.add("active");
             showMunnaToast("âš¡ Gemini 3.6 Flash Engine Active");
@@ -3493,7 +3493,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       window.startNewChat = function() {
         if (typeof createNewSession === "function") {
           createNewSession();
-          showMunnaToast("ðŸ‘‘ Nayi darbar chat shuru ho gayi!");
+          showMunnaToast("<span class="material-symbols-outlined" style="font-size:18px; color:var(--gold-primary); vertical-align:middle;">workspace_premium</span> Nayi darbar chat shuru ho gayi!");
         }
       };
 
