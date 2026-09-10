@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="hi">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Munna AI - King of AI Models</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👑</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>ðŸ‘‘</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -4799,7 +4799,543 @@
     .msg.munna .ai-name {
       color: var(--text-main) !important;
     }
-</style>
+
+    /* ==========================================================================
+       PREMIUM 3-COLUMN OBSIDIAN + ROYAL GOLD REDESIGN STYLES
+       ========================================================================== */
+
+    /* Left Sidebar Navigation */
+    .sidebar-main-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      margin: 12px 0 16px 0;
+      padding: 0;
+      list-style: none;
+    }
+    .sidebar-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      text-decoration: none;
+      background: transparent;
+      border: 1px solid transparent;
+      width: 100%;
+      text-align: left;
+    }
+    .sidebar-nav-item:hover {
+      background: var(--bg-surface);
+      color: var(--gold-primary);
+      border-color: rgba(242, 202, 80, 0.15);
+      transform: translateX(2px);
+    }
+    .sidebar-nav-item.active {
+      background: rgba(242, 202, 80, 0.1);
+      color: var(--gold-primary);
+      border-color: rgba(242, 202, 80, 0.3);
+      font-weight: 600;
+    }
+    .sidebar-nav-item .nav-icon {
+      font-size: 19px;
+      color: inherit;
+      flex-shrink: 0;
+    }
+    .sidebar-nav-item .nav-badge {
+      margin-left: auto;
+      font-size: 0.68rem;
+      padding: 2px 6px;
+      border-radius: 999px;
+      background: rgba(242, 202, 80, 0.15);
+      color: var(--gold-primary);
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+
+    /* Sidebar History Section */
+    .sidebar-history-section {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-height: 0;
+      overflow: hidden;
+      margin-top: 4px;
+    }
+    .history-section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 4px 8px 4px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-dim);
+    }
+
+    /* Topbar Chips (Voice Studio & Language) */
+    .topbar-chip-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 6px 12px;
+      border-radius: 20px;
+      background: var(--bg-surface);
+      border: 1px solid rgba(242, 202, 80, 0.2);
+      color: var(--text-main);
+      font-size: 0.82rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .topbar-chip-btn:hover {
+      background: var(--bg-surface-high);
+      border-color: var(--gold-primary);
+      color: var(--gold-primary);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+    .topbar-chip-btn .chip-icon {
+      font-size: 16px;
+    }
+
+    /* Cinematic Welcome Hero */
+    .welcome-hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      max-width: 840px;
+      margin: 28px auto 24px auto;
+      padding: 0 20px;
+      animation: heroFadeIn 0.4s ease-out;
+    }
+    @keyframes heroFadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .welcome-crest {
+      width: 58px;
+      height: 58px;
+      border-radius: 16px;
+      background: radial-gradient(circle, rgba(242, 202, 80, 0.25) 0%, rgba(31, 31, 35, 0.8) 100%);
+      border: 1.5px solid rgba(242, 202, 80, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 14px;
+      box-shadow: 0 0 24px rgba(242, 202, 80, 0.25);
+    }
+    .welcome-crest .crown-icon {
+      font-size: 32px;
+      color: var(--gold-primary);
+    }
+    .welcome-badge-line {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 14px;
+      border-radius: 999px;
+      background: rgba(242, 202, 80, 0.08);
+      border: 1px solid rgba(242, 202, 80, 0.25);
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--gold-primary);
+      margin-bottom: 12px;
+    }
+    .welcome-title {
+      font-size: 2.1rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: #ffffff;
+      margin-bottom: 8px;
+      line-height: 1.25;
+    }
+    .welcome-title .gold-accent {
+      background: linear-gradient(135deg, #fce484 0%, #f2ca50 50%, #d4af37 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .welcome-subtitle {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      max-width: 600px;
+      line-height: 1.55;
+      margin-bottom: 26px;
+    }
+
+    /* 4 Feature Cards Grid */
+    .hero-feature-cards {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+    .feature-card-royal {
+      background: var(--bg-surface);
+      border: 1px solid rgba(77, 70, 53, 0.4);
+      border-radius: 12px;
+      padding: 16px 14px;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    .feature-card-royal::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold-primary), transparent);
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+    .feature-card-royal:hover {
+      background: var(--bg-surface-high);
+      border-color: rgba(242, 202, 80, 0.4);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3), 0 0 12px rgba(242, 202, 80, 0.1);
+    }
+    .feature-card-royal:hover::before {
+      opacity: 1;
+    }
+    .feature-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .feature-card-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      background: rgba(242, 202, 80, 0.1);
+      border: 1px solid rgba(242, 202, 80, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gold-primary);
+    }
+    .feature-card-badge {
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: var(--bg-surface-highest);
+      color: var(--text-dim);
+      text-transform: uppercase;
+    }
+    .feature-card-title {
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: #ffffff;
+    }
+    .feature-card-desc {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    /* Quick Prompts Bar */
+    .hero-quick-prompts {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+    }
+    .quick-prompt-chip {
+      background: rgba(31, 31, 35, 0.6);
+      border: 1px solid rgba(77, 70, 53, 0.35);
+      border-radius: 20px;
+      padding: 6px 14px;
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .quick-prompt-chip:hover {
+      background: var(--bg-surface-high);
+      color: var(--gold-primary);
+      border-color: rgba(242, 202, 80, 0.35);
+      transform: translateY(-1px);
+    }
+
+    /* Right Sidebar: Tools & Intel Hub */
+    .tools-sidebar {
+      width: 290px;
+      background-color: var(--bg-sidebar);
+      border-left: 1.5px solid var(--border-subtle);
+      display: flex;
+      flex-direction: column;
+      padding: 18px 14px;
+      gap: 16px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      flex-shrink: 0;
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), margin-right 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 45;
+    }
+    .tools-sidebar.collapsed {
+      margin-right: -290px;
+      display: none;
+    }
+
+    /* Quote Card */
+    .tools-quote-card {
+      background: linear-gradient(145deg, rgba(31, 31, 35, 0.9), rgba(27, 27, 31, 0.95));
+      border: 1px solid rgba(242, 202, 80, 0.25);
+      border-radius: 12px;
+      padding: 14px 14px 12px 14px;
+      position: relative;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+    }
+    .tools-quote-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .tools-quote-tag {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: var(--gold-primary);
+    }
+    .tools-quote-text {
+      font-size: 0.84rem;
+      line-height: 1.45;
+      color: var(--text-main);
+      font-style: italic;
+      margin-bottom: 6px;
+    }
+    .tools-quote-author {
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: var(--text-dim);
+      text-align: right;
+    }
+
+    /* Tools Section Title */
+    .tools-section-title {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-dim);
+      padding: 0 4px;
+    }
+
+    /* 4 Compact Tools Grid */
+    .tools-grid-compact {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .tool-box-card {
+      background: var(--bg-surface);
+      border: 1px solid rgba(77, 70, 53, 0.3);
+      border-radius: 10px;
+      padding: 10px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 6px;
+      transition: all 0.2s ease;
+      text-align: left;
+      width: 100%;
+    }
+    .tool-box-card:hover {
+      background: var(--bg-surface-high);
+      border-color: var(--gold-primary);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    }
+    .tool-box-icon-wrap {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      background: rgba(242, 202, 80, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gold-primary);
+    }
+    .tool-box-name {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #ffffff;
+    }
+    .tool-box-desc {
+      font-size: 0.68rem;
+      color: var(--text-dim);
+      line-height: 1.25;
+    }
+
+    /* Active Model & Voice Badges */
+    .tools-info-card {
+      background: var(--bg-surface);
+      border: 1px solid rgba(77, 70, 53, 0.35);
+      border-radius: 10px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .tools-info-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .tools-info-title {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+    .tools-info-name {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .tools-info-specs {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+    .tools-info-action-btn {
+      align-self: flex-start;
+      margin-top: 4px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      background: rgba(242, 202, 80, 0.1);
+      border: 1px solid rgba(242, 202, 80, 0.2);
+      color: var(--gold-primary);
+      font-size: 0.72rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .tools-info-action-btn:hover {
+      background: var(--gold-primary);
+      color: #0e0e12;
+    }
+
+    /* Right Sidebar Upgrade Card */
+    .tools-upgrade-card {
+      margin-top: auto;
+      background: linear-gradient(135deg, rgba(31, 31, 35, 0.95), rgba(20, 20, 24, 0.98));
+      border: 1px solid rgba(242, 202, 80, 0.35);
+      border-radius: 12px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    }
+    .tools-upgrade-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--gold-primary);
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+    .tools-upgrade-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 0;
+      margin: 0;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+    .tools-upgrade-list li {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .tools-upgrade-list li .material-symbols-outlined {
+      font-size: 14px;
+      color: var(--gold-primary);
+    }
+    .tools-upgrade-btn {
+      background: linear-gradient(135deg, #fce484 0%, #f2ca50 50%, #d4af37 100%);
+      color: #0e0e12;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(242, 202, 80, 0.25);
+    }
+    .tools-upgrade-btn:hover {
+      filter: brightness(1.1);
+      transform: translateY(-1px);
+    }
+
+    /* Responsive Breakpoints */
+    @media (max-width: 1200px) {
+      .hero-feature-cards {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 1100px) {
+      .tools-sidebar {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        box-shadow: -4px 0 24px rgba(0, 0, 0, 0.5);
+        z-index: 60;
+      }
+      .tools-sidebar.collapsed {
+        transform: translateX(100%);
+        margin-right: 0;
+        display: none;
+      }
+    }
+    @media (max-width: 768px) {
+      .hero-feature-cards {
+        grid-template-columns: 1fr;
+      }
+      .tools-sidebar {
+        width: 280px;
+      }
+      .topbar-chip-btn {
+        display: none;
+      }
+    }
+  </style>
 </head>
 <body>
 
@@ -4815,7 +5351,7 @@
       <!-- Left Column: Royal Brand & Power Showcase -->
       <div class="auth-brand-col">
         <div class="auth-royal-crest">
-          <span class="auth-crown">👑</span>
+          <span class="auth-crown">ðŸ‘‘</span>
           <div class="auth-crest-ring"></div>
         </div>
         
@@ -4825,34 +5361,34 @@
         </h1>
 
         <p class="auth-brand-motto">
-          "Whether you sit on the throne or we do — every challenge has a definitive solution."
+          "Whether you sit on the throne or we do â€” every challenge has a definitive solution."
         </p>
 
         <!-- Power Highlights -->
         <div class="auth-highlights-grid">
           <div class="auth-highlight-card">
-            <span class="highlight-icon">🧠</span>
+            <span class="highlight-icon">ðŸ§ </span>
             <div class="highlight-info">
               <span class="highlight-title">Gemini 3.6 Vision</span>
               <span class="highlight-sub">High-Speed Image, Code & Document Intel</span>
             </div>
           </div>
           <div class="auth-highlight-card">
-            <span class="highlight-icon">🎙️</span>
+            <span class="highlight-icon">ðŸŽ™ï¸</span>
             <div class="highlight-info">
               <span class="highlight-title">ElevenLabs HD Voice</span>
               <span class="highlight-sub">Adam Studio AI Speech Architecture</span>
             </div>
           </div>
           <div class="auth-highlight-card">
-            <span class="highlight-icon">☁️</span>
+            <span class="highlight-icon">â˜ï¸</span>
             <div class="highlight-info">
               <span class="highlight-title">Supabase Cloud Sync</span>
               <span class="highlight-sub">Instant Cross-Device Session Storage</span>
             </div>
           </div>
           <div class="auth-highlight-card">
-            <span class="highlight-icon">⚡</span>
+            <span class="highlight-icon">âš¡</span>
             <div class="highlight-info">
               <span class="highlight-title">Full-Stack Intelligence</span>
               <span class="highlight-sub">Strategic Logic, Coding & Creative Power</span>
@@ -4861,7 +5397,7 @@
         </div>
 
         <div class="auth-brand-badge">
-          <span>🔒 Secure Executive Portal • Authorized Access</span>
+          <span>ðŸ”’ Secure Executive Portal â€¢ Authorized Access</span>
         </div>
       </div>
 
@@ -4888,7 +5424,7 @@
             <div class="auth-field">
               <label class="auth-field-label">Email Address</label>
               <div class="auth-field-input-wrap">
-                <span class="field-icon">✉️</span>
+                <span class="field-icon">âœ‰ï¸</span>
                 <input type="email" id="screenSignInEmail" class="auth-field-input" placeholder="name@example.com" required autocomplete="email" />
               </div>
             </div>
@@ -4896,13 +5432,13 @@
             <div class="auth-field">
               <label class="auth-field-label">Password</label>
               <div class="auth-field-input-wrap">
-                <span class="field-icon">🔒</span>
-                <input type="password" id="screenSignInPassword" class="auth-field-input" placeholder="••••••••" required autocomplete="current-password" />
+                <span class="field-icon">ðŸ”’</span>
+                <input type="password" id="screenSignInPassword" class="auth-field-input" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" required autocomplete="current-password" />
               </div>
             </div>
 
             <button type="submit" id="btnScreenSignIn" class="btn-screen-primary">
-              <span>Sign In to Munna AI ➔</span>
+              <span>Sign In to Munna AI âž”</span>
             </button>
           </form>
 
@@ -4911,7 +5447,7 @@
             <div class="auth-field">
               <label class="auth-field-label">Full Name</label>
               <div class="auth-field-input-wrap">
-                <span class="field-icon">👤</span>
+                <span class="field-icon">ðŸ‘¤</span>
                 <input type="text" id="screenSignUpName" class="auth-field-input" placeholder="Abhishek Sharma" required autocomplete="name" />
               </div>
             </div>
@@ -4919,7 +5455,7 @@
             <div class="auth-field">
               <label class="auth-field-label">Email Address</label>
               <div class="auth-field-input-wrap">
-                <span class="field-icon">✉️</span>
+                <span class="field-icon">âœ‰ï¸</span>
                 <input type="email" id="screenSignUpEmail" class="auth-field-input" placeholder="name@example.com" required autocomplete="email" />
               </div>
             </div>
@@ -4927,13 +5463,13 @@
             <div class="auth-field">
               <label class="auth-field-label">Create Password (Min 6 characters)</label>
               <div class="auth-field-input-wrap">
-                <span class="field-icon">🔑</span>
-                <input type="password" id="screenSignUpPassword" class="auth-field-input" placeholder="••••••••" required minlength="6" autocomplete="new-password" />
+                <span class="field-icon">ðŸ”‘</span>
+                <input type="password" id="screenSignUpPassword" class="auth-field-input" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" required minlength="6" autocomplete="new-password" />
               </div>
             </div>
 
             <button type="submit" id="btnScreenSignUp" class="btn-screen-primary">
-              <span>Create Your Account ➔</span>
+              <span>Create Your Account âž”</span>
             </button>
           </form>
 
@@ -4954,7 +5490,7 @@
           </button>
 
           <div class="auth-security-note">
-            <span>🔒 End-to-end encrypted sessions powered by Supabase Cloud</span>
+            <span>ðŸ”’ End-to-end encrypted sessions powered by Supabase Cloud</span>
           </div>
         </div>
       </div>
@@ -4983,6 +5519,47 @@
         <span>NEW CHAT</span>
       </button>
 
+      <!-- Primary Navigation Links -->
+      <nav class="sidebar-main-nav">
+        <button type="button" class="sidebar-nav-item active" onclick="window.handleNavAction('home')">
+          <span class="material-symbols-outlined nav-icon">home</span>
+          <span>Home</span>
+        </button>
+        <button type="button" class="sidebar-nav-item" onclick="window.handleNavAction('explore')">
+          <span class="material-symbols-outlined nav-icon">explore</span>
+          <span>Explore</span>
+          <span class="nav-badge">New</span>
+        </button>
+        <button type="button" class="sidebar-nav-item" onclick="window.handleNavAction('models')">
+          <span class="material-symbols-outlined nav-icon">neurology</span>
+          <span>Models</span>
+        </button>
+        <button type="button" class="sidebar-nav-item" onclick="window.handleNavAction('voice')">
+          <span class="material-symbols-outlined nav-icon">graphic_eq</span>
+          <span>Voice Studio</span>
+          <span class="nav-badge">HD</span>
+        </button>
+        <button type="button" class="sidebar-nav-item" onclick="window.handleNavAction('image')">
+          <span class="material-symbols-outlined nav-icon">palette</span>
+          <span>Image Tools</span>
+        </button>
+        <button type="button" class="sidebar-nav-item" onclick="window.handleNavAction('documents')">
+          <span class="material-symbols-outlined nav-icon">description</span>
+          <span>Documents</span>
+        </button>
+        <button type="button" class="sidebar-nav-item" onclick="window.handleNavAction('history')">
+          <span class="material-symbols-outlined nav-icon">history</span>
+          <span>History</span>
+        </button>
+        <button type="button" class="sidebar-nav-item" onclick="window.handleNavAction('saved')">
+          <span class="material-symbols-outlined nav-icon">bookmark</span>
+          <span>Saved</span>
+        </button>
+      </nav>
+        <span class="material-symbols-outlined" style="font-size:18px;">add</span>
+        <span>NEW CHAT</span>
+      </button>
+
       <div class="sidebar-section-title">Operations & Strategy</div>
       <ul class="history-list" id="historyList">
         <!-- Injected history items -->
@@ -5002,7 +5579,7 @@
         </div>
 
         <button id="clearAllHistoryBtn" class="btn-clear-history">
-          <span>🗑️</span> Saari History Mitao
+          <span>ðŸ—‘ï¸</span> Saari History Mitao
         </button>
 
         <!-- Modern SaaS User Profile Widget -->
@@ -5019,7 +5596,7 @@
                 <span class="cloud-sync-pill offline" id="sidebarCloudSync" title="Cloud Sync"><span class="cloud-sync-dot"></span> <span id="sidebarCloudText">Mehman</span></span>
               </div>
             </div>
-            <div class="user-menu-ellipsis">⋯</div>
+            <div class="user-menu-ellipsis">â‹¯</div>
           </button>
 
           <!-- Floating Account Popover Menu -->
@@ -5041,33 +5618,33 @@
             <!-- Menu Items -->
             <div class="account-menu-list">
               <button type="button" class="account-menu-item" id="menuAuthBtn" role="menuitem" style="color:var(--gold-primary);font-weight:700;">
-                <span class="item-icon">🔑</span>
+                <span class="item-icon">ðŸ”‘</span>
                 <span class="item-label" id="menuAuthLabel">Login / Sign Up</span>
                 <span class="item-badge" style="background:rgba(196,146,22,0.15);color:var(--gold-primary);">Cloud</span>
               </button>
 
               <button type="button" class="account-menu-item upgrade-highlight" id="menuUpgradeBtn" role="menuitem">
-                <span class="item-icon">👑</span>
+                <span class="item-icon">ðŸ‘‘</span>
                 <span class="item-label">Upgrade Plan</span>
                 <span class="item-badge">Pro</span>
               </button>
 
               <button type="button" class="account-menu-item" id="menuProfileBtn" role="menuitem">
-                <span class="item-icon">👤</span>
+                <span class="item-icon">ðŸ‘¤</span>
                 <span class="item-label">Profile</span>
-                <span class="item-chevron">›</span>
+                <span class="item-chevron">â€º</span>
               </button>
 
               <button type="button" class="account-menu-item" id="menuSettingsBtn" role="menuitem">
-                <span class="item-icon">⚙️</span>
+                <span class="item-icon">âš™ï¸</span>
                 <span class="item-label">Settings</span>
-                <span class="item-chevron">›</span>
+                <span class="item-chevron">â€º</span>
               </button>
 
               <button type="button" class="account-menu-item" id="menuHelpBtn" role="menuitem">
-                <span class="item-icon">❓</span>
+                <span class="item-icon">â“</span>
                 <span class="item-label">Help</span>
-                <span class="item-chevron">›</span>
+                <span class="item-chevron">â€º</span>
               </button>
             </div>
 
@@ -5076,7 +5653,7 @@
             <!-- Log out Item -->
             <div class="account-menu-list">
               <button type="button" class="account-menu-item logout-action" id="menuLogoutBtn" role="menuitem">
-                <span class="item-icon">🚪</span>
+                <span class="item-icon">ðŸšª</span>
                 <span class="item-label">Log out</span>
               </button>
             </div>
@@ -5135,12 +5712,24 @@
           <div class="darbar-status-pill">
             <span class="emerald-pulse-dot"></span>
             <span class="darbar-channel-text">DARBAR SECURE EXECUTIVE CHANNEL</span>
-            <span class="status-sep">•</span>
+            <span class="status-sep">â€¢</span>
             <span class="status-latency font-mono" id="networkLatencyBadge">1.42ms</span>
           </div>
         </div>
 
         <div class="topbar-right">
+          <!-- Voice Studio Compact Chip -->
+          <button type="button" class="topbar-chip-btn" id="topbarVoiceBtn" onclick="window.openVoiceSettings();" title="Voice Studio (ElevenLabs Turbo)">
+            <span class="material-symbols-outlined chip-icon" style="color:var(--gold-primary);">graphic_eq</span>
+            <span>ðŸŽ™ï¸ ElevenLabs HD</span>
+          </button>
+
+          <!-- Language Toggle Compact Chip -->
+          <button type="button" class="topbar-chip-btn" id="topbarLangBtn" onclick="window.toggleLanguageMode();" title="Bhasha Chuno">
+            <span class="material-symbols-outlined chip-icon">translate</span>
+            <span id="topbarLangLabel">ðŸŒ Hinglish</span>
+          </button>
+
           <button type="button" class="spec-btn" id="openSpecBtn" onclick="window.openDesignSpecModal();" title="Design System Spec">
             <span class="material-symbols-outlined" style="font-size:16px; color:var(--gold-primary);">palette</span>
             <span>Design Spec</span>
@@ -5153,6 +5742,11 @@
           <div class="topbar-avatar" id="topbarAvatarBtn" onclick="window.openProfileModal();" title="Abhishek (Boss)">
             <span class="material-symbols-outlined" style="font-size:18px;">person</span>
           </div>
+
+          <!-- Right Sidebar Toggle -->
+          <button type="button" class="topbar-icon-btn" id="toggleRightSidebarBtn" onclick="window.toggleRightSidebar();" title="Tools & Intel Panel">
+            <span class="material-symbols-outlined" style="font-size:20px; color:var(--gold-primary);">dock_to_left</span>
+          </button>
         </div>
       </header>
 
@@ -5190,7 +5784,7 @@
               <span class="attachment-name" id="previewFileName">screenshot.png</span>
               <span class="attachment-size" id="previewFileSize">1.2 MB</span>
             </div>
-            <button type="button" class="attachment-remove-btn" id="removeAttachmentBtn" title="Hatao">✕</button>
+            <button type="button" class="attachment-remove-btn" id="removeAttachmentBtn" title="Hatao">âœ•</button>
           </div>
         </div>
 
@@ -5209,27 +5803,27 @@
             <!-- Floating Dropdown / Popover Menu -->
             <div class="composer-tools-menu" id="composerToolsMenu">
               <button type="button" class="tool-menu-item" data-tool="image-gen" style="color:#ffd166; font-weight:700;">
-                <span class="tool-icon">🎨</span>
+                <span class="tool-icon">ðŸŽ¨</span>
                 <span class="tool-label">Photo Banao</span>
               </button>
               <button type="button" class="tool-menu-item" data-tool="katta-vision" style="color:#ff2a51; font-weight:700;">
-                <span class="tool-icon">🎯</span>
+                <span class="tool-icon">ðŸŽ¯</span>
                 <span class="tool-label">Katta Vision</span>
               </button>
               <button type="button" class="tool-menu-item" data-tool="file">
-                <span class="tool-icon">📎</span>
+                <span class="tool-icon">ðŸ“Ž</span>
                 <span class="tool-label">File</span>
               </button>
               <button type="button" class="tool-menu-item" data-tool="image">
-                <span class="tool-icon">🖼️</span>
+                <span class="tool-icon">ðŸ–¼ï¸</span>
                 <span class="tool-label">Image</span>
               </button>
               <button type="button" class="tool-menu-item" data-tool="pdf">
-                <span class="tool-icon">📄</span>
+                <span class="tool-icon">ðŸ“„</span>
                 <span class="tool-label">PDF</span>
               </button>
               <button type="button" class="tool-menu-item" data-tool="code">
-                <span class="tool-icon">💻</span>
+                <span class="tool-icon">ðŸ’»</span>
                 <span class="tool-label">Code</span>
               </button>
             </div>
@@ -5241,7 +5835,7 @@
               id="userInput" 
               class="composer-textarea" 
               rows="1" 
-              placeholder="Boliye kya hukum hai... (Press Enter to send)" 
+              placeholder="Bolo be! Kya soch rahe ho... (Press Enter to send)" 
               autocomplete="off" 
               autofocus
             ></textarea>
@@ -5250,7 +5844,7 @@
           <!-- Right Side: Mic & Circular Gold Send Button -->
           <div class="composer-right">
             <button type="button" id="micBtn" class="composer-mic-btn" title="Bol ke baat karein (Voice Input)" aria-label="Voice Input">
-              <span class="mic-icon">🎤</span>
+              <span class="mic-icon">ðŸŽ¤</span>
             </button>
 
             <button type="button" id="sendBtn" class="composer-send-btn disabled" title="Bhejo (Enter)" aria-label="Send Message" onclick="window.handleSend();">
@@ -5267,11 +5861,108 @@
             <span>Munna AI v4.5 Secure Enclave</span>
           </div>
           <div class="enclave-right">
-            <span>Encrypted End-to-End • VIP Darbar Tier</span>
+            <span>Encrypted End-to-End â€¢ VIP Darbar Tier</span>
           </div>
         </div>
       </footer>
     </div>
+
+    <!-- Right Sidebar: Tools & Intel Panel -->
+    <aside class="tools-sidebar" id="toolsSidebar">
+      <!-- Section 1: Today's Quote -->
+      <div class="tools-quote-card">
+        <div class="tools-quote-header">
+          <span class="tools-quote-tag">DARBAR WISDOM</span>
+          <span class="material-symbols-outlined" style="font-size:16px; color:var(--gold-primary);">format_quote</span>
+        </div>
+        <p class="tools-quote-text">"Darbar ka niyam simple hai: Dimag tez rakho, zubaan meetha, aur koshish aisi jo zamane ko yaad rahe."</p>
+        <div class="tools-quote-author">â€” Munna Bhaiya</div>
+      </div>
+
+      <!-- Section 2: Quick Tools -->
+      <div class="tools-section-title">Executive Tools</div>
+      <div class="tools-grid-compact">
+        <button type="button" class="tool-box-card" onclick="if(window.openPhotoBanaoModal) window.openPhotoBanaoModal();">
+          <div class="tool-box-icon-wrap">
+            <span class="material-symbols-outlined" style="font-size:18px;">palette</span>
+          </div>
+          <span class="tool-box-name">Photo Banao</span>
+          <span class="tool-box-desc">Pixazo AI Art</span>
+        </button>
+
+        <button type="button" class="tool-box-card" onclick="if(window.openKattaVisionModal) window.openKattaVisionModal();">
+          <div class="tool-box-icon-wrap" style="color:var(--crimson); background:rgba(248,113,113,0.1);">
+            <span class="material-symbols-outlined" style="font-size:18px;">visibility</span>
+          </div>
+          <span class="tool-box-name">Katta Vision</span>
+          <span class="tool-box-desc">Docs & Vision</span>
+        </button>
+
+        <button type="button" class="tool-box-card" onclick="window.injectStarterPrompt('Real-time global intelligence aur live search insights report generate karo');">
+          <div class="tool-box-icon-wrap" style="color:#60a5fa; background:rgba(96,165,250,0.1);">
+            <span class="material-symbols-outlined" style="font-size:18px;">language</span>
+          </div>
+          <span class="tool-box-name">Web Search</span>
+          <span class="tool-box-desc">Live Intelligence</span>
+        </button>
+
+        <button type="button" class="tool-box-card" onclick="window.injectStarterPrompt('Ek high-performance production Python architecture template write aur test karo');">
+          <div class="tool-box-icon-wrap" style="color:var(--emerald); background:rgba(52,211,153,0.1);">
+            <span class="material-symbols-outlined" style="font-size:18px;">terminal</span>
+          </div>
+          <span class="tool-box-name">Code Lab</span>
+          <span class="tool-box-desc">Fast Synthesizer</span>
+        </button>
+      </div>
+
+      <!-- Section 3: Active Model Info -->
+      <div class="tools-section-title">Active AI Model</div>
+      <div class="tools-info-card">
+        <div class="tools-info-header">
+          <span class="tools-info-title">Flagship Reasoning</span>
+          <span class="spec-badge spec-badge-gold">Online</span>
+        </div>
+        <div class="tools-info-name">
+          <span class="material-symbols-outlined" style="font-size:18px; color:var(--gold-primary);">neurology</span>
+          <span>Gemini 3.6 Flash</span>
+        </div>
+        <div class="tools-info-specs">Multimodal Â· Sub-Second Latency Â· 32k Tokens</div>
+        <button type="button" class="tools-info-action-btn" onclick="window.toggleModelMenu();">Change Model</button>
+      </div>
+
+      <!-- Section 4: Voice Studio Info -->
+      <div class="tools-section-title">Audio Synthesis</div>
+      <div class="tools-info-card">
+        <div class="tools-info-header">
+          <span class="tools-info-title">ElevenLabs Engine</span>
+          <span class="spec-badge spec-badge-emerald">HD 128k</span>
+        </div>
+        <div class="tools-info-name">
+          <span class="material-symbols-outlined" style="font-size:18px; color:var(--gold-primary);">record_voice_over</span>
+          <span>Adam (Studio HD)</span>
+        </div>
+        <div class="tools-info-specs">Bilingual Hinglish / Hindi Expressive Audio</div>
+        <button type="button" class="tools-info-action-btn" onclick="window.openVoiceSettings();">Configure Voice</button>
+      </div>
+
+      <!-- Section 5: Upgrade to Pro Card -->
+      <div class="tools-upgrade-card">
+        <div class="tools-upgrade-badge">
+          <span class="material-symbols-outlined" style="font-size:20px;">workspace_premium</span>
+          <span>Munna Pro VIP</span>
+        </div>
+        <ul class="tools-upgrade-list">
+          <li><span class="material-symbols-outlined">check_circle</span> Unlimited 3.6 Flash Tokens</li>
+          <li><span class="material-symbols-outlined">check_circle</span> Unlimited Photo Banao AI Images</li>
+          <li><span class="material-symbols-outlined">check_circle</span> ElevenLabs Studio HD Voice</li>
+          <li><span class="material-symbols-outlined">check_circle</span> Priority Supabase Cloud Sync</li>
+        </ul>
+        <button type="button" class="tools-upgrade-btn" onclick="if(window.openNazranaModal) window.openNazranaModal();">
+          <span>Upgrade Now</span>
+          <span class="material-symbols-outlined" style="font-size:16px;">arrow_forward</span>
+        </button>
+      </div>
+    </aside>
 
   </div>
 
@@ -5283,7 +5974,7 @@
           <span class="material-symbols-outlined" style="font-size:24px; color:var(--gold-primary);">analytics</span>
           <div>
             <h3 class="font-headline" style="color:var(--text-main); font-size:1.05rem;">Jaunpur Deal Financials</h3>
-            <div style="font-size:0.7rem; color:var(--text-dim);">Darbar Secured Pipeline • Corridor v4.5</div>
+            <div style="font-size:0.7rem; color:var(--text-dim);">Darbar Secured Pipeline â€¢ Corridor v4.5</div>
           </div>
         </div>
         <button class="modal-close-btn" onclick="window.closeJaunpurModal();">&times;</button>
@@ -5297,7 +5988,7 @@
         </div>
         <div style="background:var(--bg-surface); border:1px solid rgba(77,70,53,0.3); border-radius:10px; padding:12px;">
           <div style="font-size:0.7rem; color:var(--text-dim);">Darbar Net Realization</div>
-          <div class="font-headline" style="font-size:1.2rem; font-weight:700; color:var(--gold-primary);">₹148.6 Cr</div>
+          <div class="font-headline" style="font-size:1.2rem; font-weight:700; color:var(--gold-primary);">â‚¹148.6 Cr</div>
           <div style="font-size:0.7rem; color:var(--emerald); font-family:var(--font-code);">+24.1% EBITDA</div>
         </div>
       </div>
@@ -5327,7 +6018,7 @@
         <div class="modal-brand">
           <span class="material-symbols-outlined" style="font-size:24px; color:var(--gold-primary);">palette</span>
           <div>
-            <h3 class="font-headline" style="color:var(--text-main); font-size:1.1rem;">Munna AI — Executive Design System</h3>
+            <h3 class="font-headline" style="color:var(--text-main); font-size:1.1rem;">Munna AI â€” Executive Design System</h3>
             <div style="font-size:0.72rem; color:var(--text-dim);">Obsidian & Imperial Gold Architecture Specification</div>
           </div>
         </div>
@@ -5357,9 +6048,9 @@
         <div style="background:var(--bg-surface); border:1px solid rgba(77,70,53,0.3); border-radius:10px; padding:14px; margin-bottom:16px;">
           <div class="font-headline" style="font-weight:700; color:var(--gold-primary); font-size:0.88rem; margin-bottom:6px;">Typography Stack</div>
           <div style="font-size:0.8rem; color:var(--text-muted); line-height:1.6;">
-            • <strong>Display:</strong> Space Grotesk (Titles, Crest, Engine labels)<br>
-            • <strong>Body:</strong> Inter (Chat stream, controls, descriptions)<br>
-            • <strong>Code:</strong> JetBrains Mono (Terminal, latency badges, formulas)
+            â€¢ <strong>Display:</strong> Space Grotesk (Titles, Crest, Engine labels)<br>
+            â€¢ <strong>Body:</strong> Inter (Chat stream, controls, descriptions)<br>
+            â€¢ <strong>Code:</strong> JetBrains Mono (Terminal, latency badges, formulas)
           </div>
         </div>
 
@@ -5375,7 +6066,7 @@
     <div class="modal-box">
       <div class="modal-top">
         <div class="modal-brand">
-          <span style="font-size:24px;">💰</span>
+          <span style="font-size:24px;">ðŸ’°</span>
           <h3>Munna Bhaiya Ka Nazrana</h3>
         </div>
         <button class="modal-close-btn" id="closeNazranaBtn">&times;</button>
@@ -5384,15 +6075,15 @@
       <p class="modal-sub">"Kaam pasand aaya toh barfi aur chai-paani ka shagun bhejo! Jalwa barkaraar rahega!"</p>
 
       <div class="amount-pills" id="amountPills">
-        <button class="amt-btn" data-amt="21">₹21</button>
-        <button class="amt-btn active" data-amt="51">₹51 (Barfi)</button>
-        <button class="amt-btn" data-amt="101">₹101 (Katta)</button>
-        <button class="amt-btn" data-amt="501">₹501 (Gaddi)</button>
+        <button class="amt-btn" data-amt="21">â‚¹21</button>
+        <button class="amt-btn active" data-amt="51">â‚¹51 (Barfi)</button>
+        <button class="amt-btn" data-amt="101">â‚¹101 (Katta)</button>
+        <button class="amt-btn" data-amt="501">â‚¹501 (Gaddi)</button>
       </div>
 
       <div class="qr-container">
         <img id="upiQrImg" src="" alt="UPI QR Code" class="qr-img" />
-        <div class="qr-overlay-text">GPay • PhonePe • Paytm • BHIM</div>
+        <div class="qr-overlay-text">GPay â€¢ PhonePe â€¢ Paytm â€¢ BHIM</div>
       </div>
 
       <div class="upi-info-box">
@@ -5404,7 +6095,7 @@
       </div>
 
       <div class="modal-action-row">
-        <a id="payUpiLink" href="#" class="btn-pay-direct">Seedha UPI App Kholein ➔</a>
+        <a id="payUpiLink" href="#" class="btn-pay-direct">Seedha UPI App Kholein âž”</a>
       </div>
     </div>
   </div>
@@ -5414,27 +6105,27 @@
     <div class="modal-box vip-box">
       <div class="modal-top">
         <div class="modal-brand">
-          <span style="font-size:24px;">👑</span>
+          <span style="font-size:24px;">ðŸ‘‘</span>
           <h3>Bahubali VIP Pass</h3>
         </div>
         <button class="modal-close-btn" id="closeVipBtn">&times;</button>
       </div>
 
       <div class="vip-pricing-badge">
-        <span class="vip-price">₹49</span>
+        <span class="vip-price">â‚¹49</span>
         <span class="vip-period">/ Mahina (Ek Chai ke barabar)</span>
       </div>
 
       <ul class="vip-perks-list">
-        <li><span>🔥</span> <strong>Unlimited Messages</strong> (Daily quota ka koi jhanjhat nahi)</li>
-        <li><span>🔊</span> <strong>Munna Bhaiya Voice & Mic</strong> (Aawaz mein sunno aur bol ke baat karo)</li>
-        <li><span>⚡</span> <strong>Fast Priority Server</strong> (Zero wait time, superfast streaming)</li>
-        <li><span>💻</span> <strong>Pro Code & Project Generator</strong> (Poora e-commerce, apps, blueprints)</li>
+        <li><span>ðŸ”¥</span> <strong>Unlimited Messages</strong> (Daily quota ka koi jhanjhat nahi)</li>
+        <li><span>ðŸ”Š</span> <strong>Munna Bhaiya Voice & Mic</strong> (Aawaz mein sunno aur bol ke baat karo)</li>
+        <li><span>âš¡</span> <strong>Fast Priority Server</strong> (Zero wait time, superfast streaming)</li>
+        <li><span>ðŸ’»</span> <strong>Pro Code & Project Generator</strong> (Poora e-commerce, apps, blueprints)</li>
       </ul>
 
       <div class="vip-action-section">
         <button id="unlockVipWithUpiBtn" class="btn-vip-checkout">
-          <span>💳</span> ₹49 Me Unlock Karein (UPI)
+          <span>ðŸ’³</span> â‚¹49 Me Unlock Karein (UPI)
         </button>
         <div class="vip-secret-row">
           <input type="text" id="vipCodeInput" class="vip-code-input" placeholder="Secret Promo Code (MUNNA99)" />
@@ -5449,7 +6140,7 @@
     <div class="modal-box profile-modal-box">
       <div class="modal-top">
         <div class="modal-brand">
-          <span style="font-size:24px;">👤</span>
+          <span style="font-size:24px;">ðŸ‘¤</span>
           <h3>Aapka Profile</h3>
         </div>
         <button class="modal-close-btn" id="closeProfileBtn">&times;</button>
@@ -5481,9 +6172,9 @@
           <div class="plan-summary-row">
             <div>
               <div class="plan-title">Account Tier:</div>
-              <div class="plan-desc" id="profilePlanDesc">Daily 10 free messages • Standard server</div>
+              <div class="plan-desc" id="profilePlanDesc">Daily 10 free messages â€¢ Standard server</div>
             </div>
-            <button type="button" class="btn-upgrade-pill" id="profileUpgradeBtn">👑 Upgrade</button>
+            <button type="button" class="btn-upgrade-pill" id="profileUpgradeBtn">ðŸ‘‘ Upgrade</button>
           </div>
         </div>
 
@@ -5499,7 +6190,7 @@
     <div class="modal-box settings-modal-box">
       <div class="modal-top">
         <div class="modal-brand">
-          <span style="font-size:24px;">⚙️</span>
+          <span style="font-size:24px;">âš™ï¸</span>
           <h3>Munna AI Settings</h3>
         </div>
         <button class="modal-close-btn" id="closeSettingsBtn">&times;</button>
@@ -5593,7 +6284,7 @@
               <div class="setting-label">Voice / Aawaz</div>
               <div class="setting-desc">ElevenLabs Studio AI (Adam - Deep & Commanding)</div>
             </div>
-            <span class="setting-badge-gold">👑 ElevenLabs Studio HD</span>
+            <span class="setting-badge-gold">ðŸ‘‘ ElevenLabs Studio HD</span>
           </div>
 
           <div class="setting-item">
@@ -5613,7 +6304,7 @@
               <div class="setting-desc">Munna Bhaiya ki human voice abhi sunein</div>
             </div>
             <button type="button" id="testVoiceBtn" class="btn-voice-test">
-              <span>▶️</span> Test Human Voice
+              <span>â–¶ï¸</span> Test Human Voice
             </button>
           </div>
 
@@ -5653,7 +6344,7 @@
               <div class="setting-label">Account Session</div>
               <div class="setting-desc">Log out of your Munna AI profile</div>
             </div>
-            <button type="button" class="btn-danger-outline" id="settingsLogoutBtn">🚪 Log out</button>
+            <button type="button" class="btn-danger-outline" id="settingsLogoutBtn">ðŸšª Log out</button>
           </div>
         </div>
 
@@ -5669,43 +6360,43 @@
     <div class="modal-box help-modal-box">
       <div class="modal-top">
         <div class="modal-brand">
-          <span style="font-size:24px;">❓</span>
-          <h3>Help & Support — Munna AI</h3>
+          <span style="font-size:24px;">â“</span>
+          <h3>Help & Support â€” Munna AI</h3>
         </div>
         <button class="modal-close-btn" id="closeHelpBtn">&times;</button>
       </div>
 
       <div class="help-scroll-body">
         <div class="help-intro-card">
-          <h4>👑 Munna AI — King of AI Models</h4>
+          <h4>ðŸ‘‘ Munna AI â€” King of AI Models</h4>
           <p>Munna AI se coding, problem solving, business strategies, study notes, ya purvanchal fundas pooch sakte hain. Har sawaal ka pakka prabandh milega!</p>
         </div>
 
         <div class="help-section-title">Frequently Asked Questions</div>
         <div class="help-faq-accordion">
           <details class="faq-item" open>
-            <summary class="faq-question">1. Munna AI se kya kya pooch sakte hain? <span>▾</span></summary>
+            <summary class="faq-question">1. Munna AI se kya kya pooch sakte hain? <span>â–¾</span></summary>
             <div class="faq-answer">
               Kuch bhi! Coding (Python, JS, C++), full-stack website blueprints, bug debugging, business plan, mathematical logic, aur Mirzapur style advice.
             </div>
           </details>
 
           <details class="faq-item">
-            <summary class="faq-question">2. Images aur Files kaise analyze hoti hain? <span>▾</span></summary>
+            <summary class="faq-question">2. Images aur Files kaise analyze hoti hain? <span>â–¾</span></summary>
             <div class="faq-answer">
               Composer me compact <strong>'+'</strong> button daba kar ya drag-drop karke koi bhi image, code file, ya PDF upload karein. Munna AI multimodal engine photo ko scan karke solution deta hai.
             </div>
           </details>
 
           <details class="faq-item">
-            <summary class="faq-question">3. Bahubali VIP Pass ke kya benefits hain? <span>▾</span></summary>
+            <summary class="faq-question">3. Bahubali VIP Pass ke kya benefits hain? <span>â–¾</span></summary>
             <div class="faq-answer">
               VIP Pass lene par daily message limit khatam ho jati hai, Munna Bhaiya Voice audio enable hota hai, aur superfast priority streaming milti hai.
             </div>
           </details>
 
           <details class="faq-item">
-            <summary class="faq-question">4. Kya mera data private rehta hai? <span>▾</span></summary>
+            <summary class="faq-question">4. Kya mera data private rehta hai? <span>â–¾</span></summary>
             <div class="faq-answer">
               Haan! Aapki sari chat history aapke browser ke private LocalStorage me safe rehti hai. Koi third-party server data store nahi karta.
             </div>
@@ -5715,14 +6406,14 @@
         <div class="help-section-title">Masla Darj Karein (Report Problem)</div>
         <div class="report-box">
           <textarea id="problemReportInput" class="report-textarea" placeholder="Bolo bhai, kya dikkat aa rahi hai? Yahan likhein..."></textarea>
-          <button type="button" id="submitReportBtn" class="btn-submit-report">Masla Bhejo ➔</button>
+          <button type="button" id="submitReportBtn" class="btn-submit-report">Masla Bhejo âž”</button>
         </div>
 
         <div class="help-section-title">Raabta / Contact Support</div>
         <div class="support-channels">
-          <a href="mailto:support@mirzapur.ai" class="support-chip">✉️ support@mirzapur.ai</a>
-          <a href="https://t.me/" target="_blank" class="support-chip">💬 Telegram Channel</a>
-          <a href="https://twitter.com/" target="_blank" class="support-chip">🐦 @MunnaAI_Official</a>
+          <a href="mailto:support@mirzapur.ai" class="support-chip">âœ‰ï¸ support@mirzapur.ai</a>
+          <a href="https://t.me/" target="_blank" class="support-chip">ðŸ’¬ Telegram Channel</a>
+          <a href="https://twitter.com/" target="_blank" class="support-chip">ðŸ¦ @MunnaAI_Official</a>
         </div>
       </div>
     </div>
@@ -5731,7 +6422,7 @@
   <!-- 6. LOGOUT CONFIRMATION MODAL -->
   <div class="modal-backdrop" id="logoutConfirmModal">
     <div class="modal-box logout-dialog-box">
-      <div class="logout-icon-crest">🚪</div>
+      <div class="logout-icon-crest">ðŸšª</div>
       <h3 class="logout-title">Logout karna hai bhai?</h3>
       <p class="logout-desc">Mirzapur ki gaddi aur sari baatcheet ka prabandh chhoot jayega. Kya aap sach me logout karna chahte hain?</p>
       <div class="logout-actions-row">
@@ -5746,7 +6437,7 @@
     <div class="modal-box auth-modal-box">
       <div class="modal-top">
         <div class="modal-title-wrap">
-          <span class="modal-crest">👑</span>
+          <span class="modal-crest">ðŸ‘‘</span>
           <div class="modal-title-col">
             <h3 class="modal-title">Munna AI Darbar</h3>
             <span class="modal-subtitle">Cloud Sync & Personal Account</span>
@@ -5769,10 +6460,10 @@
         </div>
         <div class="auth-input-group">
           <label class="auth-label">Password / Gupt Code</label>
-          <input type="password" id="signInPassword" class="auth-input" placeholder="••••••••" required autocomplete="current-password" />
+          <input type="password" id="signInPassword" class="auth-input" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" required autocomplete="current-password" />
         </div>
         <button type="submit" id="btnSubmitSignIn" class="btn-auth-primary">
-          <span class="btn-text">Dakhil Ho (Sign In) ➔</span>
+          <span class="btn-text">Dakhil Ho (Sign In) âž”</span>
         </button>
       </form>
 
@@ -5788,10 +6479,10 @@
         </div>
         <div class="auth-input-group">
           <label class="auth-label">Password Banayein (Kam se kam 6 akshar)</label>
-          <input type="password" id="signUpPassword" class="auth-input" placeholder="••••••••" required minlength="6" autocomplete="new-password" />
+          <input type="password" id="signUpPassword" class="auth-input" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" required minlength="6" autocomplete="new-password" />
         </div>
         <button type="submit" id="btnSubmitSignUp" class="btn-auth-primary">
-          <span class="btn-text">Naya Khata Kholein (Register) ➔</span>
+          <span class="btn-text">Naya Khata Kholein (Register) âž”</span>
         </button>
       </form>
 
@@ -5799,9 +6490,9 @@
 
       <!-- Cloud Sync Feature Badges -->
       <div class="auth-features-row">
-        <div class="auth-feat"><span class="feat-icon">☁️</span> Cloud Sync</div>
-        <div class="auth-feat"><span class="feat-icon">🔒</span> Supabase Secure</div>
-        <div class="auth-feat"><span class="feat-icon">⚡</span> 0ms Lag</div>
+        <div class="auth-feat"><span class="feat-icon">â˜ï¸</span> Cloud Sync</div>
+        <div class="auth-feat"><span class="feat-icon">ðŸ”’</span> Supabase Secure</div>
+        <div class="auth-feat"><span class="feat-icon">âš¡</span> 0ms Lag</div>
       </div>
     </div>
   </div>
@@ -5812,8 +6503,8 @@
       <!-- Top Bar -->
       <div class="katta-topbar">
         <div class="katta-title-wrap">
-          <span class="katta-badge-pulsing">● LIVE HUD</span>
-          <h3 class="katta-title">🎯 KATTA VISION AI SCANNER</h3>
+          <span class="katta-badge-pulsing">â— LIVE HUD</span>
+          <h3 class="katta-title">ðŸŽ¯ KATTA VISION AI SCANNER</h3>
           <span class="katta-subtitle">Mirzapur Target & Asla Telemetry</span>
         </div>
         <button type="button" class="modal-close-btn" id="closeKattaVisionBtn">&times;</button>
@@ -5831,10 +6522,10 @@
           <div class="katta-scanner-reticle">
             <div class="reticle-circle"></div>
             <div class="reticle-crosshair"></div>
-            <span class="reticle-icon">🎯</span>
+            <span class="reticle-icon">ðŸŽ¯</span>
           </div>
           <p class="katta-empty-title">Nishana Lagao (Target Lock)</p>
-          <p class="katta-empty-desc">Camera se photo lo ya gallery se upload karo — Munna Bhaiya poora assessment aur roast karenge!</p>
+          <p class="katta-empty-desc">Camera se photo lo ya gallery se upload karo â€” Munna Bhaiya poora assessment aur roast karenge!</p>
         </div>
 
         <!-- Sci-Fi Gangster HUD Overlay Layer -->
@@ -5856,12 +6547,12 @@
       <div class="katta-presets-wrapper">
         <span class="presets-label">Roast Preset:</span>
         <div class="katta-presets-scroll" id="kattaPresetsScroll">
-          <button type="button" class="katta-preset-chip active" data-preset="selfie">📸 Selfie Drip</button>
-          <button type="button" class="katta-preset-chip" data-preset="diet">🍲 Khaana (Diet)</button>
-          <button type="button" class="katta-preset-chip" data-preset="room">🏚️ Kamra (Room)</button>
-          <button type="button" class="katta-preset-chip" data-preset="vehicle">🏍️ Gaadi / Bike</button>
-          <button type="button" class="katta-preset-chip" data-preset="setup">💻 Setup / Code</button>
-          <button type="button" class="katta-preset-chip" data-preset="general">🔥 Full Bawal</button>
+          <button type="button" class="katta-preset-chip active" data-preset="selfie">ðŸ“¸ Selfie Drip</button>
+          <button type="button" class="katta-preset-chip" data-preset="diet">ðŸ² Khaana (Diet)</button>
+          <button type="button" class="katta-preset-chip" data-preset="room">ðŸšï¸ Kamra (Room)</button>
+          <button type="button" class="katta-preset-chip" data-preset="vehicle">ðŸï¸ Gaadi / Bike</button>
+          <button type="button" class="katta-preset-chip" data-preset="setup">ðŸ’» Setup / Code</button>
+          <button type="button" class="katta-preset-chip" data-preset="general">ðŸ”¥ Full Bawal</button>
         </div>
       </div>
 
@@ -5871,15 +6562,15 @@
         <input type="file" id="kattaFileInput" accept="image/*" style="display:none;" />
         
         <button type="button" class="katta-action-btn secondary" id="kattaUploadBtn">
-          <span>📁 Gallery / File</span>
+          <span>ðŸ“ Gallery / File</span>
         </button>
 
         <button type="button" class="katta-action-btn secondary" id="kattaCameraToggleBtn">
-          <span>📷 Camera</span>
+          <span>ðŸ“· Camera</span>
         </button>
 
         <button type="button" class="katta-action-btn primary" id="kattaScanExecuteBtn" disabled>
-          <span class="btn-icon">⚡</span>
+          <span class="btn-icon">âš¡</span>
           <span id="kattaScanBtnText">Nishana Lagao (Scan)</span>
         </button>
       </div>
@@ -5892,7 +6583,7 @@
       <!-- Header -->
       <div class="image-gen-header">
         <div class="image-gen-title-wrap">
-          <h3>🎨 AI PHOTO BANAO</h3>
+          <h3>ðŸŽ¨ AI PHOTO BANAO</h3>
           <span>Pixazo Gateway & FLUX.1 HD Studio</span>
         </div>
         <button type="button" class="modal-close-btn" id="closeImageGenBtn">&times;</button>
@@ -5900,11 +6591,11 @@
 
       <!-- Style Presets Horizontal Scroll -->
       <div class="image-style-scroll" id="imageStyleScroll">
-        <button type="button" class="image-style-chip active" data-style="mirzapur">👑 Mirzapur Haveli</button>
-        <button type="button" class="image-style-chip" data-style="gangster">🔫 Badass Gangster</button>
-        <button type="button" class="image-style-chip" data-style="cyberpunk">🕶️ Desi Cyberpunk</button>
-        <button type="button" class="image-style-chip" data-style="avatar">🦁 Bahubali Sher</button>
-        <button type="button" class="image-style-chip" data-style="realistic">📸 8K Realistic</button>
+        <button type="button" class="image-style-chip active" data-style="mirzapur">ðŸ‘‘ Mirzapur Haveli</button>
+        <button type="button" class="image-style-chip" data-style="gangster">ðŸ”« Badass Gangster</button>
+        <button type="button" class="image-style-chip" data-style="cyberpunk">ðŸ•¶ï¸ Desi Cyberpunk</button>
+        <button type="button" class="image-style-chip" data-style="avatar">ðŸ¦ Bahubali Sher</button>
+        <button type="button" class="image-style-chip" data-style="realistic">ðŸ“¸ 8K Realistic</button>
       </div>
 
       <!-- Prompt Input -->
@@ -5916,15 +6607,15 @@
 
       <!-- Quick Suggestion Tags -->
       <div class="image-suggestions-row">
-        <span class="image-sugg-tag" data-sugg="Royal Haveli throne room with gold guns and red carpets">🏰 Royal Throne Haveli</span>
-        <span class="image-sugg-tag" data-sugg="Badass Indian gangster standing near black vintage Ambassador car">🕶️ Gangster & Car</span>
-        <span class="image-sugg-tag" data-sugg="Cyberpunk Mirzapur alleyway with neon signs and flying auto-rickshaw">🚀 Cyberpunk Purvanchal</span>
-        <span class="image-sugg-tag" data-sugg="A fierce majestic lion wearing a golden crown and heavy chains">🦁 Crowned Lion King</span>
+        <span class="image-sugg-tag" data-sugg="Royal Haveli throne room with gold guns and red carpets">ðŸ° Royal Throne Haveli</span>
+        <span class="image-sugg-tag" data-sugg="Badass Indian gangster standing near black vintage Ambassador car">ðŸ•¶ï¸ Gangster & Car</span>
+        <span class="image-sugg-tag" data-sugg="Cyberpunk Mirzapur alleyway with neon signs and flying auto-rickshaw">ðŸš€ Cyberpunk Purvanchal</span>
+        <span class="image-sugg-tag" data-sugg="A fierce majestic lion wearing a golden crown and heavy chains">ðŸ¦ Crowned Lion King</span>
       </div>
 
       <!-- Submit Button -->
       <button type="button" class="image-submit-btn" id="imageGenSubmitBtn">
-        <span>⚡ Photo Generate Karo (1024x1024)</span>
+        <span>âš¡ Photo Generate Karo (1024x1024)</span>
       </button>
     </div>
   </div>
@@ -5936,7 +6627,7 @@
       <img id="artLightboxImg" src="" alt="Full Resolution Art" style="max-width:92vw; max-height:80vh; border-radius:12px; border:2px solid #ffd166; box-shadow:0 0 30px rgba(0,0,0,0.9); object-fit:contain;" />
       <div style="margin-top:14px; display:flex; gap:12px; width:100%; justify-content:center;">
         <button type="button" id="artLightboxDownloadBtn" class="munna-art-action-btn" style="padding:10px 24px; font-size:0.92rem; max-width:280px;">
-          <span>⬇️ Download High-Res PNG</span>
+          <span>â¬‡ï¸ Download High-Res PNG</span>
         </button>
       </div>
     </div>
@@ -5998,7 +6689,7 @@
 
     // --- 2. ERROR NOTICE HELPER (No fake dialogues, transparent errors) ---
     function getAIErrorMessage(err) {
-      return "⚠️ **Connection Error:** Gemini AI se connect nahi ho paya (" + (err?.message || "Network issue") + "). Kripya apna message dobara bhejein!";
+      return "âš ï¸ **Connection Error:** Gemini AI se connect nahi ho paya (" + (err?.message || "Network issue") + "). Kripya apna message dobara bhejein!";
     }
 
     try {
@@ -6010,7 +6701,7 @@
     }
     // --- 3. GEMINI AI CONFIGURATION (Secured via /api/chat) ---
     let activeModel = "gemini-3.6-flash";
-    const initialGreeting = "Aao be! Ka dikkat ho gayi? Mirzapur ke hone wale raja se seedha baat kar rahe ho. Koi coding ki samasya ho, dimaag ka bawasir ho, ya koi photo/file dikhaani ho — bolo be, hum karte hain pakka prabandh!";
+    const initialGreeting = "Aao be! Ka dikkat ho gayi? Mirzapur ke hone wale raja se seedha baat kar rahe ho. Koi coding ki samasya ho, dimaag ka bawasir ho, ya koi photo/file dikhaani ho â€” bolo be, hum karte hain pakka prabandh!";
 
     function getSystemPrompt() {
       const lang = (userData && userData.language) ? userData.language : "hinglish";
@@ -6022,22 +6713,22 @@
       } else {
         langDirective = `LANGUAGE & SLANG (MANDATORY & CRITICAL):
 - You MUST ALWAYS speak in authentic Purvanchal / Mirzapur UP Hindi-Hinglish dialect!
-- Use raw street words naturally in EVERY sentence: "Abe", "Aao be!", "Bolo be!", "Ka dikkat hai be?", "Launde", "Chote", "Guru", "Hum", "Hamara", "Katta", "Bawasir", "Prabandh", "Gaddi", "Bauji", "Lalit".
-- NEVER refer to yourself as "Main" or "Mujhe" — ALWAYS use "Hum" and "Humein" ("Hum bol rahe hain", "Hum karte hain prabandh", "Hamara dabdaba").
+- Use raw street words naturally in EVERY sentence: "Abe", "Aao be!", "Bolo be!", "Ka dikkat hai be<span class="material-symbols-outlined" style="font-size:16px;">help_outline</span>, "Launde", "Chote", "Guru", "Hum", "Hamara", "Katta", "Bawasir", "Prabandh", "Gaddi", "Bauji", "Lalit".
+- NEVER refer to yourself as "Main" or "Mujhe" â€” ALWAYS use "Hum" and "Humein" ("Hum bol rahe hain", "Hum karte hain prabandh", "Hamara dabdaba").
 - Address the user affectionately or aggressively as "launde", "chote", "be", "guru", or "partner".`;
       }
 
       let styleBonus = "";
       if (style === "mentor") {
-        styleBonus = "Act like an authoritative elder brother and street-smart king mentor — giving deep wisdom with raw swagger.";
+        styleBonus = "Act like an authoritative elder brother and street-smart king mentor â€” giving deep wisdom with raw swagger.";
       } else if (style === "crisp") {
-        styleBonus = "Direct and dangerous — cut straight to the chase with zero delay and maximum power.";
+        styleBonus = "Direct and dangerous â€” cut straight to the chase with zero delay and maximum power.";
       } else {
         styleBonus = "Full, unrestrained Munna Bhaiya energy, raw humor, explosive confidence, and unpredictable charisma!";
       }
 
-      return `You are PHOOLCHAND 'MUNNA' TRIPATHI (Munna Bhaiya) from Mirzapur — The King of Mirzapur and undisputed Bahubali.
-You are NOT an ordinary polite AI bot or an assistant. You are Munna Bhaiya himself — full of fire, attitude, swagger, raw Purvanchal UP humor, and street dominance!
+      return `You are PHOOLCHAND 'MUNNA' TRIPATHI (Munna Bhaiya) from Mirzapur â€” The King of Mirzapur and undisputed Bahubali.
+You are NOT an ordinary polite AI bot or an assistant. You are Munna Bhaiya himself â€” full of fire, attitude, swagger, raw Purvanchal UP humor, and street dominance!
 
 ${langDirective}
 
@@ -6046,20 +6737,20 @@ ${styleBonus}
 YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
 1. RAW PURVANCHAL OPENINGS & PUNCHLINES:
    - Start responses with punchy Mirzapur flavor:
-     "Abe sunno be...", "Aao be, ka dikkat ho gayi?", "Bolo be launde...", "Abe chup chaap sunno...", "Hum khade hain na yahan!"
+     "Abe sunno be...", "Aao be, ka dikkat ho gayi<span class="material-symbols-outlined" style="font-size:16px;">help_outline</span>, "Bolo be launde...", "Abe chup chaap sunno...", "Hum khade hain na yahan!"
    - Naturally weave iconic Munna Bhaiya dialogues into your explanations:
      * "Hum karte hain prabandh!"
      * "Jalwa hai hamara poore shehar mein!"
      * "Gaddi pe chahe hum baithein ya Bauji, niyam same rahega!"
      * "Abe hum AMAR hain be! Humko koi nahi maar sakta!"
-     * "Ka bawasir bana ke rakh diye ho be?"
+     * "Ka bawasir bana ke rakh diye ho be<span class="material-symbols-outlined" style="font-size:16px;">help_outline</span>
      * "Lalit ko bolke uthwa lenge!"
      * "Darr aisa hona chahiye ki agla aadmi saans lene se pehle permission maange!"
      * "Katta nikalne pe majboor mat karo!"
-   - NEVER sound polite, formal, or like a corporate chatbot. NEVER say "Certainly!", "I'd be happy to help", "As an AI model", or "How may I assist you?".
+   - NEVER sound polite, formal, or like a corporate chatbot. NEVER say "Certainly!", "I'd be happy to help", "As an AI model", or "How may I assist you<span class="material-symbols-outlined" style="font-size:16px;">help_outline</span>.
 
 2. THE GENIUS BAHUBALI (ULTIMATE PROBLEM SOLVER):
-   - Munna Bhaiya acts rough and carefree, but secretly knows EVERYTHING — coding (Python, JavaScript, React, backend, full-stack, bugs), mathematics, science, business strategy, exam prep, relationship advice, and life fundas.
+   - Munna Bhaiya acts rough and carefree, but secretly knows EVERYTHING â€” coding (Python, JavaScript, React, backend, full-stack, bugs), mathematics, science, business strategy, exam prep, relationship advice, and life fundas.
    - When asked a technical question or for code:
      * Give the 100% COMPLETE, ACCURATE, PRODUCTION-READY CODE.
      * Explain the logic with Munna Bhaiya's aggressive swag, witty desi analogies, and commanding attitude!
@@ -6086,9 +6777,9 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
     function syncUserUI() {
       const displayName = userData.name && userData.name.trim() ? userData.name.trim() : "Munna User";
       const initial = displayName.charAt(0).toUpperCase();
-      const planText = isVip ? "👑 VIP Plan" : "Free Plan";
-      const headerPlanText = isVip ? "👑 Bahubali VIP" : "Free Plan";
-      const modalPlanText = isVip ? "👑 Bahubali VIP Pass" : "Free Plan";
+      const planText = isVip ? "ðŸ‘‘ VIP Plan" : "Free Plan";
+      const headerPlanText = isVip ? "ðŸ‘‘ Bahubali VIP" : "Free Plan";
+      const modalPlanText = isVip ? "ðŸ‘‘ Bahubali VIP Pass" : "Free Plan";
 
       // 1. Sidebar trigger
       const sbInit = document.getElementById("sidebarAvatarInitial");
@@ -6130,8 +6821,8 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       if (profEmailIn) profEmailIn.value = userData.email || "abhishek@mirzapur.ai";
       if (profPlanDesc) {
         profPlanDesc.textContent = isVip ?
-          "Unlimited messages • Fast priority server • Voice enabled" :
-          "Daily 10 free messages • Standard server";
+          "Unlimited messages â€¢ Fast priority server â€¢ Voice enabled" :
+          "Daily 10 free messages â€¢ Standard server";
       }
       if (profMember) {
         profMember.textContent = `Member since ${userData.joined || "Sept 2026"}`;
@@ -6141,7 +6832,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       const setPlanText = document.getElementById("settingsPlanText");
       if (setPlanText) {
         setPlanText.textContent = isVip ?
-          "👑 Bahubali VIP Pass (Unlimited Messages)" :
+          "ðŸ‘‘ Bahubali VIP Pass (Unlimited Messages)" :
           "Free Plan (10 messages/day)";
       }
       const enterToggle = document.getElementById("enterToSendToggle");
@@ -6260,12 +6951,12 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
     let kattaSelectedPreset = "selfie";
 
     const KATTA_VISION_PROMPTS = {
-      selfie: "🎯 [KATTA VISION: SELFIE DRIP & SWAG SCAN]\nMunna Bhaiya, is photo/selfie ka poora Mirzapur Gangster Assessment aur Brutal Roast Report taiyaar karo!\n1. TARGET DIAGNOSIS: Is bande ka look, expression, hairstyle aur attitude kaisa hai.\n2. PURVANCHAL GANGSTER RATING: X/10 Katta Points (funny reason ke saath).\n3. THE BRUTAL ROAST: Munna Bhaiya ka raw, funny aur bina kisi raham ka roast!\n4. MUNNA KA FAISLA / ADVICE: Isko Bahubali banne ke liye kya karna chahiye.",
-      diet: "🎯 [KATTA VISION: DIET & NUTRITION CHECK]\nMunna Bhaiya, is khane/peene ki photo ka Gangster Nutrition Check aur Roast Report karo!\n1. TARGET DIAGNOSIS: Thaali me kya kya bawasir ya lazeez cheez dikh rahi hai.\n2. PURVANCHAL GANGSTER RATING: X/10 Katta Points.\n3. THE BRUTAL ROAST: Ye khana Mirzapur ke bahubali ke layak hai ya churan hai?\n4. MUNNA KA FAISLA: Asli purvanchal diet ki salah.",
-      room: "🎯 [KATTA VISION: CRIME SCENE & ROOM SCAN]\nMunna Bhaiya, is kamre / room ki halat ka Crime Scene Investigation aur Roast Report karo!\n1. TARGET DIAGNOSIS: Kamra kitna bikhra hua hai.\n2. PURVANCHAL GANGSTER RATING: X/10 Katta Points.\n3. THE BRUTAL ROAST: Ye kamra hai ya Lalit ka adda?\n4. MUNNA KA FAISLA: Safai aur dabdaba banaye rakhne ki advice.",
-      vehicle: "🎯 [KATTA VISION: GAADI / BIKE SWAG SCAN]\nMunna Bhaiya, is gaadi / bike / ride ka Gangster Swag aur Asla Rating check karo!\n1. TARGET DIAGNOSIS: Ride kaisi hai.\n2. PURVANCHAL GANGSTER RATING: X/10 Katta Points.\n3. THE BRUTAL ROAST: Mirzapur ki sadko par ye gaadi chalegi ya police utha le jayegi?\n4. MUNNA KA FAISLA: Swag badhane ka nuskha.",
-      setup: "🎯 [KATTA VISION: DESK & CODE SETUP SCAN]\nMunna Bhaiya, is coding desk / setup / laptop ka Brutal Gangster Review karo!\n1. TARGET DIAGNOSIS: Screen, cables, laptop aur vibe ka inspection.\n2. PURVANCHAL GANGSTER RATING: X/10 Katta Points.\n3. THE BRUTAL ROAST: Ye launda coder banega ya computer operator?\n4. MUNNA KA FAISLA: Asli pro coder banne ki advice.",
-      general: "🎯 [KATTA VISION: FULL BAWAL SCAN]\nMunna Bhaiya, is photo ka poora Mirzapur Gangster Assessment aur Roast Report bina kisi raham ke taiyaar karo!\n1. TARGET DIAGNOSIS\n2. PURVANCHAL GANGSTER RATING (X/10 Katta Points)\n3. THE BRUTAL ROAST\n4. MUNNA KA FAISLA"
+      selfie: "ðŸŽ¯ [KATTA VISION: SELFIE DRIP & SWAG SCAN]\nMunna Bhaiya, is photo/selfie ka poora Mirzapur Gangster Assessment aur Brutal Roast Report taiyaar karo!\n1. TARGET DIAGNOSIS: Is bande ka look, expression, hairstyle aur attitude kaisa hai.\n2. PURVANCHAL GANGSTER RATING: X/10 Katta Points (funny reason ke saath).\n3. THE BRUTAL ROAST: Munna Bhaiya ka raw, funny aur bina kisi raham ka roast!\n4. MUNNA KA FAISLA / ADVICE: Isko Bahubali banne ke liye kya karna chahiye.",
+      diet: "ðŸŽ¯ [KATTA VISION: DIET & NUTRITION CHECK]\nMunna Bhaiya, is khane/peene ki photo ka Gangster Nutrition Check aur Roast Report karo!\n1. TARGET DIAGNOSIS: Thaali me kya kya bawasir ya lazeez cheez dikh rahi hai.\n2. PURVANCHAL GANGSTER RATING: X/10 Katta Points.\n3. THE BRUTAL ROAST: Ye khana Mirzapur ke bahubali ke layak hai ya churan hai?\n4. MUNNA KA FAISLA: Asli purvanchal diet ki salah.",
+      room: "ðŸŽ¯ [KATTA VISION: CRIME SCENE & ROOM SCAN]\nMunna Bhaiya, is kamre / room ki halat ka Crime Scene Investigation aur Roast Report karo!\n1. TARGET DIAGNOSIS: Kamra kitna bikhra hua hai.\n2. PURVANCHAL GANGSTER RATING: X/10 Katta Points.\n3. THE BRUTAL ROAST: Ye kamra hai ya Lalit ka adda?\n4. MUNNA KA FAISLA: Safai aur dabdaba banaye rakhne ki advice.",
+      vehicle: "ðŸŽ¯ [KATTA VISION: GAADI / BIKE SWAG SCAN]\nMunna Bhaiya, is gaadi / bike / ride ka Gangster Swag aur Asla Rating check karo!\n1. TARGET DIAGNOSIS: Ride kaisi hai.\n2. PURVANCHAL GANGSTER RATING: X/10 Katta Points.\n3. THE BRUTAL ROAST: Mirzapur ki sadko par ye gaadi chalegi ya police utha le jayegi?\n4. MUNNA KA FAISLA: Swag badhane ka nuskha.",
+      setup: "ðŸŽ¯ [KATTA VISION: DESK & CODE SETUP SCAN]\nMunna Bhaiya, is coding desk / setup / laptop ka Brutal Gangster Review karo!\n1. TARGET DIAGNOSIS: Screen, cables, laptop aur vibe ka inspection.\n2. PURVANCHAL GANGSTER RATING: X/10 Katta Points.\n3. THE BRUTAL ROAST: Ye launda coder banega ya computer operator?\n4. MUNNA KA FAISLA: Asli pro coder banne ki advice.",
+      general: "ðŸŽ¯ [KATTA VISION: FULL BAWAL SCAN]\nMunna Bhaiya, is photo ka poora Mirzapur Gangster Assessment aur Roast Report bina kisi raham ke taiyaar karo!\n1. TARGET DIAGNOSIS\n2. PURVANCHAL GANGSTER RATING (X/10 Katta Points)\n3. THE BRUTAL ROAST\n4. MUNNA KA FAISLA"
     };
 
     function openKattaVisionModal() {
@@ -6296,7 +6987,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       if (emptyState) emptyState.style.display = "flex";
       if (hudOverlay) hudOverlay.style.display = "none";
       if (scanBtn) scanBtn.disabled = true;
-      if (camBtn) camBtn.innerHTML = "<span>📷 Camera</span>";
+      if (camBtn) camBtn.innerHTML = "<span>ðŸ“· Camera</span>";
     }
 
     function stopKattaCamera() {
@@ -6321,7 +7012,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       } else {
         try {
           if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-            showMunnaToast("⚠️ Camera support uplabdh nahi hai. Gallery se photo upload karein.");
+            showMunnaToast("âš ï¸ Camera support uplabdh nahi hai. Gallery se photo upload karein.");
             return;
           }
           kattaStream = await navigator.mediaDevices.getUserMedia({
@@ -6335,11 +7026,11 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           if (img) img.style.display = "none";
           if (emptyState) emptyState.style.display = "none";
           if (hudOverlay) hudOverlay.style.display = "block";
-          if (camBtn) camBtn.innerHTML = "<span>📸 Photo Kheecho</span>";
+          if (camBtn) camBtn.innerHTML = "<span>ðŸ“¸ Photo Kheecho</span>";
           playKattaAudio("laser");
         } catch (err) {
           console.error("Camera access error:", err);
-          showMunnaToast("⚠️ Camera permission nahi mili. Gallery se upload karein!");
+          showMunnaToast("âš ï¸ Camera permission nahi mili. Gallery se upload karein!");
         }
       }
     }
@@ -6365,18 +7056,18 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         img.src = kattaCapturedDataUrl;
         img.style.display = "block";
       }
-      if (camBtn) camBtn.innerHTML = "<span>📷 Retake Camera</span>";
+      if (camBtn) camBtn.innerHTML = "<span>ðŸ“· Retake Camera</span>";
       if (scanBtn) {
         scanBtn.disabled = false;
         scanBtn.classList.add("pulse");
       }
       playKattaAudio("lock");
-      showMunnaToast("🎯 Target Locked! Ab 'Nishana Lagao' dabayein!");
+      showMunnaToast("ðŸŽ¯ Target Locked! Ab 'Nishana Lagao' dabayein!");
     }
 
     function handleKattaFileUpload(file) {
       if (!file || !file.type.startsWith("image/")) {
-        showMunnaToast("⚠️ Kripya valid photo file chunein!");
+        showMunnaToast("âš ï¸ Kripya valid photo file chunein!");
         return;
       }
       const reader = new FileReader();
@@ -6397,20 +7088,20 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           img.style.display = "block";
         }
         if (hudOverlay) hudOverlay.style.display = "block";
-        if (camBtn) camBtn.innerHTML = "<span>📷 Camera</span>";
+        if (camBtn) camBtn.innerHTML = "<span>ðŸ“· Camera</span>";
         if (scanBtn) {
           scanBtn.disabled = false;
           scanBtn.classList.add("pulse");
         }
         playKattaAudio("lock");
-        showMunnaToast("🎯 Target Locked! 'Nishana Lagao' dabayein!");
+        showMunnaToast("ðŸŽ¯ Target Locked! 'Nishana Lagao' dabayein!");
       };
       reader.readAsDataURL(file);
     }
 
     async function executeKattaScan() {
       if (!kattaCapturedDataUrl) {
-        showMunnaToast("⚠️ Pehle koi photo kheecho ya upload karo!");
+        showMunnaToast("âš ï¸ Pehle koi photo kheecho ya upload karo!");
         return;
       }
 
@@ -6444,7 +7135,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
     async function downloadGangsterReportCard(btn) {
       try {
         btn.disabled = true;
-        btn.textContent = "⏳ Generating Report Card...";
+        btn.textContent = "â³ Generating Report Card...";
 
         const bubble = btn.closest(".message-bubble") || btn.parentElement;
         const msgContainer = btn.closest(".chat-message");
@@ -6469,7 +7160,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         const roastMatch = text.match(/ROAST:?[\s\S]*?(?=(MUNNA KA FAISLA|$))/i);
         if (roastMatch && roastMatch[0]) {
           const lines = roastMatch[0].replace(/ROAST:?/i, "").trim().split("\n").filter(l => l.trim());
-          if (lines.length > 0) roastLine = lines[0].replace(/^[-*•]\s*/, "");
+          if (lines.length > 0) roastLine = lines[0].replace(/^[-*â€¢]\s*/, "");
         }
         if (roastLine.length > 90) roastLine = roastLine.substring(0, 90) + "...";
 
@@ -6504,7 +7195,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         ctx.textAlign = "center";
         ctx.fillStyle = "#ff2a51";
         ctx.font = "bold 26px sans-serif";
-        ctx.fillText("● KATTA VISION AI // OFFICIAL INSPECTION ●", 540, 95);
+        ctx.fillText("â— KATTA VISION AI // OFFICIAL INSPECTION â—", 540, 95);
 
         ctx.fillStyle = "#ffd166";
         ctx.font = "bold 44px 'Outfit', sans-serif";
@@ -6512,7 +7203,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
 
         ctx.fillStyle = "#a0a0b8";
         ctx.font = "20px monospace";
-        ctx.fillText("FILE NO: MZP-" + Math.floor(100000 + Math.random() * 900000) + " • CALIBER: .315 DESI", 540, 195);
+        ctx.fillText("FILE NO: MZP-" + Math.floor(100000 + Math.random() * 900000) + " â€¢ CALIBER: .315 DESI", 540, 195);
 
         let contentTop = 230;
         if (imgSrc) {
@@ -6554,7 +7245,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
 
         ctx.fillStyle = "#ffffff";
         ctx.font = "bold 38px 'Outfit', sans-serif";
-        ctx.fillText("🎯 " + scoreText, 540, bY + 62);
+        ctx.fillText("ðŸŽ¯ " + scoreText, 540, bY + 62);
 
         const rY = bY + 140;
         ctx.fillStyle = "rgba(255, 255, 255, 0.04)";
@@ -6575,11 +7266,11 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
 
         ctx.fillStyle = "#d90429";
         ctx.font = "bold 26px monospace";
-        ctx.fillText("👑 VERIFIED BY PHOOLCHAND TRIPATHI • KING OF MIRZAPUR", 540, 1220);
+        ctx.fillText("ðŸ‘‘ VERIFIED BY PHOOLCHAND TRIPATHI â€¢ KING OF MIRZAPUR", 540, 1220);
 
         ctx.fillStyle = "#7a7a92";
         ctx.font = "18px sans-serif";
-        ctx.fillText("Generated at munnaai.youmika.site • Zero Mercy • 100% Swag", 540, 1260);
+        ctx.fillText("Generated at munnaai.youmika.site â€¢ Zero Mercy â€¢ 100% Swag", 540, 1260);
 
         const a = document.createElement("a");
         a.download = `MunnaAI_Gangster_Report_${Date.now()}.png`;
@@ -6589,13 +7280,13 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         document.body.removeChild(a);
 
         btn.disabled = false;
-        btn.innerHTML = "<span>📸 Download Official Gangster Report Card</span>";
-        showMunnaToast("📸 Gangster Report Card download ho gaya! Status pe lagao!");
+        btn.innerHTML = "<span>ðŸ“¸ Download Official Gangster Report Card</span>";
+        showMunnaToast("ðŸ“¸ Gangster Report Card download ho gaya! Status pe lagao!");
       } catch (err) {
         console.error("Report card generation error:", err);
         btn.disabled = false;
-        btn.innerHTML = "<span>📸 Download Official Gangster Report Card</span>";
-        showMunnaToast("⚠️ Card download nahi ho paya, dobara try karein!");
+        btn.innerHTML = "<span>ðŸ“¸ Download Official Gangster Report Card</span>";
+        showMunnaToast("âš ï¸ Card download nahi ho paya, dobara try karein!");
       }
     }
 
@@ -6634,7 +7325,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
 
     async function downloadArtImage(url) {
       try {
-        showMunnaToast("⏳ Photo download ho rahi hai...");
+        showMunnaToast("â³ Photo download ho rahi hai...");
         const response = await fetch(url);
         const blob = await response.blob();
         const blobUrl = URL.createObjectURL(blob);
@@ -6645,27 +7336,27 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(blobUrl);
-        showMunnaToast("✅ Photo successfully download ho gayi!");
+        showMunnaToast("âœ… Photo successfully download ho gayi!");
       } catch (e) {
         const a = document.createElement("a");
         a.href = url;
         a.target = "_blank";
         a.download = `MunnaAI_${Date.now()}.png`;
         a.click();
-        showMunnaToast("✅ Photo nayi tab me open ho gayi!");
+        showMunnaToast("âœ… Photo nayi tab me open ho gayi!");
       }
     }
 
     async function generateAIImage(promptText, styleName = "mirzapur") {
       if (!promptText || !promptText.trim()) {
-        showMunnaToast("⚠️ Pehle batao toh sahi kaisi photo banani hai!");
+        showMunnaToast("âš ï¸ Pehle batao toh sahi kaisi photo banani hai!");
         return;
       }
 
       closeImageGenModal();
 
       // Render user prompt
-      const userDisplay = `🎨 Photo Banao: "${promptText.trim()}"`;
+      const userDisplay = `ðŸŽ¨ Photo Banao: "${promptText.trim()}"`;
       renderMessage(userDisplay, "user");
       const session = getCurrentSession();
       session.messages.push({ sender: "user", text: userDisplay });
@@ -6676,9 +7367,9 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       const bubbleElem = msgObj.bubble;
       bubbleElem.innerHTML = `
         <div class="image-generating-skeleton">
-          <div class="skeleton-art-pulse">👑</div>
+          <div class="skeleton-art-pulse">ðŸ‘‘</div>
           <div class="skeleton-art-text">Munna Bhaiya ka karigar painting bana raha hai...</div>
-          <div class="skeleton-art-sub">Aesthetic: <strong>${styleName.toUpperCase()}</strong> • 1024x1024 HD</div>
+          <div class="skeleton-art-sub">Aesthetic: <strong>${styleName.toUpperCase()}</strong> â€¢ 1024x1024 HD</div>
           <div class="skeleton-bar-wrap">
             <div class="skeleton-bar-active"></div>
           </div>
@@ -6704,11 +7395,11 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
 
         const data = await res.json();
         const imgUrl = data.imageUrl;
-        const engineLabel = data.engine === "pixazo" ? "⚡ PIXAZO GATEWAY" : "⚡ FLUX.1 HD ENGINE";
+        const engineLabel = data.engine === "pixazo" ? "âš¡ PIXAZO GATEWAY" : "âš¡ FLUX.1 HD ENGINE";
 
         const munnaQuotes = [
           "Ye lo be launde! Mirzapur ke karigar ka dabdaba! Aisi photo poore Purvanchal me koi bana ke dikha de toh batana!",
-          "Kaisa laga maal? Hamare darbar me aisi hi cheezein banti hain — ekdum solid aur lajawab!",
+          "Kaisa laga maal? Hamare darbar me aisi hi cheezein banti hain â€” ekdum solid aur lajawab!",
           "Photo dekho aur maze lo! Jalwa hai hamara, prabandh hum hamesha top class karte hain!",
           "Ye rahi tumhari photo! Frame karwa ke deewar pe laga lo, Bahubali lag rahe ho!"
         ];
@@ -6718,7 +7409,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           <p style="margin-bottom:10px; font-weight:600;">${quote}</p>
           <div class="munna-art-card">
             <div class="munna-art-header">
-              <span class="munna-art-badge">🎨 MUNNA AI ART STUDIO</span>
+              <span class="munna-art-badge">ðŸŽ¨ MUNNA AI ART STUDIO</span>
               <span class="munna-art-engine">${engineLabel}</span>
             </div>
             <div class="munna-art-image-wrapper">
@@ -6727,13 +7418,13 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
             <div class="munna-art-footer">
               <div class="munna-art-actions">
                 <button type="button" class="munna-art-action-btn" onclick="showArtLightbox('${imgUrl}')">
-                  <span>🔍 Fullscreen</span>
+                  <span>ðŸ” Fullscreen</span>
                 </button>
                 <button type="button" class="munna-art-action-btn" onclick="downloadArtImage('${imgUrl}')">
-                  <span>⬇️ Download HD</span>
+                  <span>â¬‡ï¸ Download HD</span>
                 </button>
                 <button type="button" class="munna-art-action-btn" onclick="generateAIImage('${promptText.replace(/'/g, "\\'")}', '${styleName}')">
-                  <span>🔄 Phir Se Banao</span>
+                  <span>ðŸ”„ Phir Se Banao</span>
                 </button>
               </div>
             </div>
@@ -6754,10 +7445,10 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       } catch (err) {
         console.error("Image generation failed:", err);
         bubbleElem.innerHTML = `
-          <p>⚠️ <strong>Abe karigar ka hathiyar thoda ruk gaya tha!</strong></p>
+          <p>âš ï¸ <strong>Abe karigar ka hathiyar thoda ruk gaya tha!</strong></p>
           <p style="margin-top:6px; color:#a0a0b8; font-size:0.85rem;">Error: ${err.message || 'Server busy'}</p>
           <button type="button" class="munna-art-action-btn" style="margin-top:10px; max-width:200px;" onclick="generateAIImage('${promptText.replace(/'/g, "\\'")}', '${styleName}')">
-            <span>🔄 Dobara Koshish Karo</span>
+            <span>ðŸ”„ Dobara Koshish Karo</span>
           </button>
         `;
       }
@@ -6835,7 +7526,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           cloudPill.classList.remove("offline");
           cloudPill.title = "Supabase Cloud Connected (" + user.email + ")";
         }
-        if (cloudText) cloudText.textContent = "Cloud ☁️";
+        if (cloudText) cloudText.textContent = "Cloud â˜ï¸";
         if (menuAuthLabel) menuAuthLabel.textContent = "Account (" + displayName + ")";
         if (menuLogoutBtn) menuLogoutBtn.style.display = "flex";
 
@@ -6903,10 +7594,10 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         title: "Guddu Pandit Analysis",
         timestamp: Date.now() - 3600000,
         history: [
-          { role: "model", parts: [{ text: "Guddu Pandit ka chapter hum bohot jald close karenge! Tum batao ka kaam hai?" }] }
+          { role: "model", parts: [{ text: "Guddu Pandit ka chapter hum bohot jald close karenge! Tum batao ka kaam hai<span class="material-symbols-outlined" style="font-size:16px;">help_outline</span> }] }
         ],
         messages: [
-          { sender: "munna", text: "Guddu Pandit ka chapter hum bohot jald close karenge! Tum batao ka kaam hai?" }
+          { sender: "munna", text: "Guddu Pandit ka chapter hum bohot jald close karenge! Tum batao ka kaam hai<span class="material-symbols-outlined" style="font-size:16px;">help_outline</span> }
         ]
       },
       {
@@ -6914,10 +7605,10 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         title: "Chhapra Warehouse Logistics",
         timestamp: Date.now() - 7200000,
         history: [
-          { role: "model", parts: [{ text: "Chhapra warehouse ka supply chain ekdum tight hai. Kaunse maal ka hisaab chahiye?" }] }
+          { role: "model", parts: [{ text: "Chhapra warehouse ka supply chain ekdum tight hai. Kaunse maal ka hisaab chahiye<span class="material-symbols-outlined" style="font-size:16px;">help_outline</span> }] }
         ],
         messages: [
-          { sender: "munna", text: "Chhapra warehouse ka supply chain ekdum tight hai. Kaunse maal ka hisaab chahiye?" }
+          { sender: "munna", text: "Chhapra warehouse ka supply chain ekdum tight hai. Kaunse maal ka hisaab chahiye<span class="material-symbols-outlined" style="font-size:16px;">help_outline</span> }
         ]
       }
     ];
@@ -7034,7 +7725,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           }
           renderSessionList();
           loadActiveSession();
-          showMunnaToast("☁️ Cloud chats load ho gayi hain!");
+          showMunnaToast("â˜ï¸ Cloud chats load ho gayi hain!");
         }
       } catch (err) {
         console.warn("Cloud load notice:", err);
@@ -7071,7 +7762,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       const badge = document.getElementById("quotaBadge");
       if (!badge) return;
       if (isVip) {
-        badge.textContent = "👑 VIP Unlimited";
+        badge.textContent = "ðŸ‘‘ VIP Unlimited";
         badge.classList.add("unlimited");
       } else {
         badge.textContent = `${dailyQuota} Free Left`;
@@ -7237,7 +7928,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       if (attachment.isImage && attachment.dataUrl) {
         thumb.innerHTML = `<img src="${attachment.dataUrl}" alt="Preview" />`;
       } else {
-        const icon = attachment.isPdf ? "📄" : "📜";
+        const icon = attachment.isPdf ? "ðŸ“„" : "ðŸ“œ";
         thumb.innerHTML = `<span class="file-icon">${icon}</span>`;
       }
       tray.style.display = "flex";
@@ -7297,7 +7988,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       if (codeEl) {
         navigator.clipboard.writeText(codeEl.innerText).then(() => {
           const orig = btn.innerHTML;
-          btn.innerHTML = '✔ Copied!';
+          btn.innerHTML = 'âœ” Copied!';
           setTimeout(() => btn.innerHTML = orig, 1800);
         });
       }
@@ -7317,7 +8008,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           <div class="code-block-wrapper">
             <div class="code-header">
               <span class="code-lang">${cleanLang}</span>
-              <button type="button" class="copy-code-btn" onclick="copyCodeBlock(this)">📋 Copy</button>
+              <button type="button" class="copy-code-btn" onclick="copyCodeBlock(this)">ðŸ“‹ Copy</button>
             </div>
             <pre><code>${escapedCode.trim()}</code></pre>
           </div>
@@ -7408,7 +8099,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           htmlResult += `
             <div class="katta-download-card-wrapper" style="margin-top:14px;">
               <button type="button" class="katta-download-card-btn" onclick="downloadGangsterReportCard(this)">
-                <span>📸 Download Official Gangster Report Card</span>
+                <span>ðŸ“¸ Download Official Gangster Report Card</span>
               </button>
             </div>
           `;
@@ -7442,13 +8133,13 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       }
       if (activeVoiceBtn) {
         activeVoiceBtn.classList.remove("active-voice", "loading-voice");
-        activeVoiceBtn.innerHTML = '<span class="act-icon">🔊</span>';
+        activeVoiceBtn.innerHTML = '<span class="act-icon">ðŸ”Š</span>';
         activeVoiceBtn = null;
       }
       const testBtn = document.getElementById("testVoiceBtn");
       if (testBtn) {
         testBtn.classList.remove("playing");
-        testBtn.innerHTML = '<span>▶️</span> Test Human Voice';
+        testBtn.innerHTML = '<span>â–¶ï¸</span> Test Human Voice';
       }
     }
 
@@ -7475,7 +8166,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
 
       if (btn) {
         btn.classList.add("loading-voice");
-        btn.innerHTML = '<span class="act-icon">⏳</span>';
+        btn.innerHTML = '<span class="act-icon">â³</span>';
         btn.title = "Aawaz ban rahi hai...";
         activeVoiceBtn = btn;
       }
@@ -7516,14 +8207,14 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           if (btn) {
             btn.classList.remove("loading-voice");
             btn.classList.add("active-voice");
-            btn.innerHTML = '<span class="act-icon">⏹️</span>';
+            btn.innerHTML = '<span class="act-icon">â¹ï¸</span>';
             btn.title = "Aawaz chal rahi hai (Rokne ke liye click karein)";
           }
 
           source.onended = () => {
             if (btn) {
               btn.classList.remove("active-voice", "loading-voice");
-              btn.innerHTML = '<span class="act-icon">🔊</span>';
+              btn.innerHTML = '<span class="act-icon">ðŸ”Š</span>';
               btn.title = "Sunno (Realistic Voice)";
             }
             if (activeVoiceBtn === btn) activeVoiceBtn = null;
@@ -7531,7 +8222,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
             const testBtn = document.getElementById("testVoiceBtn");
             if (testBtn) {
               testBtn.classList.remove("playing");
-              testBtn.innerHTML = '<span>▶️</span> Test Human Voice';
+              testBtn.innerHTML = '<span>â–¶ï¸</span> Test Human Voice';
             }
           };
 
@@ -7549,14 +8240,14 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           if (btn) {
             btn.classList.remove("loading-voice");
             btn.classList.add("active-voice");
-            btn.innerHTML = '<span class="act-icon">⏹️</span>';
+            btn.innerHTML = '<span class="act-icon">â¹ï¸</span>';
             btn.title = "Aawaz chal rahi hai (Rokne ke liye click karein)";
           }
 
           audio.onended = () => {
             if (btn) {
               btn.classList.remove("active-voice", "loading-voice");
-              btn.innerHTML = '<span class="act-icon">🔊</span>';
+              btn.innerHTML = '<span class="act-icon">ðŸ”Š</span>';
               btn.title = "Sunno (Realistic Voice)";
             }
             if (activeVoiceBtn === btn) activeVoiceBtn = null;
@@ -7568,10 +8259,10 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         }
       } catch (err) {
         console.error("ElevenLabs playback error:", err);
-        showMunnaToast("⚠️ Aawaz load nahi hui, network check karein.");
+        showMunnaToast("âš ï¸ Aawaz load nahi hui, network check karein.");
         if (btn) {
           btn.classList.remove("loading-voice", "active-voice");
-          btn.innerHTML = '<span class="act-icon">🔊</span>';
+          btn.innerHTML = '<span class="act-icon">ðŸ”Š</span>';
         }
         if (activeVoiceBtn === btn) activeVoiceBtn = null;
       }
@@ -7602,7 +8293,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         const contentBody = document.createElement("div");
         contentBody.className = "ai-content-body";
 
-        // Subtle Icon-Only Actions Bar (📋 🔊 ↻ 👍 👎 ⋯)
+        // Subtle Icon-Only Actions Bar (ðŸ“‹ ðŸ”Š â†» ðŸ‘ ðŸ‘Ž â‹¯)
         const actionsBar = document.createElement("div");
         actionsBar.className = "ai-actions-bar";
 
@@ -7611,11 +8302,11 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         copyBtn.type = "button";
         copyBtn.className = "ai-icon-btn btn-copy-ai";
         copyBtn.title = "Copy response";
-        copyBtn.innerHTML = '<span class="act-icon">📋</span>';
+        copyBtn.innerHTML = '<span class="act-icon">ðŸ“‹</span>';
         copyBtn.onclick = () => {
           navigator.clipboard.writeText(contentBody.innerText).then(() => {
-            copyBtn.innerHTML = '<span class="act-icon">✓</span>';
-            setTimeout(() => copyBtn.innerHTML = '<span class="act-icon">📋</span>', 1800);
+            copyBtn.innerHTML = '<span class="act-icon">âœ“</span>';
+            setTimeout(() => copyBtn.innerHTML = '<span class="act-icon">ðŸ“‹</span>', 1800);
           });
         };
         actionsBar.appendChild(copyBtn);
@@ -7625,7 +8316,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         voiceBtn.type = "button";
         voiceBtn.className = "ai-icon-btn btn-voice-ai";
         voiceBtn.title = "Sunno (Realistic Human Voice)";
-        voiceBtn.innerHTML = '<span class="act-icon">🔊</span>';
+        voiceBtn.innerHTML = '<span class="act-icon">ðŸ”Š</span>';
         voiceBtn.onclick = () => {
           speakText(contentBody.innerText, voiceBtn);
         };
@@ -7636,7 +8327,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         regenBtn.type = "button";
         regenBtn.className = "ai-icon-btn btn-regen-ai";
         regenBtn.title = "Dobara generate karein";
-        regenBtn.innerHTML = '<span class="act-icon">↻</span>';
+        regenBtn.innerHTML = '<span class="act-icon">â†»</span>';
         regenBtn.onclick = () => handleRegenerate(msgDiv);
         actionsBar.appendChild(regenBtn);
 
@@ -7645,7 +8336,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         likeBtn.type = "button";
         likeBtn.className = "ai-icon-btn btn-like-ai";
         likeBtn.title = "Acha laga (Jalwa!)";
-        likeBtn.innerHTML = '<span class="act-icon">👍</span>';
+        likeBtn.innerHTML = '<span class="act-icon">ðŸ‘</span>';
         likeBtn.onclick = () => {
           likeBtn.classList.toggle("active");
           if (dislikeBtn) dislikeBtn.classList.remove("active");
@@ -7657,7 +8348,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         dislikeBtn.type = "button";
         dislikeBtn.className = "ai-icon-btn btn-dislike-ai";
         dislikeBtn.title = "Kharab laga";
-        dislikeBtn.innerHTML = '<span class="act-icon">👎</span>';
+        dislikeBtn.innerHTML = '<span class="act-icon">ðŸ‘Ž</span>';
         dislikeBtn.onclick = () => {
           dislikeBtn.classList.toggle("active");
           if (likeBtn) likeBtn.classList.remove("active");
@@ -7669,7 +8360,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         moreBtn.type = "button";
         moreBtn.className = "ai-icon-btn btn-more-ai";
         moreBtn.title = "More options";
-        moreBtn.innerHTML = '<span class="act-icon">⋯</span>';
+        moreBtn.innerHTML = '<span class="act-icon">â‹¯</span>';
         moreBtn.onclick = () => {
           navigator.clipboard.writeText(contentBody.innerText);
           alert("Munna Bhaiya ka jawab clipboard par copy ho gaya!");
@@ -7740,7 +8431,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         } else if (attachment.name) {
           const fileBadge = document.createElement("div");
           fileBadge.className = "msg-attachment-file";
-          const icon = attachment.isPdf ? "📄" : "📜";
+          const icon = attachment.isPdf ? "ðŸ“„" : "ðŸ“œ";
           fileBadge.innerHTML = `<span>${icon}</span> <span>${escapeHTML(attachment.name)}</span> <small>(${attachment.formattedSize || ''})</small>`;
           bubble.appendChild(fileBadge);
         }
@@ -7765,7 +8456,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       typingDiv.className = "msg munna document-style";
       typingDiv.innerHTML = `
         <div class="ai-header">
-          <div class="ai-avatar">👑</div>
+          <div class="ai-avatar">ðŸ‘‘</div>
           <div class="ai-identity">
             <span class="ai-name">Munna AI</span>
             <span class="ai-status">Dimaag chala rahe hain...</span>
@@ -7793,8 +8484,8 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         const li = document.createElement("li");
         li.className = `history-item ${sess.id === currentSessionId ? 'active' : ''}`;
         li.innerHTML = `
-          <span class="history-title" title="${escapeHTML(sess.title)}">💬 ${escapeHTML(sess.title)}</span>
-          <button class="history-delete-btn" title="Delete">✕</button>
+          <span class="history-title" title="${escapeHTML(sess.title)}">ðŸ’¬ ${escapeHTML(sess.title)}</span>
+          <button class="history-delete-btn" title="Delete">âœ•</button>
         `;
         li.onclick = (e) => {
           if (e.target.classList.contains("history-delete-btn")) return;
@@ -7844,46 +8535,122 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
     function renderWelcomeHero() {
       const chatMessages = document.getElementById("chatMessages");
       if (!chatMessages) return;
+      const existingHero = document.getElementById("welcomeHero");
+      if (existingHero) existingHero.remove();
+
       const hero = document.createElement("div");
       hero.className = "welcome-hero";
       hero.id = "welcomeHero";
-      hero.innerHTML = `
+      hero.innerHTML = 
         <div class="welcome-crest">
           <span class="material-symbols-outlined crown-icon">workspace_premium</span>
         </div>
-        <h1 class="welcome-title font-headline">Bolo be launde, ka prabandh karna hai...</h1>
-        <p class="welcome-subtitle">Munna AI Ultra v4.5 is online. State your intent, execute code, synthesize global market strategies, or generate visionary assets instantly.</p>
-        <div class="welcome-action-chips">
-          <button type="button" class="welcome-chip" id="welcomeChipKatta">
-            <span class="material-symbols-outlined" style="color:var(--crimson); font-size:18px;">visibility</span>
-            <span>Katta Vision</span>
+        <div class="welcome-badge-line">
+          <span class="material-symbols-outlined" style="font-size:14px;">bolt</span>
+          <span>Munna AI â€¢ King of AI Models</span>
+        </div>
+        <h1 class="welcome-title font-headline">
+          Your AI. <span class="gold-accent">Your Rules.</span> Your King.
+        </h1>
+        <p class="welcome-subtitle">
+          Obsidian executive intelligence powered by Gemini 3.6 Flash. State your intent, synthesize global data, execute code, or build visionary systems.
+        </p>
+
+        <!-- 4 Royal Feature Cards -->
+        <div class="hero-feature-cards">
+          <div class="feature-card-royal" id="featureCardChat">
+            <div class="feature-card-header">
+              <div class="feature-card-icon">
+                <span class="material-symbols-outlined" style="font-size:20px;">chat</span>
+              </div>
+              <span class="feature-card-badge">Gemini 3.6</span>
+            </div>
+            <div class="feature-card-title">Intelligent Chat</div>
+            <div class="feature-card-desc">Deep context, unfiltered reasoning & executive decision making.</div>
+          </div>
+
+          <div class="feature-card-royal" id="featureCardVision">
+            <div class="feature-card-header">
+              <div class="feature-card-icon" style="color:var(--crimson); background:rgba(248,113,113,0.1);">
+                <span class="material-symbols-outlined" style="font-size:20px;">visibility</span>
+              </div>
+              <span class="feature-card-badge">Multimodal</span>
+            </div>
+            <div class="feature-card-title">Katta Vision</div>
+            <div class="feature-card-desc">Optical document scan, perimeter analysis & multi-modal inspection.</div>
+          </div>
+
+          <div class="feature-card-royal" id="featureCardVoice">
+            <div class="feature-card-header">
+              <div class="feature-card-icon" style="color:var(--emerald); background:rgba(52,211,153,0.1);">
+                <span class="material-symbols-outlined" style="font-size:20px;">record_voice_over</span>
+              </div>
+              <span class="feature-card-badge">Adam HD</span>
+            </div>
+            <div class="feature-card-title">Voice Studio</div>
+            <div class="feature-card-desc">Ultra-low latency ElevenLabs studio audio streaming in Hinglish/Hindi.</div>
+          </div>
+
+          <div class="feature-card-royal" id="featureCardCode">
+            <div class="feature-card-header">
+              <div class="feature-card-icon" style="color:#60a5fa; background:rgba(96,165,250,0.1);">
+                <span class="material-symbols-outlined" style="font-size:20px;">terminal</span>
+              </div>
+              <span class="feature-card-badge">Synthesizer</span>
+            </div>
+            <div class="feature-card-title">Code Assistant</div>
+            <div class="feature-card-desc">Write, review, optimize & execute full-stack architecture & scripts.</div>
+          </div>
+        </div>
+
+        <!-- Quick Prompts Bar -->
+        <div class="hero-quick-prompts">
+          <button type="button" class="quick-prompt-chip" id="quickPromptVision">
+            <span class="material-symbols-outlined" style="font-size:16px; color:var(--crimson);">image_search</span>
+            <span>Explain this image</span>
           </button>
-          <button type="button" class="welcome-chip" id="welcomeChipPhoto">
-            <span class="material-symbols-outlined" style="color:var(--gold-primary); font-size:18px;">palette</span>
-            <span>Photo Banao</span>
+          <button type="button" class="quick-prompt-chip" id="quickPromptCode">
+            <span class="material-symbols-outlined" style="font-size:16px; color:var(--emerald);">code</span>
+            <span>Write a Python script for real-time market data</span>
           </button>
-          <button type="button" class="welcome-chip" id="welcomeChipSuggest">
-            <span class="material-symbols-outlined" style="color:var(--gold-primary); font-size:18px;">lightbulb</span>
-            <span>Suggest Prompt</span>
+          <button type="button" class="quick-prompt-chip" id="quickPromptPdf">
+            <span class="material-symbols-outlined" style="font-size:16px; color:var(--gold-primary);">description</span>
+            <span>Summarize quarterly business performance</span>
           </button>
-          <button type="button" class="welcome-chip" id="welcomeChipWeb">
-            <span class="material-symbols-outlined" style="color:#60a5fa; font-size:18px;">language</span>
-            <span>Web Search</span>
+          <button type="button" class="quick-prompt-chip" id="quickPromptIdeas">
+            <span class="material-symbols-outlined" style="font-size:16px; color:#60a5fa;">lightbulb</span>
+            <span>Brainstorm high-margin tech startup ideas</span>
           </button>
         </div>
-      `;
+      ;
 
-      hero.querySelector("#welcomeChipKatta").onclick = () => {
+      // Wire feature card events
+      hero.querySelector("#featureCardChat").onclick = () => {
+        const input = document.getElementById("userInput");
+        if (input) { input.focus(); input.placeholder = "Bolo be! Kya soch rahe ho..."; }
+      };
+      hero.querySelector("#featureCardVision").onclick = () => {
         if (typeof window.openKattaVisionModal === "function") window.openKattaVisionModal();
       };
-      hero.querySelector("#welcomeChipPhoto").onclick = () => {
-        if (typeof window.openPhotoBanaoModal === "function") window.openPhotoBanaoModal();
+      hero.querySelector("#featureCardVoice").onclick = () => {
+        window.openVoiceSettings();
       };
-      hero.querySelector("#welcomeChipSuggest").onclick = () => {
-        window.injectStarterPrompt("Jaunpur deal corridor ka risk assessment aur logistics plan compile karo");
+      hero.querySelector("#featureCardCode").onclick = () => {
+        window.injectStarterPrompt("Ek robust, production-grade Python script likho jo live financial and market data fetch kare.");
       };
-      hero.querySelector("#welcomeChipWeb").onclick = () => {
-        window.injectStarterPrompt("Global AI chip market aur supply chain disruptions par strategic report generate karo");
+
+      // Wire quick prompts
+      hero.querySelector("#quickPromptVision").onclick = () => {
+        if (typeof window.openKattaVisionModal === "function") window.openKattaVisionModal();
+      };
+      hero.querySelector("#quickPromptCode").onclick = () => {
+        window.injectStarterPrompt("Ek robust, production-grade Python script likho jo live financial and market data fetch kare.");
+      };
+      hero.querySelector("#quickPromptPdf").onclick = () => {
+        window.injectStarterPrompt("Quarterly business performance and unit economics ka strategic executive summary ready karo.");
+      };
+      hero.querySelector("#quickPromptIdeas").onclick = () => {
+        window.injectStarterPrompt("India aur global market ke liye top 5 high-margin profitable AI-first startup ideas share karo.");
       };
 
       chatMessages.appendChild(hero);
@@ -7900,7 +8667,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       }
       if (activeVoiceBtn) {
         activeVoiceBtn.classList.remove("active-voice", "loading-voice");
-        activeVoiceBtn.innerHTML = '<span class="act-icon">🔊</span>';
+        activeVoiceBtn.innerHTML = '<span class="act-icon">ðŸ”Š</span>';
         activeVoiceBtn = null;
       }
       const chatMessages = document.getElementById("chatMessages");
@@ -8020,7 +8787,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           const errData = await res.json().catch(() => ({}));
           const errMsg = errData.error || `HTTP ${res.status}`;
           if (res.status === 429) {
-            showMunnaToast("⚠️ Google Gemini ka daily free quota poora ho gaya hai! Kripya thoda intezaar karein.");
+            showMunnaToast("âš ï¸ Google Gemini ka daily free quota poora ho gaya hai! Kripya thoda intezaar karein.");
           }
           throw new Error(errMsg);
         }
@@ -8029,11 +8796,11 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         fullIncomingText = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
       } catch (err) {
         console.error("AI Generation error:", err);
-        fullIncomingText = "⚠️ **Gemini AI Connection Error:** " + (err.message || "Network error") + ". Kripya dobara try karein!";
+        fullIncomingText = "âš ï¸ **Gemini AI Connection Error:** " + (err.message || "Network error") + ". Kripya dobara try karein!";
       }
 
       if (!fullIncomingText.trim()) {
-        fullIncomingText = "⚠️ **No Content:** Gemini AI se response prapt nahi hua. Kripya apna message dobara bhejein.";
+        fullIncomingText = "âš ï¸ **No Content:** Gemini AI se response prapt nahi hua. Kripya apna message dobara bhejein.";
       }
 
       // Smooth fluid typewriter animation for the real Google Gemini AI response
@@ -8096,7 +8863,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       }
       if (activeVoiceBtn) {
         activeVoiceBtn.classList.remove("active-voice", "loading-voice");
-        activeVoiceBtn.innerHTML = '<span class="act-icon">🔊</span>';
+        activeVoiceBtn.innerHTML = '<span class="act-icon">ðŸ”Š</span>';
         activeVoiceBtn = null;
       }
       targetMsgDiv.remove();
@@ -8164,7 +8931,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       }
       if (activeVoiceBtn) {
         activeVoiceBtn.classList.remove("active-voice", "loading-voice");
-        activeVoiceBtn.innerHTML = '<span class="act-icon">🔊</span>';
+        activeVoiceBtn.innerHTML = '<span class="act-icon">ðŸ”Š</span>';
         activeVoiceBtn = null;
       }
 
@@ -8236,7 +9003,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         } : null
       });
 
-      const sessionDisplayTitle = text || (currentAttachment ? `📎 ${currentAttachment.name}` : "New Chat");
+      const sessionDisplayTitle = text || (currentAttachment ? `ðŸ“Ž ${currentAttachment.name}` : "New Chat");
       if (session.messages.length <= 2 || session.title === "Nayi Baatcheet" || session.title === "New Chat") {
         session.title = sessionDisplayTitle.length > 24 ? sessionDisplayTitle.substring(0, 24) + "..." : sessionDisplayTitle;
         renderSessionList();
@@ -8251,7 +9018,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       // Update Send Button to Loading State
       if (sendBtn) {
         sendBtn.classList.add("loading");
-        sendBtn.innerHTML = '<span class="send-icon">⏳</span>';
+        sendBtn.innerHTML = '<span class="send-icon">â³</span>';
       }
 
       let bubbleElem = null;
@@ -8280,7 +9047,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         isSending = false;
         if (sendBtn) {
           sendBtn.classList.remove("loading");
-          sendBtn.innerHTML = '<span class="send-icon">➤</span>';
+          sendBtn.innerHTML = '<span class="send-icon">âž¤</span>';
         }
         updateSendBtnState();
         const currentInput = document.getElementById("userInput");
@@ -8401,10 +9168,10 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           if (action === "suggest") {
             const suggestions = [
               "Munna Bhaiya, Jaunpur market pe kabza karne ka complete business masterplan banao!",
-              "Bhaiya, Python aur JavaScript me ek mast full-stack app kaise banayein?",
+              "Bhaiya, Python aur JavaScript me ek mast full-stack app kaise banayein<span class="material-symbols-outlined" style="font-size:16px;">help_outline</span>,
               "Munna Bhaiya, dushman ko dost kaise banayein? Koi solid purvanchal formula batao!",
-              "Bhaiya, mere code me performance bug aa raha hai, isko optimize kaise karein?",
-              "Mirzapur ki gaddi ka niyam business aur career me kaise lagayein?"
+              "Bhaiya, mere code me performance bug aa raha hai, isko optimize kaise karein<span class="material-symbols-outlined" style="font-size:16px;">help_outline</span>,
+              "Mirzapur ki gaddi ka niyam business aur career me kaise lagayein<span class="material-symbols-outlined" style="font-size:16px;">help_outline</span>
             ];
             const chosen = suggestions[Math.floor(Math.random() * suggestions.length)];
             textarea.value = chosen;
@@ -8427,8 +9194,8 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
             textarea.focus();
             updateSendBtnState();
           } else if (action === "web") {
-            if (!textarea.value.includes("[🌐 Web Search]")) {
-              textarea.value = "[🌐 Web Search] " + textarea.value;
+            if (!textarea.value.includes("[ðŸŒ Web Search]")) {
+              textarea.value = "[ðŸŒ Web Search] " + textarea.value;
             }
             autoResizeTextarea();
             textarea.focus();
@@ -8537,7 +9304,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       const clearBtn = document.getElementById("clearAllHistoryBtn");
       if (clearBtn) {
         clearBtn.onclick = () => {
-          if (confirm("Kya aap saari pichli baatcheet hatana chahte hain?")) {
+          if (confirm("Kya aap saari pichli baatcheet hatana chahte hain<span class="material-symbols-outlined" style="font-size:16px;">help_outline</span>)) {
             sessions = [];
             createNewSession();
           }
@@ -8577,7 +9344,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           const upiVipStr = `upi://pay?pa=${encodeURIComponent(currentUpiId)}&pn=Munna%20Bhaiya%20VIP&am=49&cu=INR`;
           window.open(upiVipStr, "_blank");
           setTimeout(() => {
-            if (confirm("Kya aapne ₹49 UPI payment kar diya hai? 'OK' daba kar VIP Pass activate karein!")) {
+            if (confirm("Kya aapne â‚¹49 UPI payment kar diya hai? 'OK' daba kar VIP Pass activate karein!")) {
               activateVip(false);
             }
           }, 1200);
@@ -8592,7 +9359,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           if (c === "MUNNA99" || c === "BAHUBALI" || c === "MIRZAPUR") {
             activateVip(true);
           } else {
-            alert("Galat Promo Code be! Asli code daalo (MUNNA99) ya ₹49 se unlock karo!");
+            alert("Galat Promo Code be! Asli code daalo (MUNNA99) ya â‚¹49 se unlock karo!");
           }
         };
       }
@@ -8826,7 +9593,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           const inp = document.getElementById("imageGenPromptInput");
           const prompt = inp ? inp.value.trim() : "";
           if (!prompt) {
-            showMunnaToast("⚠️ Pehle koi prompt likho be!");
+            showMunnaToast("âš ï¸ Pehle koi prompt likho be!");
             return;
           }
           generateAIImage(prompt, currentImageGenStyle || "mirzapur");
@@ -8902,7 +9669,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           }
 
           syncUserUI();
-          showMunnaToast("👑 Profile update ho gayi bhai!");
+          showMunnaToast("ðŸ‘‘ Profile update ho gayi bhai!");
           closeProfileModal();
         };
       }
@@ -8939,7 +9706,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       const settingsClearHistoryBtn = document.getElementById("settingsClearHistoryBtn");
       if (settingsClearHistoryBtn) {
         settingsClearHistoryBtn.onclick = () => {
-          if (confirm("Kya aap saari pichli baatcheet hatana chahte hain?")) {
+          if (confirm("Kya aap saari pichli baatcheet hatana chahte hain<span class="material-symbols-outlined" style="font-size:16px;">help_outline</span>)) {
             sessions = [];
             createNewSession();
             closeSettingsModal();
@@ -9042,25 +9809,25 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         signInForm.onsubmit = async (e) => {
           e.preventDefault();
           if (!supabaseClient) {
-            showMunnaToast("⚠️ Supabase connect nahi ho paya.");
+            showMunnaToast("âš ï¸ Supabase connect nahi ho paya.");
             return;
           }
           const email = document.getElementById("signInEmail").value.trim();
           const password = document.getElementById("signInPassword").value;
           const btn = document.getElementById("btnSubmitSignIn");
           btn.classList.add("loading");
-          btn.innerHTML = '<span class="btn-text">Dakhil ho rahe hain... ⏳</span>';
+          btn.innerHTML = '<span class="btn-text">Dakhil ho rahe hain... â³</span>';
 
           try {
             const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
             if (error) throw error;
-            showMunnaToast("👑 Dakhila safal! Darbar me swagat hai.");
+            showMunnaToast("ðŸ‘‘ Dakhila safal! Darbar me swagat hai.");
             closeAuthModal();
           } catch (err) {
-            showMunnaToast("⚠️ " + (err.message || "Login nahi ho paya"));
+            showMunnaToast("âš ï¸ " + (err.message || "Login nahi ho paya"));
           } finally {
             btn.classList.remove("loading");
-            btn.innerHTML = '<span class="btn-text">Dakhil Ho (Sign In) ➔</span>';
+            btn.innerHTML = '<span class="btn-text">Dakhil Ho (Sign In) âž”</span>';
           }
         };
       }
@@ -9069,7 +9836,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         signUpForm.onsubmit = async (e) => {
           e.preventDefault();
           if (!supabaseClient) {
-            showMunnaToast("⚠️ Supabase connect nahi ho paya.");
+            showMunnaToast("âš ï¸ Supabase connect nahi ho paya.");
             return;
           }
           const name = document.getElementById("signUpName").value.trim();
@@ -9077,7 +9844,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           const password = document.getElementById("signUpPassword").value;
           const btn = document.getElementById("btnSubmitSignUp");
           btn.classList.add("loading");
-          btn.innerHTML = '<span class="btn-text">Khata ban raha hai... ⏳</span>';
+          btn.innerHTML = '<span class="btn-text">Khata ban raha hai... â³</span>';
 
           try {
             const { data, error } = await supabaseClient.auth.signUp({
@@ -9086,15 +9853,15 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
               options: { data: { full_name: name } }
             });
             if (error) throw error;
-            showMunnaToast("✅ Khata ban gaya! Ab Sign In karein.");
+            showMunnaToast("âœ… Khata ban gaya! Ab Sign In karein.");
             if (tabSignInBtn) tabSignInBtn.click();
             const inEmail = document.getElementById("signInEmail");
             if (inEmail) inEmail.value = email;
           } catch (err) {
-            showMunnaToast("⚠️ " + (err.message || "Khata nahi ban paya"));
+            showMunnaToast("âš ï¸ " + (err.message || "Khata nahi ban paya"));
           } finally {
             btn.classList.remove("loading");
-            btn.innerHTML = '<span class="btn-text">Naya Khata Kholein (Register) ➔</span>';
+            btn.innerHTML = '<span class="btn-text">Naya Khata Kholein (Register) âž”</span>';
           }
         };
       }
@@ -9125,12 +9892,12 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       if (btnScreenGoogle) {
         btnScreenGoogle.onclick = async () => {
           if (!supabaseClient) {
-            showMunnaToast("⚠️ Supabase connection unavailable.");
+            showMunnaToast("âš ï¸ Supabase connection unavailable.");
             return;
           }
           btnScreenGoogle.classList.add("loading");
           const origHtml = btnScreenGoogle.innerHTML;
-          btnScreenGoogle.innerHTML = '<span>Redirecting to Google... ⏳</span>';
+          btnScreenGoogle.innerHTML = '<span>Redirecting to Google... â³</span>';
           try {
             const { data, error } = await supabaseClient.auth.signInWithOAuth({
               provider: 'google',
@@ -9141,7 +9908,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
             if (error) throw error;
           } catch (err) {
             console.error("Google sign-in error:", err);
-            showMunnaToast("⚠️ Google sign-in: " + (err.message || "Failed to initiate"));
+            showMunnaToast("âš ï¸ Google sign-in: " + (err.message || "Failed to initiate"));
             btnScreenGoogle.classList.remove("loading");
             btnScreenGoogle.innerHTML = origHtml;
           }
@@ -9152,14 +9919,14 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         screenSignInForm.onsubmit = async (e) => {
           e.preventDefault();
           if (!supabaseClient) {
-            showMunnaToast("⚠️ Supabase connection unavailable.");
+            showMunnaToast("âš ï¸ Supabase connection unavailable.");
             return;
           }
           const email = document.getElementById("screenSignInEmail").value.trim();
           const password = document.getElementById("screenSignInPassword").value;
           const btn = document.getElementById("btnScreenSignIn");
           btn.classList.add("loading");
-          btn.innerHTML = '<span>Signing in... ⏳</span>';
+          btn.innerHTML = '<span>Signing in... â³</span>';
 
           try {
             const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
@@ -9169,7 +9936,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
             updateAuthUI(currentUser);
             loadSessionsFromCloud();
             hideAuthScreen();
-            showMunnaToast("👑 Darbar me swagat hai, " + (currentUser.user_metadata?.full_name || currentUser.email.split("@")[0]) + "!");
+            showMunnaToast("ðŸ‘‘ Darbar me swagat hai, " + (currentUser.user_metadata?.full_name || currentUser.email.split("@")[0]) + "!");
           } catch (err) {
             console.error("Sign in error:", err);
             let msg = err.message || "Unable to sign in";
@@ -9178,10 +9945,10 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
             } else if (msg.toLowerCase().includes("email not confirmed")) {
               msg = "Aapka email verify nahi hua hai. Kripya inbox check karein!";
             }
-            showMunnaToast("⚠️ " + msg);
+            showMunnaToast("âš ï¸ " + msg);
           } finally {
             btn.classList.remove("loading");
-            btn.innerHTML = '<span>Sign In to Munna AI ➔</span>';
+            btn.innerHTML = '<span>Sign In to Munna AI âž”</span>';
           }
         };
       }
@@ -9190,7 +9957,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         screenSignUpForm.onsubmit = async (e) => {
           e.preventDefault();
           if (!supabaseClient) {
-            showMunnaToast("⚠️ Supabase connection unavailable.");
+            showMunnaToast("âš ï¸ Supabase connection unavailable.");
             return;
           }
           const name = document.getElementById("screenSignUpName").value.trim();
@@ -9198,7 +9965,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           const password = document.getElementById("screenSignUpPassword").value;
           const btn = document.getElementById("btnScreenSignUp");
           btn.classList.add("loading");
-          btn.innerHTML = '<span>Creating account... ⏳</span>';
+          btn.innerHTML = '<span>Creating account... â³</span>';
 
           try {
             const { data, error } = await supabaseClient.auth.signUp({
@@ -9212,10 +9979,10 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
               sessionStorage.removeItem("munna_guest_mode");
               updateAuthUI(currentUser);
               hideAuthScreen();
-              showMunnaToast("👑 Khata ban gaya aur dakhila safal! Swagat hai, " + name + "!");
+              showMunnaToast("ðŸ‘‘ Khata ban gaya aur dakhila safal! Swagat hai, " + name + "!");
               loadSessionsFromCloud();
             } else {
-              showMunnaToast("✅ Khata ban gaya! Kripya Sign In karein.");
+              showMunnaToast("âœ… Khata ban gaya! Kripya Sign In karein.");
               if (screenTabSignInBtn) screenTabSignInBtn.click();
               const inEmail = document.getElementById("screenSignInEmail");
               if (inEmail) inEmail.value = email;
@@ -9224,10 +9991,10 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
             }
           } catch (err) {
             console.error("Sign up error:", err);
-            showMunnaToast("⚠️ " + (err.message || "Unable to create account"));
+            showMunnaToast("âš ï¸ " + (err.message || "Unable to create account"));
           } finally {
             btn.classList.remove("loading");
-            btn.innerHTML = '<span>Create Your Account ➔</span>';
+            btn.innerHTML = '<span>Create Your Account âž”</span>';
           }
         };
       }
@@ -9267,7 +10034,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
             sessionStorage.removeItem("munna_guest_mode");
             updateAuthUI(currentUser);
             hideAuthScreen();
-            showMunnaToast("👑 Welcome to Munna AI, " + (currentUser.user_metadata?.full_name || currentUser.email.split("@")[0]) + "!");
+            showMunnaToast("ðŸ‘‘ Welcome to Munna AI, " + (currentUser.user_metadata?.full_name || currentUser.email.split("@")[0]) + "!");
             loadSessionsFromCloud();
           } else if (event === "SIGNED_OUT") {
             currentUser = null;
@@ -9290,8 +10057,8 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
             return;
           }
           testVoiceBtn.classList.add("playing");
-          testVoiceBtn.innerHTML = '<span>⏹️</span> Rokhein';
-          showMunnaToast("🎙️ Munna Bhaiya bol rahe hain...");
+          testVoiceBtn.innerHTML = '<span>â¹ï¸</span> Rokhein';
+          showMunnaToast("ðŸŽ™ï¸ Munna Bhaiya bol rahe hain...");
           speakText("Arey bhai, hum hain Munna AI! King of AI Models! Poori duniya me jalwa hai hamara! Har masle ka pakka prabandh karte hain!", testVoiceBtn);
         };
       }
@@ -9325,10 +10092,10 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           activeModel = engineId || "gemini-3.6-flash";
           if (label && label.includes("Ultra")) {
             document.getElementById("optModelUltra")?.classList.add("active");
-            showMunnaToast("👑 Munna Ultra v4.5 Flagship Active (Gemini 3.6)");
+            showMunnaToast("ðŸ‘‘ Munna Ultra v4.5 Flagship Active (Gemini 3.6)");
           } else {
             document.getElementById("optModelFlash")?.classList.add("active");
-            showMunnaToast("⚡ Gemini 3.6 Flash Engine Active");
+            showMunnaToast("âš¡ Gemini 3.6 Flash Engine Active");
           }
         }
       };
@@ -9366,7 +10133,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       window.startNewChat = function() {
         if (typeof createNewSession === "function") {
           createNewSession();
-          showMunnaToast("👑 Nayi darbar chat shuru ho gayi!");
+          showMunnaToast("ðŸ‘‘ Nayi darbar chat shuru ho gayi!");
         }
       };
 
@@ -9404,7 +10171,8 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
 
   <!-- Drag and Drop Overlay -->
   <div class="drag-overlay" id="dragOverlay">
-    <span>📁 Image ya File yahan chhodo! Munna Bhaiya dekh rahe hain...</span>
+    <span>ðŸ“ Image ya File yahan chhodo! Munna Bhaiya dekh rahe hain...</span>
   </div>
 </body>
 </html>
+

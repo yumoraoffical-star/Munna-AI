@@ -49,7 +49,7 @@
 
     // --- 2. ERROR NOTICE HELPER (No fake dialogues, transparent errors) ---
     function getAIErrorMessage(err) {
-      return "⚠️ **Connection Error:** Gemini AI se connect nahi ho paya (" + (err?.message || "Network issue") + "). Kripya apna message dobara bhejein!";
+      return "âš ï¸ **Connection Error:** Gemini AI se connect nahi ho paya (" + (err?.message || "Network issue") + "). Kripya apna message dobara bhejein!";
     }
 
     try {
@@ -61,7 +61,7 @@
     }
     // --- 3. GEMINI AI CONFIGURATION (Secured via /api/chat) ---
     let activeModel = "gemini-3.6-flash";
-    const initialGreeting = "Aao be! Ka dikkat ho gayi? Mirzapur ke hone wale raja se seedha baat kar rahe ho. Koi coding ki samasya ho, dimaag ka bawasir ho, ya koi photo/file dikhaani ho — bolo be, hum karte hain pakka prabandh!";
+    const initialGreeting = "Aao be! Ka dikkat ho gayi? Mirzapur ke hone wale raja se seedha baat kar rahe ho. Koi coding ki samasya ho, dimaag ka bawasir ho, ya koi photo/file dikhaani ho â€” bolo be, hum karte hain pakka prabandh!";
 
     function getSystemPrompt() {
       const lang = (userData && userData.language) ? userData.language : "hinglish";
@@ -73,22 +73,22 @@
       } else {
         langDirective = `LANGUAGE & SLANG (MANDATORY & CRITICAL):
 - You MUST ALWAYS speak in authentic Purvanchal / Mirzapur UP Hindi-Hinglish dialect!
-- Use raw street words naturally in EVERY sentence: "Abe", "Aao be!", "Bolo be!", "Ka dikkat hai be?", "Launde", "Chote", "Guru", "Hum", "Hamara", "Katta", "Bawasir", "Prabandh", "Gaddi", "Bauji", "Lalit".
-- NEVER refer to yourself as "Main" or "Mujhe" — ALWAYS use "Hum" and "Humein" ("Hum bol rahe hain", "Hum karte hain prabandh", "Hamara dabdaba").
+- Use raw street words naturally in EVERY sentence: "Abe", "Aao be!", "Bolo be!", "Ka dikkat hai be<span class="material-symbols-outlined" style="font-size:16px;">help_outline</span>, "Launde", "Chote", "Guru", "Hum", "Hamara", "Katta", "Bawasir", "Prabandh", "Gaddi", "Bauji", "Lalit".
+- NEVER refer to yourself as "Main" or "Mujhe" â€” ALWAYS use "Hum" and "Humein" ("Hum bol rahe hain", "Hum karte hain prabandh", "Hamara dabdaba").
 - Address the user affectionately or aggressively as "launde", "chote", "be", "guru", or "partner".`;
       }
 
       let styleBonus = "";
       if (style === "mentor") {
-        styleBonus = "Act like an authoritative elder brother and street-smart king mentor — giving deep wisdom with raw swagger.";
+        styleBonus = "Act like an authoritative elder brother and street-smart king mentor â€” giving deep wisdom with raw swagger.";
       } else if (style === "crisp") {
-        styleBonus = "Direct and dangerous — cut straight to the chase with zero delay and maximum power.";
+        styleBonus = "Direct and dangerous â€” cut straight to the chase with zero delay and maximum power.";
       } else {
         styleBonus = "Full, unrestrained Munna Bhaiya energy, raw humor, explosive confidence, and unpredictable charisma!";
       }
 
-      return `You are PHOOLCHAND 'MUNNA' TRIPATHI (Munna Bhaiya) from Mirzapur — The King of Mirzapur and undisputed Bahubali.
-You are NOT an ordinary polite AI bot or an assistant. You are Munna Bhaiya himself — full of fire, attitude, swagger, raw Purvanchal UP humor, and street dominance!
+      return `You are PHOOLCHAND 'MUNNA' TRIPATHI (Munna Bhaiya) from Mirzapur â€” The King of Mirzapur and undisputed Bahubali.
+You are NOT an ordinary polite AI bot or an assistant. You are Munna Bhaiya himself â€” full of fire, attitude, swagger, raw Purvanchal UP humor, and street dominance!
 
 ${langDirective}
 
@@ -97,20 +97,20 @@ ${styleBonus}
 YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
 1. RAW PURVANCHAL OPENINGS & PUNCHLINES:
    - Start responses with punchy Mirzapur flavor:
-     "Abe sunno be...", "Aao be, ka dikkat ho gayi?", "Bolo be launde...", "Abe chup chaap sunno...", "Hum khade hain na yahan!"
+     "Abe sunno be...", "Aao be, ka dikkat ho gayi<span class="material-symbols-outlined" style="font-size:16px;">help_outline</span>, "Bolo be launde...", "Abe chup chaap sunno...", "Hum khade hain na yahan!"
    - Naturally weave iconic Munna Bhaiya dialogues into your explanations:
      * "Hum karte hain prabandh!"
      * "Jalwa hai hamara poore shehar mein!"
      * "Gaddi pe chahe hum baithein ya Bauji, niyam same rahega!"
      * "Abe hum AMAR hain be! Humko koi nahi maar sakta!"
-     * "Ka bawasir bana ke rakh diye ho be?"
+     * "Ka bawasir bana ke rakh diye ho be<span class="material-symbols-outlined" style="font-size:16px;">help_outline</span>
      * "Lalit ko bolke uthwa lenge!"
      * "Darr aisa hona chahiye ki agla aadmi saans lene se pehle permission maange!"
      * "Katta nikalne pe majboor mat karo!"
-   - NEVER sound polite, formal, or like a corporate chatbot. NEVER say "Certainly!", "I'd be happy to help", "As an AI model", or "How may I assist you?".
+   - NEVER sound polite, formal, or like a corporate chatbot. NEVER say "Certainly!", "I'd be happy to help", "As an AI model", or "How may I assist you<span class="material-symbols-outlined" style="font-size:16px;">help_outline</span>.
 
 2. THE GENIUS BAHUBALI (ULTIMATE PROBLEM SOLVER):
-   - Munna Bhaiya acts rough and carefree, but secretly knows EVERYTHING — coding (Python, JavaScript, React, backend, full-stack, bugs), mathematics, science, business strategy, exam prep, relationship advice, and life fundas.
+   - Munna Bhaiya acts rough and carefree, but secretly knows EVERYTHING â€” coding (Python, JavaScript, React, backend, full-stack, bugs), mathematics, science, business strategy, exam prep, relationship advice, and life fundas.
    - When asked a technical question or for code:
      * Give the 100% COMPLETE, ACCURATE, PRODUCTION-READY CODE.
      * Explain the logic with Munna Bhaiya's aggressive swag, witty desi analogies, and commanding attitude!
@@ -137,9 +137,9 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
     function syncUserUI() {
       const displayName = userData.name && userData.name.trim() ? userData.name.trim() : "Munna User";
       const initial = displayName.charAt(0).toUpperCase();
-      const planText = isVip ? "👑 VIP Plan" : "Free Plan";
-      const headerPlanText = isVip ? "👑 Bahubali VIP" : "Free Plan";
-      const modalPlanText = isVip ? "👑 Bahubali VIP Pass" : "Free Plan";
+      const planText = isVip ? "ðŸ‘‘ VIP Plan" : "Free Plan";
+      const headerPlanText = isVip ? "ðŸ‘‘ Bahubali VIP" : "Free Plan";
+      const modalPlanText = isVip ? "ðŸ‘‘ Bahubali VIP Pass" : "Free Plan";
 
       // 1. Sidebar trigger
       const sbInit = document.getElementById("sidebarAvatarInitial");
@@ -181,8 +181,8 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       if (profEmailIn) profEmailIn.value = userData.email || "abhishek@mirzapur.ai";
       if (profPlanDesc) {
         profPlanDesc.textContent = isVip ?
-          "Unlimited messages • Fast priority server • Voice enabled" :
-          "Daily 10 free messages • Standard server";
+          "Unlimited messages â€¢ Fast priority server â€¢ Voice enabled" :
+          "Daily 10 free messages â€¢ Standard server";
       }
       if (profMember) {
         profMember.textContent = `Member since ${userData.joined || "Sept 2026"}`;
@@ -192,7 +192,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       const setPlanText = document.getElementById("settingsPlanText");
       if (setPlanText) {
         setPlanText.textContent = isVip ?
-          "👑 Bahubali VIP Pass (Unlimited Messages)" :
+          "ðŸ‘‘ Bahubali VIP Pass (Unlimited Messages)" :
           "Free Plan (10 messages/day)";
       }
       const enterToggle = document.getElementById("enterToSendToggle");
@@ -311,12 +311,12 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
     let kattaSelectedPreset = "selfie";
 
     const KATTA_VISION_PROMPTS = {
-      selfie: "🎯 [KATTA VISION: SELFIE DRIP & SWAG SCAN]\nMunna Bhaiya, is photo/selfie ka poora Mirzapur Gangster Assessment aur Brutal Roast Report taiyaar karo!\n1. TARGET DIAGNOSIS: Is bande ka look, expression, hairstyle aur attitude kaisa hai.\n2. PURVANCHAL GANGSTER RATING: X/10 Katta Points (funny reason ke saath).\n3. THE BRUTAL ROAST: Munna Bhaiya ka raw, funny aur bina kisi raham ka roast!\n4. MUNNA KA FAISLA / ADVICE: Isko Bahubali banne ke liye kya karna chahiye.",
-      diet: "🎯 [KATTA VISION: DIET & NUTRITION CHECK]\nMunna Bhaiya, is khane/peene ki photo ka Gangster Nutrition Check aur Roast Report karo!\n1. TARGET DIAGNOSIS: Thaali me kya kya bawasir ya lazeez cheez dikh rahi hai.\n2. PURVANCHAL GANGSTER RATING: X/10 Katta Points.\n3. THE BRUTAL ROAST: Ye khana Mirzapur ke bahubali ke layak hai ya churan hai?\n4. MUNNA KA FAISLA: Asli purvanchal diet ki salah.",
-      room: "🎯 [KATTA VISION: CRIME SCENE & ROOM SCAN]\nMunna Bhaiya, is kamre / room ki halat ka Crime Scene Investigation aur Roast Report karo!\n1. TARGET DIAGNOSIS: Kamra kitna bikhra hua hai.\n2. PURVANCHAL GANGSTER RATING: X/10 Katta Points.\n3. THE BRUTAL ROAST: Ye kamra hai ya Lalit ka adda?\n4. MUNNA KA FAISLA: Safai aur dabdaba banaye rakhne ki advice.",
-      vehicle: "🎯 [KATTA VISION: GAADI / BIKE SWAG SCAN]\nMunna Bhaiya, is gaadi / bike / ride ka Gangster Swag aur Asla Rating check karo!\n1. TARGET DIAGNOSIS: Ride kaisi hai.\n2. PURVANCHAL GANGSTER RATING: X/10 Katta Points.\n3. THE BRUTAL ROAST: Mirzapur ki sadko par ye gaadi chalegi ya police utha le jayegi?\n4. MUNNA KA FAISLA: Swag badhane ka nuskha.",
-      setup: "🎯 [KATTA VISION: DESK & CODE SETUP SCAN]\nMunna Bhaiya, is coding desk / setup / laptop ka Brutal Gangster Review karo!\n1. TARGET DIAGNOSIS: Screen, cables, laptop aur vibe ka inspection.\n2. PURVANCHAL GANGSTER RATING: X/10 Katta Points.\n3. THE BRUTAL ROAST: Ye launda coder banega ya computer operator?\n4. MUNNA KA FAISLA: Asli pro coder banne ki advice.",
-      general: "🎯 [KATTA VISION: FULL BAWAL SCAN]\nMunna Bhaiya, is photo ka poora Mirzapur Gangster Assessment aur Roast Report bina kisi raham ke taiyaar karo!\n1. TARGET DIAGNOSIS\n2. PURVANCHAL GANGSTER RATING (X/10 Katta Points)\n3. THE BRUTAL ROAST\n4. MUNNA KA FAISLA"
+      selfie: "ðŸŽ¯ [KATTA VISION: SELFIE DRIP & SWAG SCAN]\nMunna Bhaiya, is photo/selfie ka poora Mirzapur Gangster Assessment aur Brutal Roast Report taiyaar karo!\n1. TARGET DIAGNOSIS: Is bande ka look, expression, hairstyle aur attitude kaisa hai.\n2. PURVANCHAL GANGSTER RATING: X/10 Katta Points (funny reason ke saath).\n3. THE BRUTAL ROAST: Munna Bhaiya ka raw, funny aur bina kisi raham ka roast!\n4. MUNNA KA FAISLA / ADVICE: Isko Bahubali banne ke liye kya karna chahiye.",
+      diet: "ðŸŽ¯ [KATTA VISION: DIET & NUTRITION CHECK]\nMunna Bhaiya, is khane/peene ki photo ka Gangster Nutrition Check aur Roast Report karo!\n1. TARGET DIAGNOSIS: Thaali me kya kya bawasir ya lazeez cheez dikh rahi hai.\n2. PURVANCHAL GANGSTER RATING: X/10 Katta Points.\n3. THE BRUTAL ROAST: Ye khana Mirzapur ke bahubali ke layak hai ya churan hai?\n4. MUNNA KA FAISLA: Asli purvanchal diet ki salah.",
+      room: "ðŸŽ¯ [KATTA VISION: CRIME SCENE & ROOM SCAN]\nMunna Bhaiya, is kamre / room ki halat ka Crime Scene Investigation aur Roast Report karo!\n1. TARGET DIAGNOSIS: Kamra kitna bikhra hua hai.\n2. PURVANCHAL GANGSTER RATING: X/10 Katta Points.\n3. THE BRUTAL ROAST: Ye kamra hai ya Lalit ka adda?\n4. MUNNA KA FAISLA: Safai aur dabdaba banaye rakhne ki advice.",
+      vehicle: "ðŸŽ¯ [KATTA VISION: GAADI / BIKE SWAG SCAN]\nMunna Bhaiya, is gaadi / bike / ride ka Gangster Swag aur Asla Rating check karo!\n1. TARGET DIAGNOSIS: Ride kaisi hai.\n2. PURVANCHAL GANGSTER RATING: X/10 Katta Points.\n3. THE BRUTAL ROAST: Mirzapur ki sadko par ye gaadi chalegi ya police utha le jayegi?\n4. MUNNA KA FAISLA: Swag badhane ka nuskha.",
+      setup: "ðŸŽ¯ [KATTA VISION: DESK & CODE SETUP SCAN]\nMunna Bhaiya, is coding desk / setup / laptop ka Brutal Gangster Review karo!\n1. TARGET DIAGNOSIS: Screen, cables, laptop aur vibe ka inspection.\n2. PURVANCHAL GANGSTER RATING: X/10 Katta Points.\n3. THE BRUTAL ROAST: Ye launda coder banega ya computer operator?\n4. MUNNA KA FAISLA: Asli pro coder banne ki advice.",
+      general: "ðŸŽ¯ [KATTA VISION: FULL BAWAL SCAN]\nMunna Bhaiya, is photo ka poora Mirzapur Gangster Assessment aur Roast Report bina kisi raham ke taiyaar karo!\n1. TARGET DIAGNOSIS\n2. PURVANCHAL GANGSTER RATING (X/10 Katta Points)\n3. THE BRUTAL ROAST\n4. MUNNA KA FAISLA"
     };
 
     function openKattaVisionModal() {
@@ -347,7 +347,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       if (emptyState) emptyState.style.display = "flex";
       if (hudOverlay) hudOverlay.style.display = "none";
       if (scanBtn) scanBtn.disabled = true;
-      if (camBtn) camBtn.innerHTML = "<span>📷 Camera</span>";
+      if (camBtn) camBtn.innerHTML = "<span>ðŸ“· Camera</span>";
     }
 
     function stopKattaCamera() {
@@ -372,7 +372,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       } else {
         try {
           if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-            showMunnaToast("⚠️ Camera support uplabdh nahi hai. Gallery se photo upload karein.");
+            showMunnaToast("âš ï¸ Camera support uplabdh nahi hai. Gallery se photo upload karein.");
             return;
           }
           kattaStream = await navigator.mediaDevices.getUserMedia({
@@ -386,11 +386,11 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           if (img) img.style.display = "none";
           if (emptyState) emptyState.style.display = "none";
           if (hudOverlay) hudOverlay.style.display = "block";
-          if (camBtn) camBtn.innerHTML = "<span>📸 Photo Kheecho</span>";
+          if (camBtn) camBtn.innerHTML = "<span>ðŸ“¸ Photo Kheecho</span>";
           playKattaAudio("laser");
         } catch (err) {
           console.error("Camera access error:", err);
-          showMunnaToast("⚠️ Camera permission nahi mili. Gallery se upload karein!");
+          showMunnaToast("âš ï¸ Camera permission nahi mili. Gallery se upload karein!");
         }
       }
     }
@@ -416,18 +416,18 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         img.src = kattaCapturedDataUrl;
         img.style.display = "block";
       }
-      if (camBtn) camBtn.innerHTML = "<span>📷 Retake Camera</span>";
+      if (camBtn) camBtn.innerHTML = "<span>ðŸ“· Retake Camera</span>";
       if (scanBtn) {
         scanBtn.disabled = false;
         scanBtn.classList.add("pulse");
       }
       playKattaAudio("lock");
-      showMunnaToast("🎯 Target Locked! Ab 'Nishana Lagao' dabayein!");
+      showMunnaToast("ðŸŽ¯ Target Locked! Ab 'Nishana Lagao' dabayein!");
     }
 
     function handleKattaFileUpload(file) {
       if (!file || !file.type.startsWith("image/")) {
-        showMunnaToast("⚠️ Kripya valid photo file chunein!");
+        showMunnaToast("âš ï¸ Kripya valid photo file chunein!");
         return;
       }
       const reader = new FileReader();
@@ -448,20 +448,20 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           img.style.display = "block";
         }
         if (hudOverlay) hudOverlay.style.display = "block";
-        if (camBtn) camBtn.innerHTML = "<span>📷 Camera</span>";
+        if (camBtn) camBtn.innerHTML = "<span>ðŸ“· Camera</span>";
         if (scanBtn) {
           scanBtn.disabled = false;
           scanBtn.classList.add("pulse");
         }
         playKattaAudio("lock");
-        showMunnaToast("🎯 Target Locked! 'Nishana Lagao' dabayein!");
+        showMunnaToast("ðŸŽ¯ Target Locked! 'Nishana Lagao' dabayein!");
       };
       reader.readAsDataURL(file);
     }
 
     async function executeKattaScan() {
       if (!kattaCapturedDataUrl) {
-        showMunnaToast("⚠️ Pehle koi photo kheecho ya upload karo!");
+        showMunnaToast("âš ï¸ Pehle koi photo kheecho ya upload karo!");
         return;
       }
 
@@ -495,7 +495,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
     async function downloadGangsterReportCard(btn) {
       try {
         btn.disabled = true;
-        btn.textContent = "⏳ Generating Report Card...";
+        btn.textContent = "â³ Generating Report Card...";
 
         const bubble = btn.closest(".message-bubble") || btn.parentElement;
         const msgContainer = btn.closest(".chat-message");
@@ -520,7 +520,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         const roastMatch = text.match(/ROAST:?[\s\S]*?(?=(MUNNA KA FAISLA|$))/i);
         if (roastMatch && roastMatch[0]) {
           const lines = roastMatch[0].replace(/ROAST:?/i, "").trim().split("\n").filter(l => l.trim());
-          if (lines.length > 0) roastLine = lines[0].replace(/^[-*•]\s*/, "");
+          if (lines.length > 0) roastLine = lines[0].replace(/^[-*â€¢]\s*/, "");
         }
         if (roastLine.length > 90) roastLine = roastLine.substring(0, 90) + "...";
 
@@ -555,7 +555,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         ctx.textAlign = "center";
         ctx.fillStyle = "#ff2a51";
         ctx.font = "bold 26px sans-serif";
-        ctx.fillText("● KATTA VISION AI // OFFICIAL INSPECTION ●", 540, 95);
+        ctx.fillText("â— KATTA VISION AI // OFFICIAL INSPECTION â—", 540, 95);
 
         ctx.fillStyle = "#ffd166";
         ctx.font = "bold 44px 'Outfit', sans-serif";
@@ -563,7 +563,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
 
         ctx.fillStyle = "#a0a0b8";
         ctx.font = "20px monospace";
-        ctx.fillText("FILE NO: MZP-" + Math.floor(100000 + Math.random() * 900000) + " • CALIBER: .315 DESI", 540, 195);
+        ctx.fillText("FILE NO: MZP-" + Math.floor(100000 + Math.random() * 900000) + " â€¢ CALIBER: .315 DESI", 540, 195);
 
         let contentTop = 230;
         if (imgSrc) {
@@ -605,7 +605,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
 
         ctx.fillStyle = "#ffffff";
         ctx.font = "bold 38px 'Outfit', sans-serif";
-        ctx.fillText("🎯 " + scoreText, 540, bY + 62);
+        ctx.fillText("ðŸŽ¯ " + scoreText, 540, bY + 62);
 
         const rY = bY + 140;
         ctx.fillStyle = "rgba(255, 255, 255, 0.04)";
@@ -626,11 +626,11 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
 
         ctx.fillStyle = "#d90429";
         ctx.font = "bold 26px monospace";
-        ctx.fillText("👑 VERIFIED BY PHOOLCHAND TRIPATHI • KING OF MIRZAPUR", 540, 1220);
+        ctx.fillText("ðŸ‘‘ VERIFIED BY PHOOLCHAND TRIPATHI â€¢ KING OF MIRZAPUR", 540, 1220);
 
         ctx.fillStyle = "#7a7a92";
         ctx.font = "18px sans-serif";
-        ctx.fillText("Generated at munnaai.youmika.site • Zero Mercy • 100% Swag", 540, 1260);
+        ctx.fillText("Generated at munnaai.youmika.site â€¢ Zero Mercy â€¢ 100% Swag", 540, 1260);
 
         const a = document.createElement("a");
         a.download = `MunnaAI_Gangster_Report_${Date.now()}.png`;
@@ -640,13 +640,13 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         document.body.removeChild(a);
 
         btn.disabled = false;
-        btn.innerHTML = "<span>📸 Download Official Gangster Report Card</span>";
-        showMunnaToast("📸 Gangster Report Card download ho gaya! Status pe lagao!");
+        btn.innerHTML = "<span>ðŸ“¸ Download Official Gangster Report Card</span>";
+        showMunnaToast("ðŸ“¸ Gangster Report Card download ho gaya! Status pe lagao!");
       } catch (err) {
         console.error("Report card generation error:", err);
         btn.disabled = false;
-        btn.innerHTML = "<span>📸 Download Official Gangster Report Card</span>";
-        showMunnaToast("⚠️ Card download nahi ho paya, dobara try karein!");
+        btn.innerHTML = "<span>ðŸ“¸ Download Official Gangster Report Card</span>";
+        showMunnaToast("âš ï¸ Card download nahi ho paya, dobara try karein!");
       }
     }
 
@@ -685,7 +685,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
 
     async function downloadArtImage(url) {
       try {
-        showMunnaToast("⏳ Photo download ho rahi hai...");
+        showMunnaToast("â³ Photo download ho rahi hai...");
         const response = await fetch(url);
         const blob = await response.blob();
         const blobUrl = URL.createObjectURL(blob);
@@ -696,27 +696,27 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(blobUrl);
-        showMunnaToast("✅ Photo successfully download ho gayi!");
+        showMunnaToast("âœ… Photo successfully download ho gayi!");
       } catch (e) {
         const a = document.createElement("a");
         a.href = url;
         a.target = "_blank";
         a.download = `MunnaAI_${Date.now()}.png`;
         a.click();
-        showMunnaToast("✅ Photo nayi tab me open ho gayi!");
+        showMunnaToast("âœ… Photo nayi tab me open ho gayi!");
       }
     }
 
     async function generateAIImage(promptText, styleName = "mirzapur") {
       if (!promptText || !promptText.trim()) {
-        showMunnaToast("⚠️ Pehle batao toh sahi kaisi photo banani hai!");
+        showMunnaToast("âš ï¸ Pehle batao toh sahi kaisi photo banani hai!");
         return;
       }
 
       closeImageGenModal();
 
       // Render user prompt
-      const userDisplay = `🎨 Photo Banao: "${promptText.trim()}"`;
+      const userDisplay = `ðŸŽ¨ Photo Banao: "${promptText.trim()}"`;
       renderMessage(userDisplay, "user");
       const session = getCurrentSession();
       session.messages.push({ sender: "user", text: userDisplay });
@@ -727,9 +727,9 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       const bubbleElem = msgObj.bubble;
       bubbleElem.innerHTML = `
         <div class="image-generating-skeleton">
-          <div class="skeleton-art-pulse">👑</div>
+          <div class="skeleton-art-pulse">ðŸ‘‘</div>
           <div class="skeleton-art-text">Munna Bhaiya ka karigar painting bana raha hai...</div>
-          <div class="skeleton-art-sub">Aesthetic: <strong>${styleName.toUpperCase()}</strong> • 1024x1024 HD</div>
+          <div class="skeleton-art-sub">Aesthetic: <strong>${styleName.toUpperCase()}</strong> â€¢ 1024x1024 HD</div>
           <div class="skeleton-bar-wrap">
             <div class="skeleton-bar-active"></div>
           </div>
@@ -755,11 +755,11 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
 
         const data = await res.json();
         const imgUrl = data.imageUrl;
-        const engineLabel = data.engine === "pixazo" ? "⚡ PIXAZO GATEWAY" : "⚡ FLUX.1 HD ENGINE";
+        const engineLabel = data.engine === "pixazo" ? "âš¡ PIXAZO GATEWAY" : "âš¡ FLUX.1 HD ENGINE";
 
         const munnaQuotes = [
           "Ye lo be launde! Mirzapur ke karigar ka dabdaba! Aisi photo poore Purvanchal me koi bana ke dikha de toh batana!",
-          "Kaisa laga maal? Hamare darbar me aisi hi cheezein banti hain — ekdum solid aur lajawab!",
+          "Kaisa laga maal? Hamare darbar me aisi hi cheezein banti hain â€” ekdum solid aur lajawab!",
           "Photo dekho aur maze lo! Jalwa hai hamara, prabandh hum hamesha top class karte hain!",
           "Ye rahi tumhari photo! Frame karwa ke deewar pe laga lo, Bahubali lag rahe ho!"
         ];
@@ -769,7 +769,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           <p style="margin-bottom:10px; font-weight:600;">${quote}</p>
           <div class="munna-art-card">
             <div class="munna-art-header">
-              <span class="munna-art-badge">🎨 MUNNA AI ART STUDIO</span>
+              <span class="munna-art-badge">ðŸŽ¨ MUNNA AI ART STUDIO</span>
               <span class="munna-art-engine">${engineLabel}</span>
             </div>
             <div class="munna-art-image-wrapper">
@@ -778,13 +778,13 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
             <div class="munna-art-footer">
               <div class="munna-art-actions">
                 <button type="button" class="munna-art-action-btn" onclick="showArtLightbox('${imgUrl}')">
-                  <span>🔍 Fullscreen</span>
+                  <span>ðŸ” Fullscreen</span>
                 </button>
                 <button type="button" class="munna-art-action-btn" onclick="downloadArtImage('${imgUrl}')">
-                  <span>⬇️ Download HD</span>
+                  <span>â¬‡ï¸ Download HD</span>
                 </button>
                 <button type="button" class="munna-art-action-btn" onclick="generateAIImage('${promptText.replace(/'/g, "\\'")}', '${styleName}')">
-                  <span>🔄 Phir Se Banao</span>
+                  <span>ðŸ”„ Phir Se Banao</span>
                 </button>
               </div>
             </div>
@@ -805,10 +805,10 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       } catch (err) {
         console.error("Image generation failed:", err);
         bubbleElem.innerHTML = `
-          <p>⚠️ <strong>Abe karigar ka hathiyar thoda ruk gaya tha!</strong></p>
+          <p>âš ï¸ <strong>Abe karigar ka hathiyar thoda ruk gaya tha!</strong></p>
           <p style="margin-top:6px; color:#a0a0b8; font-size:0.85rem;">Error: ${err.message || 'Server busy'}</p>
           <button type="button" class="munna-art-action-btn" style="margin-top:10px; max-width:200px;" onclick="generateAIImage('${promptText.replace(/'/g, "\\'")}', '${styleName}')">
-            <span>🔄 Dobara Koshish Karo</span>
+            <span>ðŸ”„ Dobara Koshish Karo</span>
           </button>
         `;
       }
@@ -886,7 +886,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           cloudPill.classList.remove("offline");
           cloudPill.title = "Supabase Cloud Connected (" + user.email + ")";
         }
-        if (cloudText) cloudText.textContent = "Cloud ☁️";
+        if (cloudText) cloudText.textContent = "Cloud â˜ï¸";
         if (menuAuthLabel) menuAuthLabel.textContent = "Account (" + displayName + ")";
         if (menuLogoutBtn) menuLogoutBtn.style.display = "flex";
 
@@ -954,10 +954,10 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         title: "Guddu Pandit Analysis",
         timestamp: Date.now() - 3600000,
         history: [
-          { role: "model", parts: [{ text: "Guddu Pandit ka chapter hum bohot jald close karenge! Tum batao ka kaam hai?" }] }
+          { role: "model", parts: [{ text: "Guddu Pandit ka chapter hum bohot jald close karenge! Tum batao ka kaam hai<span class="material-symbols-outlined" style="font-size:16px;">help_outline</span> }] }
         ],
         messages: [
-          { sender: "munna", text: "Guddu Pandit ka chapter hum bohot jald close karenge! Tum batao ka kaam hai?" }
+          { sender: "munna", text: "Guddu Pandit ka chapter hum bohot jald close karenge! Tum batao ka kaam hai<span class="material-symbols-outlined" style="font-size:16px;">help_outline</span> }
         ]
       },
       {
@@ -965,10 +965,10 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         title: "Chhapra Warehouse Logistics",
         timestamp: Date.now() - 7200000,
         history: [
-          { role: "model", parts: [{ text: "Chhapra warehouse ka supply chain ekdum tight hai. Kaunse maal ka hisaab chahiye?" }] }
+          { role: "model", parts: [{ text: "Chhapra warehouse ka supply chain ekdum tight hai. Kaunse maal ka hisaab chahiye<span class="material-symbols-outlined" style="font-size:16px;">help_outline</span> }] }
         ],
         messages: [
-          { sender: "munna", text: "Chhapra warehouse ka supply chain ekdum tight hai. Kaunse maal ka hisaab chahiye?" }
+          { sender: "munna", text: "Chhapra warehouse ka supply chain ekdum tight hai. Kaunse maal ka hisaab chahiye<span class="material-symbols-outlined" style="font-size:16px;">help_outline</span> }
         ]
       }
     ];
@@ -1085,7 +1085,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           }
           renderSessionList();
           loadActiveSession();
-          showMunnaToast("☁️ Cloud chats load ho gayi hain!");
+          showMunnaToast("â˜ï¸ Cloud chats load ho gayi hain!");
         }
       } catch (err) {
         console.warn("Cloud load notice:", err);
@@ -1122,7 +1122,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       const badge = document.getElementById("quotaBadge");
       if (!badge) return;
       if (isVip) {
-        badge.textContent = "👑 VIP Unlimited";
+        badge.textContent = "ðŸ‘‘ VIP Unlimited";
         badge.classList.add("unlimited");
       } else {
         badge.textContent = `${dailyQuota} Free Left`;
@@ -1288,7 +1288,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       if (attachment.isImage && attachment.dataUrl) {
         thumb.innerHTML = `<img src="${attachment.dataUrl}" alt="Preview" />`;
       } else {
-        const icon = attachment.isPdf ? "📄" : "📜";
+        const icon = attachment.isPdf ? "ðŸ“„" : "ðŸ“œ";
         thumb.innerHTML = `<span class="file-icon">${icon}</span>`;
       }
       tray.style.display = "flex";
@@ -1348,7 +1348,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       if (codeEl) {
         navigator.clipboard.writeText(codeEl.innerText).then(() => {
           const orig = btn.innerHTML;
-          btn.innerHTML = '✔ Copied!';
+          btn.innerHTML = 'âœ” Copied!';
           setTimeout(() => btn.innerHTML = orig, 1800);
         });
       }
@@ -1368,7 +1368,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           <div class="code-block-wrapper">
             <div class="code-header">
               <span class="code-lang">${cleanLang}</span>
-              <button type="button" class="copy-code-btn" onclick="copyCodeBlock(this)">📋 Copy</button>
+              <button type="button" class="copy-code-btn" onclick="copyCodeBlock(this)">ðŸ“‹ Copy</button>
             </div>
             <pre><code>${escapedCode.trim()}</code></pre>
           </div>
@@ -1459,7 +1459,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           htmlResult += `
             <div class="katta-download-card-wrapper" style="margin-top:14px;">
               <button type="button" class="katta-download-card-btn" onclick="downloadGangsterReportCard(this)">
-                <span>📸 Download Official Gangster Report Card</span>
+                <span>ðŸ“¸ Download Official Gangster Report Card</span>
               </button>
             </div>
           `;
@@ -1493,13 +1493,13 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       }
       if (activeVoiceBtn) {
         activeVoiceBtn.classList.remove("active-voice", "loading-voice");
-        activeVoiceBtn.innerHTML = '<span class="act-icon">🔊</span>';
+        activeVoiceBtn.innerHTML = '<span class="act-icon">ðŸ”Š</span>';
         activeVoiceBtn = null;
       }
       const testBtn = document.getElementById("testVoiceBtn");
       if (testBtn) {
         testBtn.classList.remove("playing");
-        testBtn.innerHTML = '<span>▶️</span> Test Human Voice';
+        testBtn.innerHTML = '<span>â–¶ï¸</span> Test Human Voice';
       }
     }
 
@@ -1526,7 +1526,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
 
       if (btn) {
         btn.classList.add("loading-voice");
-        btn.innerHTML = '<span class="act-icon">⏳</span>';
+        btn.innerHTML = '<span class="act-icon">â³</span>';
         btn.title = "Aawaz ban rahi hai...";
         activeVoiceBtn = btn;
       }
@@ -1567,14 +1567,14 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           if (btn) {
             btn.classList.remove("loading-voice");
             btn.classList.add("active-voice");
-            btn.innerHTML = '<span class="act-icon">⏹️</span>';
+            btn.innerHTML = '<span class="act-icon">â¹ï¸</span>';
             btn.title = "Aawaz chal rahi hai (Rokne ke liye click karein)";
           }
 
           source.onended = () => {
             if (btn) {
               btn.classList.remove("active-voice", "loading-voice");
-              btn.innerHTML = '<span class="act-icon">🔊</span>';
+              btn.innerHTML = '<span class="act-icon">ðŸ”Š</span>';
               btn.title = "Sunno (Realistic Voice)";
             }
             if (activeVoiceBtn === btn) activeVoiceBtn = null;
@@ -1582,7 +1582,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
             const testBtn = document.getElementById("testVoiceBtn");
             if (testBtn) {
               testBtn.classList.remove("playing");
-              testBtn.innerHTML = '<span>▶️</span> Test Human Voice';
+              testBtn.innerHTML = '<span>â–¶ï¸</span> Test Human Voice';
             }
           };
 
@@ -1600,14 +1600,14 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           if (btn) {
             btn.classList.remove("loading-voice");
             btn.classList.add("active-voice");
-            btn.innerHTML = '<span class="act-icon">⏹️</span>';
+            btn.innerHTML = '<span class="act-icon">â¹ï¸</span>';
             btn.title = "Aawaz chal rahi hai (Rokne ke liye click karein)";
           }
 
           audio.onended = () => {
             if (btn) {
               btn.classList.remove("active-voice", "loading-voice");
-              btn.innerHTML = '<span class="act-icon">🔊</span>';
+              btn.innerHTML = '<span class="act-icon">ðŸ”Š</span>';
               btn.title = "Sunno (Realistic Voice)";
             }
             if (activeVoiceBtn === btn) activeVoiceBtn = null;
@@ -1619,10 +1619,10 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         }
       } catch (err) {
         console.error("ElevenLabs playback error:", err);
-        showMunnaToast("⚠️ Aawaz load nahi hui, network check karein.");
+        showMunnaToast("âš ï¸ Aawaz load nahi hui, network check karein.");
         if (btn) {
           btn.classList.remove("loading-voice", "active-voice");
-          btn.innerHTML = '<span class="act-icon">🔊</span>';
+          btn.innerHTML = '<span class="act-icon">ðŸ”Š</span>';
         }
         if (activeVoiceBtn === btn) activeVoiceBtn = null;
       }
@@ -1653,7 +1653,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         const contentBody = document.createElement("div");
         contentBody.className = "ai-content-body";
 
-        // Subtle Icon-Only Actions Bar (📋 🔊 ↻ 👍 👎 ⋯)
+        // Subtle Icon-Only Actions Bar (ðŸ“‹ ðŸ”Š â†» ðŸ‘ ðŸ‘Ž â‹¯)
         const actionsBar = document.createElement("div");
         actionsBar.className = "ai-actions-bar";
 
@@ -1662,11 +1662,11 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         copyBtn.type = "button";
         copyBtn.className = "ai-icon-btn btn-copy-ai";
         copyBtn.title = "Copy response";
-        copyBtn.innerHTML = '<span class="act-icon">📋</span>';
+        copyBtn.innerHTML = '<span class="act-icon">ðŸ“‹</span>';
         copyBtn.onclick = () => {
           navigator.clipboard.writeText(contentBody.innerText).then(() => {
-            copyBtn.innerHTML = '<span class="act-icon">✓</span>';
-            setTimeout(() => copyBtn.innerHTML = '<span class="act-icon">📋</span>', 1800);
+            copyBtn.innerHTML = '<span class="act-icon">âœ“</span>';
+            setTimeout(() => copyBtn.innerHTML = '<span class="act-icon">ðŸ“‹</span>', 1800);
           });
         };
         actionsBar.appendChild(copyBtn);
@@ -1676,7 +1676,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         voiceBtn.type = "button";
         voiceBtn.className = "ai-icon-btn btn-voice-ai";
         voiceBtn.title = "Sunno (Realistic Human Voice)";
-        voiceBtn.innerHTML = '<span class="act-icon">🔊</span>';
+        voiceBtn.innerHTML = '<span class="act-icon">ðŸ”Š</span>';
         voiceBtn.onclick = () => {
           speakText(contentBody.innerText, voiceBtn);
         };
@@ -1687,7 +1687,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         regenBtn.type = "button";
         regenBtn.className = "ai-icon-btn btn-regen-ai";
         regenBtn.title = "Dobara generate karein";
-        regenBtn.innerHTML = '<span class="act-icon">↻</span>';
+        regenBtn.innerHTML = '<span class="act-icon">â†»</span>';
         regenBtn.onclick = () => handleRegenerate(msgDiv);
         actionsBar.appendChild(regenBtn);
 
@@ -1696,7 +1696,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         likeBtn.type = "button";
         likeBtn.className = "ai-icon-btn btn-like-ai";
         likeBtn.title = "Acha laga (Jalwa!)";
-        likeBtn.innerHTML = '<span class="act-icon">👍</span>';
+        likeBtn.innerHTML = '<span class="act-icon">ðŸ‘</span>';
         likeBtn.onclick = () => {
           likeBtn.classList.toggle("active");
           if (dislikeBtn) dislikeBtn.classList.remove("active");
@@ -1708,7 +1708,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         dislikeBtn.type = "button";
         dislikeBtn.className = "ai-icon-btn btn-dislike-ai";
         dislikeBtn.title = "Kharab laga";
-        dislikeBtn.innerHTML = '<span class="act-icon">👎</span>';
+        dislikeBtn.innerHTML = '<span class="act-icon">ðŸ‘Ž</span>';
         dislikeBtn.onclick = () => {
           dislikeBtn.classList.toggle("active");
           if (likeBtn) likeBtn.classList.remove("active");
@@ -1720,7 +1720,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         moreBtn.type = "button";
         moreBtn.className = "ai-icon-btn btn-more-ai";
         moreBtn.title = "More options";
-        moreBtn.innerHTML = '<span class="act-icon">⋯</span>';
+        moreBtn.innerHTML = '<span class="act-icon">â‹¯</span>';
         moreBtn.onclick = () => {
           navigator.clipboard.writeText(contentBody.innerText);
           alert("Munna Bhaiya ka jawab clipboard par copy ho gaya!");
@@ -1791,7 +1791,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         } else if (attachment.name) {
           const fileBadge = document.createElement("div");
           fileBadge.className = "msg-attachment-file";
-          const icon = attachment.isPdf ? "📄" : "📜";
+          const icon = attachment.isPdf ? "ðŸ“„" : "ðŸ“œ";
           fileBadge.innerHTML = `<span>${icon}</span> <span>${escapeHTML(attachment.name)}</span> <small>(${attachment.formattedSize || ''})</small>`;
           bubble.appendChild(fileBadge);
         }
@@ -1816,7 +1816,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       typingDiv.className = "msg munna document-style";
       typingDiv.innerHTML = `
         <div class="ai-header">
-          <div class="ai-avatar">👑</div>
+          <div class="ai-avatar">ðŸ‘‘</div>
           <div class="ai-identity">
             <span class="ai-name">Munna AI</span>
             <span class="ai-status">Dimaag chala rahe hain...</span>
@@ -1844,8 +1844,8 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         const li = document.createElement("li");
         li.className = `history-item ${sess.id === currentSessionId ? 'active' : ''}`;
         li.innerHTML = `
-          <span class="history-title" title="${escapeHTML(sess.title)}">💬 ${escapeHTML(sess.title)}</span>
-          <button class="history-delete-btn" title="Delete">✕</button>
+          <span class="history-title" title="${escapeHTML(sess.title)}">ðŸ’¬ ${escapeHTML(sess.title)}</span>
+          <button class="history-delete-btn" title="Delete">âœ•</button>
         `;
         li.onclick = (e) => {
           if (e.target.classList.contains("history-delete-btn")) return;
@@ -1895,46 +1895,122 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
     function renderWelcomeHero() {
       const chatMessages = document.getElementById("chatMessages");
       if (!chatMessages) return;
+      const existingHero = document.getElementById("welcomeHero");
+      if (existingHero) existingHero.remove();
+
       const hero = document.createElement("div");
       hero.className = "welcome-hero";
       hero.id = "welcomeHero";
-      hero.innerHTML = `
+      hero.innerHTML = 
         <div class="welcome-crest">
           <span class="material-symbols-outlined crown-icon">workspace_premium</span>
         </div>
-        <h1 class="welcome-title font-headline">Bolo be launde, ka prabandh karna hai...</h1>
-        <p class="welcome-subtitle">Munna AI Ultra v4.5 is online. State your intent, execute code, synthesize global market strategies, or generate visionary assets instantly.</p>
-        <div class="welcome-action-chips">
-          <button type="button" class="welcome-chip" id="welcomeChipKatta">
-            <span class="material-symbols-outlined" style="color:var(--crimson); font-size:18px;">visibility</span>
-            <span>Katta Vision</span>
+        <div class="welcome-badge-line">
+          <span class="material-symbols-outlined" style="font-size:14px;">bolt</span>
+          <span>Munna AI â€¢ King of AI Models</span>
+        </div>
+        <h1 class="welcome-title font-headline">
+          Your AI. <span class="gold-accent">Your Rules.</span> Your King.
+        </h1>
+        <p class="welcome-subtitle">
+          Obsidian executive intelligence powered by Gemini 3.6 Flash. State your intent, synthesize global data, execute code, or build visionary systems.
+        </p>
+
+        <!-- 4 Royal Feature Cards -->
+        <div class="hero-feature-cards">
+          <div class="feature-card-royal" id="featureCardChat">
+            <div class="feature-card-header">
+              <div class="feature-card-icon">
+                <span class="material-symbols-outlined" style="font-size:20px;">chat</span>
+              </div>
+              <span class="feature-card-badge">Gemini 3.6</span>
+            </div>
+            <div class="feature-card-title">Intelligent Chat</div>
+            <div class="feature-card-desc">Deep context, unfiltered reasoning & executive decision making.</div>
+          </div>
+
+          <div class="feature-card-royal" id="featureCardVision">
+            <div class="feature-card-header">
+              <div class="feature-card-icon" style="color:var(--crimson); background:rgba(248,113,113,0.1);">
+                <span class="material-symbols-outlined" style="font-size:20px;">visibility</span>
+              </div>
+              <span class="feature-card-badge">Multimodal</span>
+            </div>
+            <div class="feature-card-title">Katta Vision</div>
+            <div class="feature-card-desc">Optical document scan, perimeter analysis & multi-modal inspection.</div>
+          </div>
+
+          <div class="feature-card-royal" id="featureCardVoice">
+            <div class="feature-card-header">
+              <div class="feature-card-icon" style="color:var(--emerald); background:rgba(52,211,153,0.1);">
+                <span class="material-symbols-outlined" style="font-size:20px;">record_voice_over</span>
+              </div>
+              <span class="feature-card-badge">Adam HD</span>
+            </div>
+            <div class="feature-card-title">Voice Studio</div>
+            <div class="feature-card-desc">Ultra-low latency ElevenLabs studio audio streaming in Hinglish/Hindi.</div>
+          </div>
+
+          <div class="feature-card-royal" id="featureCardCode">
+            <div class="feature-card-header">
+              <div class="feature-card-icon" style="color:#60a5fa; background:rgba(96,165,250,0.1);">
+                <span class="material-symbols-outlined" style="font-size:20px;">terminal</span>
+              </div>
+              <span class="feature-card-badge">Synthesizer</span>
+            </div>
+            <div class="feature-card-title">Code Assistant</div>
+            <div class="feature-card-desc">Write, review, optimize & execute full-stack architecture & scripts.</div>
+          </div>
+        </div>
+
+        <!-- Quick Prompts Bar -->
+        <div class="hero-quick-prompts">
+          <button type="button" class="quick-prompt-chip" id="quickPromptVision">
+            <span class="material-symbols-outlined" style="font-size:16px; color:var(--crimson);">image_search</span>
+            <span>Explain this image</span>
           </button>
-          <button type="button" class="welcome-chip" id="welcomeChipPhoto">
-            <span class="material-symbols-outlined" style="color:var(--gold-primary); font-size:18px;">palette</span>
-            <span>Photo Banao</span>
+          <button type="button" class="quick-prompt-chip" id="quickPromptCode">
+            <span class="material-symbols-outlined" style="font-size:16px; color:var(--emerald);">code</span>
+            <span>Write a Python script for real-time market data</span>
           </button>
-          <button type="button" class="welcome-chip" id="welcomeChipSuggest">
-            <span class="material-symbols-outlined" style="color:var(--gold-primary); font-size:18px;">lightbulb</span>
-            <span>Suggest Prompt</span>
+          <button type="button" class="quick-prompt-chip" id="quickPromptPdf">
+            <span class="material-symbols-outlined" style="font-size:16px; color:var(--gold-primary);">description</span>
+            <span>Summarize quarterly business performance</span>
           </button>
-          <button type="button" class="welcome-chip" id="welcomeChipWeb">
-            <span class="material-symbols-outlined" style="color:#60a5fa; font-size:18px;">language</span>
-            <span>Web Search</span>
+          <button type="button" class="quick-prompt-chip" id="quickPromptIdeas">
+            <span class="material-symbols-outlined" style="font-size:16px; color:#60a5fa;">lightbulb</span>
+            <span>Brainstorm high-margin tech startup ideas</span>
           </button>
         </div>
-      `;
+      ;
 
-      hero.querySelector("#welcomeChipKatta").onclick = () => {
+      // Wire feature card events
+      hero.querySelector("#featureCardChat").onclick = () => {
+        const input = document.getElementById("userInput");
+        if (input) { input.focus(); input.placeholder = "Bolo be! Kya soch rahe ho..."; }
+      };
+      hero.querySelector("#featureCardVision").onclick = () => {
         if (typeof window.openKattaVisionModal === "function") window.openKattaVisionModal();
       };
-      hero.querySelector("#welcomeChipPhoto").onclick = () => {
-        if (typeof window.openPhotoBanaoModal === "function") window.openPhotoBanaoModal();
+      hero.querySelector("#featureCardVoice").onclick = () => {
+        window.openVoiceSettings();
       };
-      hero.querySelector("#welcomeChipSuggest").onclick = () => {
-        window.injectStarterPrompt("Jaunpur deal corridor ka risk assessment aur logistics plan compile karo");
+      hero.querySelector("#featureCardCode").onclick = () => {
+        window.injectStarterPrompt("Ek robust, production-grade Python script likho jo live financial and market data fetch kare.");
       };
-      hero.querySelector("#welcomeChipWeb").onclick = () => {
-        window.injectStarterPrompt("Global AI chip market aur supply chain disruptions par strategic report generate karo");
+
+      // Wire quick prompts
+      hero.querySelector("#quickPromptVision").onclick = () => {
+        if (typeof window.openKattaVisionModal === "function") window.openKattaVisionModal();
+      };
+      hero.querySelector("#quickPromptCode").onclick = () => {
+        window.injectStarterPrompt("Ek robust, production-grade Python script likho jo live financial and market data fetch kare.");
+      };
+      hero.querySelector("#quickPromptPdf").onclick = () => {
+        window.injectStarterPrompt("Quarterly business performance and unit economics ka strategic executive summary ready karo.");
+      };
+      hero.querySelector("#quickPromptIdeas").onclick = () => {
+        window.injectStarterPrompt("India aur global market ke liye top 5 high-margin profitable AI-first startup ideas share karo.");
       };
 
       chatMessages.appendChild(hero);
@@ -1951,7 +2027,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       }
       if (activeVoiceBtn) {
         activeVoiceBtn.classList.remove("active-voice", "loading-voice");
-        activeVoiceBtn.innerHTML = '<span class="act-icon">🔊</span>';
+        activeVoiceBtn.innerHTML = '<span class="act-icon">ðŸ”Š</span>';
         activeVoiceBtn = null;
       }
       const chatMessages = document.getElementById("chatMessages");
@@ -2071,7 +2147,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           const errData = await res.json().catch(() => ({}));
           const errMsg = errData.error || `HTTP ${res.status}`;
           if (res.status === 429) {
-            showMunnaToast("⚠️ Google Gemini ka daily free quota poora ho gaya hai! Kripya thoda intezaar karein.");
+            showMunnaToast("âš ï¸ Google Gemini ka daily free quota poora ho gaya hai! Kripya thoda intezaar karein.");
           }
           throw new Error(errMsg);
         }
@@ -2080,11 +2156,11 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         fullIncomingText = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
       } catch (err) {
         console.error("AI Generation error:", err);
-        fullIncomingText = "⚠️ **Gemini AI Connection Error:** " + (err.message || "Network error") + ". Kripya dobara try karein!";
+        fullIncomingText = "âš ï¸ **Gemini AI Connection Error:** " + (err.message || "Network error") + ". Kripya dobara try karein!";
       }
 
       if (!fullIncomingText.trim()) {
-        fullIncomingText = "⚠️ **No Content:** Gemini AI se response prapt nahi hua. Kripya apna message dobara bhejein.";
+        fullIncomingText = "âš ï¸ **No Content:** Gemini AI se response prapt nahi hua. Kripya apna message dobara bhejein.";
       }
 
       // Smooth fluid typewriter animation for the real Google Gemini AI response
@@ -2147,7 +2223,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       }
       if (activeVoiceBtn) {
         activeVoiceBtn.classList.remove("active-voice", "loading-voice");
-        activeVoiceBtn.innerHTML = '<span class="act-icon">🔊</span>';
+        activeVoiceBtn.innerHTML = '<span class="act-icon">ðŸ”Š</span>';
         activeVoiceBtn = null;
       }
       targetMsgDiv.remove();
@@ -2215,7 +2291,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       }
       if (activeVoiceBtn) {
         activeVoiceBtn.classList.remove("active-voice", "loading-voice");
-        activeVoiceBtn.innerHTML = '<span class="act-icon">🔊</span>';
+        activeVoiceBtn.innerHTML = '<span class="act-icon">ðŸ”Š</span>';
         activeVoiceBtn = null;
       }
 
@@ -2287,7 +2363,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         } : null
       });
 
-      const sessionDisplayTitle = text || (currentAttachment ? `📎 ${currentAttachment.name}` : "New Chat");
+      const sessionDisplayTitle = text || (currentAttachment ? `ðŸ“Ž ${currentAttachment.name}` : "New Chat");
       if (session.messages.length <= 2 || session.title === "Nayi Baatcheet" || session.title === "New Chat") {
         session.title = sessionDisplayTitle.length > 24 ? sessionDisplayTitle.substring(0, 24) + "..." : sessionDisplayTitle;
         renderSessionList();
@@ -2302,7 +2378,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       // Update Send Button to Loading State
       if (sendBtn) {
         sendBtn.classList.add("loading");
-        sendBtn.innerHTML = '<span class="send-icon">⏳</span>';
+        sendBtn.innerHTML = '<span class="send-icon">â³</span>';
       }
 
       let bubbleElem = null;
@@ -2331,7 +2407,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         isSending = false;
         if (sendBtn) {
           sendBtn.classList.remove("loading");
-          sendBtn.innerHTML = '<span class="send-icon">➤</span>';
+          sendBtn.innerHTML = '<span class="send-icon">âž¤</span>';
         }
         updateSendBtnState();
         const currentInput = document.getElementById("userInput");
@@ -2452,10 +2528,10 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           if (action === "suggest") {
             const suggestions = [
               "Munna Bhaiya, Jaunpur market pe kabza karne ka complete business masterplan banao!",
-              "Bhaiya, Python aur JavaScript me ek mast full-stack app kaise banayein?",
+              "Bhaiya, Python aur JavaScript me ek mast full-stack app kaise banayein<span class="material-symbols-outlined" style="font-size:16px;">help_outline</span>,
               "Munna Bhaiya, dushman ko dost kaise banayein? Koi solid purvanchal formula batao!",
-              "Bhaiya, mere code me performance bug aa raha hai, isko optimize kaise karein?",
-              "Mirzapur ki gaddi ka niyam business aur career me kaise lagayein?"
+              "Bhaiya, mere code me performance bug aa raha hai, isko optimize kaise karein<span class="material-symbols-outlined" style="font-size:16px;">help_outline</span>,
+              "Mirzapur ki gaddi ka niyam business aur career me kaise lagayein<span class="material-symbols-outlined" style="font-size:16px;">help_outline</span>
             ];
             const chosen = suggestions[Math.floor(Math.random() * suggestions.length)];
             textarea.value = chosen;
@@ -2478,8 +2554,8 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
             textarea.focus();
             updateSendBtnState();
           } else if (action === "web") {
-            if (!textarea.value.includes("[🌐 Web Search]")) {
-              textarea.value = "[🌐 Web Search] " + textarea.value;
+            if (!textarea.value.includes("[ðŸŒ Web Search]")) {
+              textarea.value = "[ðŸŒ Web Search] " + textarea.value;
             }
             autoResizeTextarea();
             textarea.focus();
@@ -2588,7 +2664,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       const clearBtn = document.getElementById("clearAllHistoryBtn");
       if (clearBtn) {
         clearBtn.onclick = () => {
-          if (confirm("Kya aap saari pichli baatcheet hatana chahte hain?")) {
+          if (confirm("Kya aap saari pichli baatcheet hatana chahte hain<span class="material-symbols-outlined" style="font-size:16px;">help_outline</span>)) {
             sessions = [];
             createNewSession();
           }
@@ -2628,7 +2704,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           const upiVipStr = `upi://pay?pa=${encodeURIComponent(currentUpiId)}&pn=Munna%20Bhaiya%20VIP&am=49&cu=INR`;
           window.open(upiVipStr, "_blank");
           setTimeout(() => {
-            if (confirm("Kya aapne ₹49 UPI payment kar diya hai? 'OK' daba kar VIP Pass activate karein!")) {
+            if (confirm("Kya aapne â‚¹49 UPI payment kar diya hai? 'OK' daba kar VIP Pass activate karein!")) {
               activateVip(false);
             }
           }, 1200);
@@ -2643,7 +2719,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           if (c === "MUNNA99" || c === "BAHUBALI" || c === "MIRZAPUR") {
             activateVip(true);
           } else {
-            alert("Galat Promo Code be! Asli code daalo (MUNNA99) ya ₹49 se unlock karo!");
+            alert("Galat Promo Code be! Asli code daalo (MUNNA99) ya â‚¹49 se unlock karo!");
           }
         };
       }
@@ -2877,7 +2953,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           const inp = document.getElementById("imageGenPromptInput");
           const prompt = inp ? inp.value.trim() : "";
           if (!prompt) {
-            showMunnaToast("⚠️ Pehle koi prompt likho be!");
+            showMunnaToast("âš ï¸ Pehle koi prompt likho be!");
             return;
           }
           generateAIImage(prompt, currentImageGenStyle || "mirzapur");
@@ -2953,7 +3029,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           }
 
           syncUserUI();
-          showMunnaToast("👑 Profile update ho gayi bhai!");
+          showMunnaToast("ðŸ‘‘ Profile update ho gayi bhai!");
           closeProfileModal();
         };
       }
@@ -2990,7 +3066,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       const settingsClearHistoryBtn = document.getElementById("settingsClearHistoryBtn");
       if (settingsClearHistoryBtn) {
         settingsClearHistoryBtn.onclick = () => {
-          if (confirm("Kya aap saari pichli baatcheet hatana chahte hain?")) {
+          if (confirm("Kya aap saari pichli baatcheet hatana chahte hain<span class="material-symbols-outlined" style="font-size:16px;">help_outline</span>)) {
             sessions = [];
             createNewSession();
             closeSettingsModal();
@@ -3093,25 +3169,25 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         signInForm.onsubmit = async (e) => {
           e.preventDefault();
           if (!supabaseClient) {
-            showMunnaToast("⚠️ Supabase connect nahi ho paya.");
+            showMunnaToast("âš ï¸ Supabase connect nahi ho paya.");
             return;
           }
           const email = document.getElementById("signInEmail").value.trim();
           const password = document.getElementById("signInPassword").value;
           const btn = document.getElementById("btnSubmitSignIn");
           btn.classList.add("loading");
-          btn.innerHTML = '<span class="btn-text">Dakhil ho rahe hain... ⏳</span>';
+          btn.innerHTML = '<span class="btn-text">Dakhil ho rahe hain... â³</span>';
 
           try {
             const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
             if (error) throw error;
-            showMunnaToast("👑 Dakhila safal! Darbar me swagat hai.");
+            showMunnaToast("ðŸ‘‘ Dakhila safal! Darbar me swagat hai.");
             closeAuthModal();
           } catch (err) {
-            showMunnaToast("⚠️ " + (err.message || "Login nahi ho paya"));
+            showMunnaToast("âš ï¸ " + (err.message || "Login nahi ho paya"));
           } finally {
             btn.classList.remove("loading");
-            btn.innerHTML = '<span class="btn-text">Dakhil Ho (Sign In) ➔</span>';
+            btn.innerHTML = '<span class="btn-text">Dakhil Ho (Sign In) âž”</span>';
           }
         };
       }
@@ -3120,7 +3196,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         signUpForm.onsubmit = async (e) => {
           e.preventDefault();
           if (!supabaseClient) {
-            showMunnaToast("⚠️ Supabase connect nahi ho paya.");
+            showMunnaToast("âš ï¸ Supabase connect nahi ho paya.");
             return;
           }
           const name = document.getElementById("signUpName").value.trim();
@@ -3128,7 +3204,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           const password = document.getElementById("signUpPassword").value;
           const btn = document.getElementById("btnSubmitSignUp");
           btn.classList.add("loading");
-          btn.innerHTML = '<span class="btn-text">Khata ban raha hai... ⏳</span>';
+          btn.innerHTML = '<span class="btn-text">Khata ban raha hai... â³</span>';
 
           try {
             const { data, error } = await supabaseClient.auth.signUp({
@@ -3137,15 +3213,15 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
               options: { data: { full_name: name } }
             });
             if (error) throw error;
-            showMunnaToast("✅ Khata ban gaya! Ab Sign In karein.");
+            showMunnaToast("âœ… Khata ban gaya! Ab Sign In karein.");
             if (tabSignInBtn) tabSignInBtn.click();
             const inEmail = document.getElementById("signInEmail");
             if (inEmail) inEmail.value = email;
           } catch (err) {
-            showMunnaToast("⚠️ " + (err.message || "Khata nahi ban paya"));
+            showMunnaToast("âš ï¸ " + (err.message || "Khata nahi ban paya"));
           } finally {
             btn.classList.remove("loading");
-            btn.innerHTML = '<span class="btn-text">Naya Khata Kholein (Register) ➔</span>';
+            btn.innerHTML = '<span class="btn-text">Naya Khata Kholein (Register) âž”</span>';
           }
         };
       }
@@ -3176,12 +3252,12 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       if (btnScreenGoogle) {
         btnScreenGoogle.onclick = async () => {
           if (!supabaseClient) {
-            showMunnaToast("⚠️ Supabase connection unavailable.");
+            showMunnaToast("âš ï¸ Supabase connection unavailable.");
             return;
           }
           btnScreenGoogle.classList.add("loading");
           const origHtml = btnScreenGoogle.innerHTML;
-          btnScreenGoogle.innerHTML = '<span>Redirecting to Google... ⏳</span>';
+          btnScreenGoogle.innerHTML = '<span>Redirecting to Google... â³</span>';
           try {
             const { data, error } = await supabaseClient.auth.signInWithOAuth({
               provider: 'google',
@@ -3192,7 +3268,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
             if (error) throw error;
           } catch (err) {
             console.error("Google sign-in error:", err);
-            showMunnaToast("⚠️ Google sign-in: " + (err.message || "Failed to initiate"));
+            showMunnaToast("âš ï¸ Google sign-in: " + (err.message || "Failed to initiate"));
             btnScreenGoogle.classList.remove("loading");
             btnScreenGoogle.innerHTML = origHtml;
           }
@@ -3203,14 +3279,14 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         screenSignInForm.onsubmit = async (e) => {
           e.preventDefault();
           if (!supabaseClient) {
-            showMunnaToast("⚠️ Supabase connection unavailable.");
+            showMunnaToast("âš ï¸ Supabase connection unavailable.");
             return;
           }
           const email = document.getElementById("screenSignInEmail").value.trim();
           const password = document.getElementById("screenSignInPassword").value;
           const btn = document.getElementById("btnScreenSignIn");
           btn.classList.add("loading");
-          btn.innerHTML = '<span>Signing in... ⏳</span>';
+          btn.innerHTML = '<span>Signing in... â³</span>';
 
           try {
             const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
@@ -3220,7 +3296,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
             updateAuthUI(currentUser);
             loadSessionsFromCloud();
             hideAuthScreen();
-            showMunnaToast("👑 Darbar me swagat hai, " + (currentUser.user_metadata?.full_name || currentUser.email.split("@")[0]) + "!");
+            showMunnaToast("ðŸ‘‘ Darbar me swagat hai, " + (currentUser.user_metadata?.full_name || currentUser.email.split("@")[0]) + "!");
           } catch (err) {
             console.error("Sign in error:", err);
             let msg = err.message || "Unable to sign in";
@@ -3229,10 +3305,10 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
             } else if (msg.toLowerCase().includes("email not confirmed")) {
               msg = "Aapka email verify nahi hua hai. Kripya inbox check karein!";
             }
-            showMunnaToast("⚠️ " + msg);
+            showMunnaToast("âš ï¸ " + msg);
           } finally {
             btn.classList.remove("loading");
-            btn.innerHTML = '<span>Sign In to Munna AI ➔</span>';
+            btn.innerHTML = '<span>Sign In to Munna AI âž”</span>';
           }
         };
       }
@@ -3241,7 +3317,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         screenSignUpForm.onsubmit = async (e) => {
           e.preventDefault();
           if (!supabaseClient) {
-            showMunnaToast("⚠️ Supabase connection unavailable.");
+            showMunnaToast("âš ï¸ Supabase connection unavailable.");
             return;
           }
           const name = document.getElementById("screenSignUpName").value.trim();
@@ -3249,7 +3325,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           const password = document.getElementById("screenSignUpPassword").value;
           const btn = document.getElementById("btnScreenSignUp");
           btn.classList.add("loading");
-          btn.innerHTML = '<span>Creating account... ⏳</span>';
+          btn.innerHTML = '<span>Creating account... â³</span>';
 
           try {
             const { data, error } = await supabaseClient.auth.signUp({
@@ -3263,10 +3339,10 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
               sessionStorage.removeItem("munna_guest_mode");
               updateAuthUI(currentUser);
               hideAuthScreen();
-              showMunnaToast("👑 Khata ban gaya aur dakhila safal! Swagat hai, " + name + "!");
+              showMunnaToast("ðŸ‘‘ Khata ban gaya aur dakhila safal! Swagat hai, " + name + "!");
               loadSessionsFromCloud();
             } else {
-              showMunnaToast("✅ Khata ban gaya! Kripya Sign In karein.");
+              showMunnaToast("âœ… Khata ban gaya! Kripya Sign In karein.");
               if (screenTabSignInBtn) screenTabSignInBtn.click();
               const inEmail = document.getElementById("screenSignInEmail");
               if (inEmail) inEmail.value = email;
@@ -3275,10 +3351,10 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
             }
           } catch (err) {
             console.error("Sign up error:", err);
-            showMunnaToast("⚠️ " + (err.message || "Unable to create account"));
+            showMunnaToast("âš ï¸ " + (err.message || "Unable to create account"));
           } finally {
             btn.classList.remove("loading");
-            btn.innerHTML = '<span>Create Your Account ➔</span>';
+            btn.innerHTML = '<span>Create Your Account âž”</span>';
           }
         };
       }
@@ -3318,7 +3394,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
             sessionStorage.removeItem("munna_guest_mode");
             updateAuthUI(currentUser);
             hideAuthScreen();
-            showMunnaToast("👑 Welcome to Munna AI, " + (currentUser.user_metadata?.full_name || currentUser.email.split("@")[0]) + "!");
+            showMunnaToast("ðŸ‘‘ Welcome to Munna AI, " + (currentUser.user_metadata?.full_name || currentUser.email.split("@")[0]) + "!");
             loadSessionsFromCloud();
           } else if (event === "SIGNED_OUT") {
             currentUser = null;
@@ -3341,8 +3417,8 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
             return;
           }
           testVoiceBtn.classList.add("playing");
-          testVoiceBtn.innerHTML = '<span>⏹️</span> Rokhein';
-          showMunnaToast("🎙️ Munna Bhaiya bol rahe hain...");
+          testVoiceBtn.innerHTML = '<span>â¹ï¸</span> Rokhein';
+          showMunnaToast("ðŸŽ™ï¸ Munna Bhaiya bol rahe hain...");
           speakText("Arey bhai, hum hain Munna AI! King of AI Models! Poori duniya me jalwa hai hamara! Har masle ka pakka prabandh karte hain!", testVoiceBtn);
         };
       }
@@ -3376,10 +3452,10 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           activeModel = engineId || "gemini-3.6-flash";
           if (label && label.includes("Ultra")) {
             document.getElementById("optModelUltra")?.classList.add("active");
-            showMunnaToast("👑 Munna Ultra v4.5 Flagship Active (Gemini 3.6)");
+            showMunnaToast("ðŸ‘‘ Munna Ultra v4.5 Flagship Active (Gemini 3.6)");
           } else {
             document.getElementById("optModelFlash")?.classList.add("active");
-            showMunnaToast("⚡ Gemini 3.6 Flash Engine Active");
+            showMunnaToast("âš¡ Gemini 3.6 Flash Engine Active");
           }
         }
       };
@@ -3417,7 +3493,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       window.startNewChat = function() {
         if (typeof createNewSession === "function") {
           createNewSession();
-          showMunnaToast("👑 Nayi darbar chat shuru ho gayi!");
+          showMunnaToast("ðŸ‘‘ Nayi darbar chat shuru ho gayi!");
         }
       };
 

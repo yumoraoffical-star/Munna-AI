@@ -4784,3 +4784,539 @@
     .msg.munna .ai-name {
       color: var(--text-main) !important;
     }
+
+    /* ==========================================================================
+       PREMIUM 3-COLUMN OBSIDIAN + ROYAL GOLD REDESIGN STYLES
+       ========================================================================== */
+
+    /* Left Sidebar Navigation */
+    .sidebar-main-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      margin: 12px 0 16px 0;
+      padding: 0;
+      list-style: none;
+    }
+    .sidebar-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      text-decoration: none;
+      background: transparent;
+      border: 1px solid transparent;
+      width: 100%;
+      text-align: left;
+    }
+    .sidebar-nav-item:hover {
+      background: var(--bg-surface);
+      color: var(--gold-primary);
+      border-color: rgba(242, 202, 80, 0.15);
+      transform: translateX(2px);
+    }
+    .sidebar-nav-item.active {
+      background: rgba(242, 202, 80, 0.1);
+      color: var(--gold-primary);
+      border-color: rgba(242, 202, 80, 0.3);
+      font-weight: 600;
+    }
+    .sidebar-nav-item .nav-icon {
+      font-size: 19px;
+      color: inherit;
+      flex-shrink: 0;
+    }
+    .sidebar-nav-item .nav-badge {
+      margin-left: auto;
+      font-size: 0.68rem;
+      padding: 2px 6px;
+      border-radius: 999px;
+      background: rgba(242, 202, 80, 0.15);
+      color: var(--gold-primary);
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+
+    /* Sidebar History Section */
+    .sidebar-history-section {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-height: 0;
+      overflow: hidden;
+      margin-top: 4px;
+    }
+    .history-section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 4px 8px 4px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-dim);
+    }
+
+    /* Topbar Chips (Voice Studio & Language) */
+    .topbar-chip-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 6px 12px;
+      border-radius: 20px;
+      background: var(--bg-surface);
+      border: 1px solid rgba(242, 202, 80, 0.2);
+      color: var(--text-main);
+      font-size: 0.82rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .topbar-chip-btn:hover {
+      background: var(--bg-surface-high);
+      border-color: var(--gold-primary);
+      color: var(--gold-primary);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+    .topbar-chip-btn .chip-icon {
+      font-size: 16px;
+    }
+
+    /* Cinematic Welcome Hero */
+    .welcome-hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      max-width: 840px;
+      margin: 28px auto 24px auto;
+      padding: 0 20px;
+      animation: heroFadeIn 0.4s ease-out;
+    }
+    @keyframes heroFadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .welcome-crest {
+      width: 58px;
+      height: 58px;
+      border-radius: 16px;
+      background: radial-gradient(circle, rgba(242, 202, 80, 0.25) 0%, rgba(31, 31, 35, 0.8) 100%);
+      border: 1.5px solid rgba(242, 202, 80, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 14px;
+      box-shadow: 0 0 24px rgba(242, 202, 80, 0.25);
+    }
+    .welcome-crest .crown-icon {
+      font-size: 32px;
+      color: var(--gold-primary);
+    }
+    .welcome-badge-line {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 14px;
+      border-radius: 999px;
+      background: rgba(242, 202, 80, 0.08);
+      border: 1px solid rgba(242, 202, 80, 0.25);
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--gold-primary);
+      margin-bottom: 12px;
+    }
+    .welcome-title {
+      font-size: 2.1rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: #ffffff;
+      margin-bottom: 8px;
+      line-height: 1.25;
+    }
+    .welcome-title .gold-accent {
+      background: linear-gradient(135deg, #fce484 0%, #f2ca50 50%, #d4af37 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .welcome-subtitle {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      max-width: 600px;
+      line-height: 1.55;
+      margin-bottom: 26px;
+    }
+
+    /* 4 Feature Cards Grid */
+    .hero-feature-cards {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+    .feature-card-royal {
+      background: var(--bg-surface);
+      border: 1px solid rgba(77, 70, 53, 0.4);
+      border-radius: 12px;
+      padding: 16px 14px;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    .feature-card-royal::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold-primary), transparent);
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+    .feature-card-royal:hover {
+      background: var(--bg-surface-high);
+      border-color: rgba(242, 202, 80, 0.4);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3), 0 0 12px rgba(242, 202, 80, 0.1);
+    }
+    .feature-card-royal:hover::before {
+      opacity: 1;
+    }
+    .feature-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .feature-card-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      background: rgba(242, 202, 80, 0.1);
+      border: 1px solid rgba(242, 202, 80, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gold-primary);
+    }
+    .feature-card-badge {
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: var(--bg-surface-highest);
+      color: var(--text-dim);
+      text-transform: uppercase;
+    }
+    .feature-card-title {
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: #ffffff;
+    }
+    .feature-card-desc {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    /* Quick Prompts Bar */
+    .hero-quick-prompts {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+    }
+    .quick-prompt-chip {
+      background: rgba(31, 31, 35, 0.6);
+      border: 1px solid rgba(77, 70, 53, 0.35);
+      border-radius: 20px;
+      padding: 6px 14px;
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .quick-prompt-chip:hover {
+      background: var(--bg-surface-high);
+      color: var(--gold-primary);
+      border-color: rgba(242, 202, 80, 0.35);
+      transform: translateY(-1px);
+    }
+
+    /* Right Sidebar: Tools & Intel Hub */
+    .tools-sidebar {
+      width: 290px;
+      background-color: var(--bg-sidebar);
+      border-left: 1.5px solid var(--border-subtle);
+      display: flex;
+      flex-direction: column;
+      padding: 18px 14px;
+      gap: 16px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      flex-shrink: 0;
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), margin-right 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 45;
+    }
+    .tools-sidebar.collapsed {
+      margin-right: -290px;
+      display: none;
+    }
+
+    /* Quote Card */
+    .tools-quote-card {
+      background: linear-gradient(145deg, rgba(31, 31, 35, 0.9), rgba(27, 27, 31, 0.95));
+      border: 1px solid rgba(242, 202, 80, 0.25);
+      border-radius: 12px;
+      padding: 14px 14px 12px 14px;
+      position: relative;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+    }
+    .tools-quote-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .tools-quote-tag {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: var(--gold-primary);
+    }
+    .tools-quote-text {
+      font-size: 0.84rem;
+      line-height: 1.45;
+      color: var(--text-main);
+      font-style: italic;
+      margin-bottom: 6px;
+    }
+    .tools-quote-author {
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: var(--text-dim);
+      text-align: right;
+    }
+
+    /* Tools Section Title */
+    .tools-section-title {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-dim);
+      padding: 0 4px;
+    }
+
+    /* 4 Compact Tools Grid */
+    .tools-grid-compact {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .tool-box-card {
+      background: var(--bg-surface);
+      border: 1px solid rgba(77, 70, 53, 0.3);
+      border-radius: 10px;
+      padding: 10px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 6px;
+      transition: all 0.2s ease;
+      text-align: left;
+      width: 100%;
+    }
+    .tool-box-card:hover {
+      background: var(--bg-surface-high);
+      border-color: var(--gold-primary);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    }
+    .tool-box-icon-wrap {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      background: rgba(242, 202, 80, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gold-primary);
+    }
+    .tool-box-name {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #ffffff;
+    }
+    .tool-box-desc {
+      font-size: 0.68rem;
+      color: var(--text-dim);
+      line-height: 1.25;
+    }
+
+    /* Active Model & Voice Badges */
+    .tools-info-card {
+      background: var(--bg-surface);
+      border: 1px solid rgba(77, 70, 53, 0.35);
+      border-radius: 10px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .tools-info-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .tools-info-title {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+    .tools-info-name {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .tools-info-specs {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+    .tools-info-action-btn {
+      align-self: flex-start;
+      margin-top: 4px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      background: rgba(242, 202, 80, 0.1);
+      border: 1px solid rgba(242, 202, 80, 0.2);
+      color: var(--gold-primary);
+      font-size: 0.72rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .tools-info-action-btn:hover {
+      background: var(--gold-primary);
+      color: #0e0e12;
+    }
+
+    /* Right Sidebar Upgrade Card */
+    .tools-upgrade-card {
+      margin-top: auto;
+      background: linear-gradient(135deg, rgba(31, 31, 35, 0.95), rgba(20, 20, 24, 0.98));
+      border: 1px solid rgba(242, 202, 80, 0.35);
+      border-radius: 12px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    }
+    .tools-upgrade-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--gold-primary);
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+    .tools-upgrade-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 0;
+      margin: 0;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+    .tools-upgrade-list li {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .tools-upgrade-list li .material-symbols-outlined {
+      font-size: 14px;
+      color: var(--gold-primary);
+    }
+    .tools-upgrade-btn {
+      background: linear-gradient(135deg, #fce484 0%, #f2ca50 50%, #d4af37 100%);
+      color: #0e0e12;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(242, 202, 80, 0.25);
+    }
+    .tools-upgrade-btn:hover {
+      filter: brightness(1.1);
+      transform: translateY(-1px);
+    }
+
+    /* Responsive Breakpoints */
+    @media (max-width: 1200px) {
+      .hero-feature-cards {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 1100px) {
+      .tools-sidebar {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        box-shadow: -4px 0 24px rgba(0, 0, 0, 0.5);
+        z-index: 60;
+      }
+      .tools-sidebar.collapsed {
+        transform: translateX(100%);
+        margin-right: 0;
+        display: none;
+      }
+    }
+    @media (max-width: 768px) {
+      .hero-feature-cards {
+        grid-template-columns: 1fr;
+      }
+      .tools-sidebar {
+        width: 280px;
+      }
+      .topbar-chip-btn {
+        display: none;
+      }
+    }
