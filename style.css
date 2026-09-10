@@ -5320,3 +5320,30 @@
         display: none;
       }
     }
+      .auth-close-btn {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(77, 70, 53, 0.3);
+      color: var(--text-muted);
+      font-size: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      line-height: 1;
+      z-index: 10;
+    }
+    .auth-close-btn:hover {
+      background: var(--bg-surface-high);
+      color: var(--gold-primary);
+      border-color: var(--gold-primary);
+    }
+    .btn-explore-guest:hover {
+      color: var(--gold-primary) !important;
+    }

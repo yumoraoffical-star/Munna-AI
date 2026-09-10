@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Munna AI - King of AI Models</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>ðŸ‘‘</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>&#x1F451;</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -5335,6 +5335,33 @@
         display: none;
       }
     }
+      .auth-close-btn {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(77, 70, 53, 0.3);
+      color: var(--text-muted);
+      font-size: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      line-height: 1;
+      z-index: 10;
+    }
+    .auth-close-btn:hover {
+      background: var(--bg-surface-high);
+      color: var(--gold-primary);
+      border-color: var(--gold-primary);
+    }
+    .btn-explore-guest:hover {
+      color: var(--gold-primary) !important;
+    }
   </style>
 </head>
 <body>
@@ -5351,7 +5378,7 @@
       <!-- Left Column: Royal Brand & Power Showcase -->
       <div class="auth-brand-col">
         <div class="auth-royal-crest">
-          <span class="auth-crown">ðŸ‘‘</span>
+          <span class="material-symbols-outlined auth-crown" style="font-size:38px; color:var(--gold-primary);">workspace_premium</span>
           <div class="auth-crest-ring"></div>
         </div>
         
@@ -5367,28 +5394,28 @@
         <!-- Power Highlights -->
         <div class="auth-highlights-grid">
           <div class="auth-highlight-card">
-            <span class="highlight-icon">ðŸ§ </span>
+            <span class="highlight-icon"><span class="material-symbols-outlined" style="color:var(--crimson); font-size:20px;">visibility</span></span>
             <div class="highlight-info">
               <span class="highlight-title">Gemini 3.6 Vision</span>
               <span class="highlight-sub">High-Speed Image, Code & Document Intel</span>
             </div>
           </div>
           <div class="auth-highlight-card">
-            <span class="highlight-icon">ðŸŽ™ï¸</span>
+            <span class="highlight-icon"><span class="material-symbols-outlined" style="color:var(--gold-primary); font-size:20px;">graphic_eq</span></span>
             <div class="highlight-info">
               <span class="highlight-title">ElevenLabs HD Voice</span>
               <span class="highlight-sub">Adam Studio AI Speech Architecture</span>
             </div>
           </div>
           <div class="auth-highlight-card">
-            <span class="highlight-icon">â˜ï¸</span>
+            <span class="highlight-icon"><span class="material-symbols-outlined" style="color:#60a5fa; font-size:20px;">cloud_sync</span></span>
             <div class="highlight-info">
               <span class="highlight-title">Supabase Cloud Sync</span>
               <span class="highlight-sub">Instant Cross-Device Session Storage</span>
             </div>
           </div>
           <div class="auth-highlight-card">
-            <span class="highlight-icon">âš¡</span>
+            <span class="highlight-icon"><span class="material-symbols-outlined" style="color:var(--emerald); font-size:20px;">bolt</span></span>
             <div class="highlight-info">
               <span class="highlight-title">Full-Stack Intelligence</span>
               <span class="highlight-sub">Strategic Logic, Coding & Creative Power</span>
@@ -5397,13 +5424,17 @@
         </div>
 
         <div class="auth-brand-badge">
-          <span>ðŸ”’ Secure Executive Portal â€¢ Authorized Access</span>
+          <span class="material-symbols-outlined" style="font-size:15px; color:var(--gold-primary); margin-right:6px;">lock</span>
+          <span>Secure Executive Portal â€¢ Authorized Access</span>
         </div>
       </div>
 
       <!-- Right Column: Executive Glassmorphism Auth Card -->
       <div class="auth-card-col">
-        <div class="auth-executive-card">
+        <div class="auth-executive-card" style="position:relative;">
+          <!-- Close / Explore Button -->
+          <button type="button" class="auth-close-btn" onclick="window.hideAuthScreen()" title="Explore Interface">&times;</button>
+
           <div class="auth-card-header">
             <div class="auth-card-title">Welcome to Munna AI</div>
             <div class="auth-card-subtitle">Sign in to access your cloud conversations, models & voice</div>
@@ -5424,7 +5455,7 @@
             <div class="auth-field">
               <label class="auth-field-label">Email Address</label>
               <div class="auth-field-input-wrap">
-                <span class="field-icon">âœ‰ï¸</span>
+                <span class="field-icon"><span class="material-symbols-outlined" style="font-size:18px;">mail</span></span>
                 <input type="email" id="screenSignInEmail" class="auth-field-input" placeholder="name@example.com" required autocomplete="email" />
               </div>
             </div>
@@ -5432,13 +5463,14 @@
             <div class="auth-field">
               <label class="auth-field-label">Password</label>
               <div class="auth-field-input-wrap">
-                <span class="field-icon">ðŸ”’</span>
+                <span class="field-icon"><span class="material-symbols-outlined" style="font-size:18px;">lock</span></span>
                 <input type="password" id="screenSignInPassword" class="auth-field-input" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" required autocomplete="current-password" />
               </div>
             </div>
 
             <button type="submit" id="btnScreenSignIn" class="btn-screen-primary">
-              <span>Sign In to Munna AI âž”</span>
+              <span>Sign In to Munna AI</span>
+              <span class="material-symbols-outlined" style="font-size:18px; margin-left:6px;">arrow_forward</span>
             </button>
           </form>
 
@@ -5447,7 +5479,7 @@
             <div class="auth-field">
               <label class="auth-field-label">Full Name</label>
               <div class="auth-field-input-wrap">
-                <span class="field-icon">ðŸ‘¤</span>
+                <span class="field-icon"><span class="material-symbols-outlined" style="font-size:18px;">person</span></span>
                 <input type="text" id="screenSignUpName" class="auth-field-input" placeholder="Abhishek Sharma" required autocomplete="name" />
               </div>
             </div>
@@ -5455,7 +5487,7 @@
             <div class="auth-field">
               <label class="auth-field-label">Email Address</label>
               <div class="auth-field-input-wrap">
-                <span class="field-icon">âœ‰ï¸</span>
+                <span class="field-icon"><span class="material-symbols-outlined" style="font-size:18px;">mail</span></span>
                 <input type="email" id="screenSignUpEmail" class="auth-field-input" placeholder="name@example.com" required autocomplete="email" />
               </div>
             </div>
@@ -5463,13 +5495,14 @@
             <div class="auth-field">
               <label class="auth-field-label">Create Password (Min 6 characters)</label>
               <div class="auth-field-input-wrap">
-                <span class="field-icon">ðŸ”‘</span>
+                <span class="field-icon"><span class="material-symbols-outlined" style="font-size:18px;">key</span></span>
                 <input type="password" id="screenSignUpPassword" class="auth-field-input" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" required minlength="6" autocomplete="new-password" />
               </div>
             </div>
 
             <button type="submit" id="btnScreenSignUp" class="btn-screen-primary">
-              <span>Create Your Account âž”</span>
+              <span>Create Your Account</span>
+              <span class="material-symbols-outlined" style="font-size:18px; margin-left:6px;">arrow_forward</span>
             </button>
           </form>
 
@@ -5489,8 +5522,16 @@
             <span>Continue with Google</span>
           </button>
 
+          <!-- Explore / Direct Access Option -->
+          <div style="margin-top:14px; text-align:center;">
+            <button type="button" class="btn-explore-guest" onclick="window.hideAuthScreen()" style="background:transparent; border:none; color:var(--text-dim); font-size:0.82rem; cursor:pointer; text-decoration:underline; transition:color 0.2s ease;">
+              Explore Darbar Interface First â†’
+            </button>
+          </div>
+
           <div class="auth-security-note">
-            <span>ðŸ”’ End-to-end encrypted sessions powered by Supabase Cloud</span>
+            <span class="material-symbols-outlined" style="font-size:16px; color:var(--emerald); margin-right:6px;">verified_user</span>
+            <span>End-to-end encrypted sessions powered by Supabase Cloud</span>
           </div>
         </div>
       </div>
@@ -5803,27 +5844,27 @@
             <!-- Floating Dropdown / Popover Menu -->
             <div class="composer-tools-menu" id="composerToolsMenu">
               <button type="button" class="tool-menu-item" data-tool="image-gen" style="color:#ffd166; font-weight:700;">
-                <span class="tool-icon">ðŸŽ¨</span>
+                <span class="material-symbols-outlined" style="font-size:18px;">palette</span>
                 <span class="tool-label">Photo Banao</span>
               </button>
               <button type="button" class="tool-menu-item" data-tool="katta-vision" style="color:#ff2a51; font-weight:700;">
-                <span class="tool-icon">ðŸŽ¯</span>
+                <span class="material-symbols-outlined" style="font-size:18px;">visibility</span>
                 <span class="tool-label">Katta Vision</span>
               </button>
               <button type="button" class="tool-menu-item" data-tool="file">
-                <span class="tool-icon">ðŸ“Ž</span>
+                <span class="material-symbols-outlined" style="font-size:18px;">attach_file</span>
                 <span class="tool-label">File</span>
               </button>
               <button type="button" class="tool-menu-item" data-tool="image">
-                <span class="tool-icon">ðŸ–¼ï¸</span>
+                <span class="material-symbols-outlined" style="font-size:18px;">image</span>
                 <span class="tool-label">Image</span>
               </button>
               <button type="button" class="tool-menu-item" data-tool="pdf">
-                <span class="tool-icon">ðŸ“„</span>
+                <span class="material-symbols-outlined" style="font-size:18px;">description</span>
                 <span class="tool-label">PDF</span>
               </button>
               <button type="button" class="tool-menu-item" data-tool="code">
-                <span class="tool-icon">ðŸ’»</span>
+                <span class="material-symbols-outlined" style="font-size:18px;">terminal</span>
                 <span class="tool-label">Code</span>
               </button>
             </div>
@@ -5844,7 +5885,7 @@
           <!-- Right Side: Mic & Circular Gold Send Button -->
           <div class="composer-right">
             <button type="button" id="micBtn" class="composer-mic-btn" title="Bol ke baat karein (Voice Input)" aria-label="Voice Input">
-              <span class="mic-icon">ðŸŽ¤</span>
+              <span class="material-symbols-outlined" style="font-size:20px;">mic</span>
             </button>
 
             <button type="button" id="sendBtn" class="composer-send-btn disabled" title="Bhejo (Enter)" aria-label="Send Message" onclick="window.handleSend();">
