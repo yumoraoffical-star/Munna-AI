@@ -1901,7 +1901,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       const hero = document.createElement("div");
       hero.className = "welcome-hero";
       hero.id = "welcomeHero";
-      hero.innerHTML = 
+      hero.innerHTML = `
         <div class="welcome-crest">
           <span class="material-symbols-outlined crown-icon">workspace_premium</span>
         </div>
@@ -1982,7 +1982,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
             <span>Brainstorm high-margin tech startup ideas</span>
           </button>
         </div>
-      ;
+      `;
 
       // Wire feature card events
       hero.querySelector("#featureCardChat").onclick = () => {
