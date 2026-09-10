@@ -892,22 +892,22 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
 
         if (typeof syncUserUI === "function") syncUserUI();
       } else {
-        const guestName = userData.name || "Abhishek";
-        const initial = guestName.charAt(0).toUpperCase();
+        const defaultName = userData.name || "Munna User";
+        const initial = defaultName.charAt(0).toUpperCase();
 
-        if (sidebarName) sidebarName.textContent = guestName + " (Guest)";
-        if (accountName) accountName.textContent = guestName;
+        if (sidebarName) sidebarName.textContent = defaultName;
+        if (accountName) accountName.textContent = defaultName;
         if (sidebarInitial) sidebarInitial.textContent = initial;
         if (accountInitial) accountInitial.textContent = initial;
 
         if (topbarAvatar) {
-          topbarAvatar.title = guestName + " (Guest Mode)";
+          topbarAvatar.title = "Sign In Required";
           topbarAvatar.innerHTML = `<span class="material-symbols-outlined" style="font-size:18px;">person</span>`;
         }
 
         if (cloudPill) {
           cloudPill.classList.add("offline");
-          cloudPill.title = "Guest Mode (Local Storage Only)";
+          cloudPill.title = "Not signed in";
         }
         if (cloudText) cloudText.textContent = "Offline";
         if (menuAuthLabel) menuAuthLabel.textContent = "Sign In / Register";
@@ -3171,24 +3171,6 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         };
       }
 
-      // Guest Mode Handlers
-      function proceedAsGuest() {
-        sessionStorage.setItem("munna_guest_mode", "true");
-        hideAuthScreen();
-        updateAuthUI(null);
-        showMunnaToast("👑 Mehman Mode: Munna AI darbar khula hai!");
-      }
-
-      const btnScreenClose = document.getElementById("btnScreenClose");
-      if (btnScreenClose) {
-        btnScreenClose.onclick = proceedAsGuest;
-      }
-
-      const btnScreenGuest = document.getElementById("btnScreenGuest");
-      if (btnScreenGuest) {
-        btnScreenGuest.onclick = proceedAsGuest;
-      }
-
       // Google OAuth Sign-In
       const btnScreenGoogle = document.getElementById("btnScreenGoogle");
       if (btnScreenGoogle) {
@@ -3303,11 +3285,11 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
 
       // Supabase Auth State Initialization
       async function initSupabaseAuth() {
-        const isGuest = sessionStorage.getItem("munna_guest_mode") === "true";
+        sessionStorage.removeItem("munna_guest_mode");
 
         if (!supabaseClient) {
           updateAuthUI(null);
-          if (!isGuest) showAuthScreen();
+          showAuthScreen();
           return;
         }
 
@@ -3321,17 +3303,13 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           } else {
             currentUser = null;
             updateAuthUI(null);
-            if (!isGuest) {
-              showAuthScreen();
-            } else {
-              hideAuthScreen();
-            }
+            showAuthScreen();
           }
         } catch (e) {
           console.warn("Auth getSession error:", e);
           currentUser = null;
           updateAuthUI(null);
-          if (!isGuest) showAuthScreen();
+          showAuthScreen();
         }
 
         supabaseClient.auth.onAuthStateChange(async (event, session) => {
