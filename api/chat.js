@@ -3,10 +3,10 @@ export const config = {
 };
 
 const BACKUP_KEYS = [
-  atob('QVEuQWI4Uk42TERYWVBlOE9wRk5kRlpyUTItbTF6RHctMGV1RGhDU0JkcDN1Zkd1OGsxRmc='),
   atob('QVEuQWI4Uk42S2dIQ05idkw3ekJ6N1VXOXh3WlNpa0dNWFdBSkFoOGR0OGx3QndoYW5TbkE='),
   atob('QVEuQWI4Uk42SUVteDh1MVI0SFZKYTcyWDJYaUhtZkZRV09pelJtVVJwRG8tRF9tZHZtTmc='),
-  atob('QVEuQWI4Uk42SksySU9iTXUwUUlpdVFqaU5QSjdYcElJTkRhZ25WTmxiUFljdE5vc1BndVE=')
+  atob('QVEuQWI4Uk42SKSySU9iTXUwUUlpdVFqaU5QSjdYcElJTkRhZ25WTmxiUFljdE5vc1BndVE='),
+  atob('QVEuQWI4Uk42TERYWVBlOE9wRk5kRlpyUTItbTF6RHctMGV1RGhDU0JkcDN1Zkd1OGsxRmc=')
 ];
 
 const CORS_HEADERS = {
@@ -33,22 +33,26 @@ export default async function handler(req) {
   }
 
   try {
-    const { model = 'gemini-3.5-flash-lite', payload, sse = true } = await req.json();
+    const { model = 'gemini-3.6-flash', payload, sse = true } = await req.json();
 
     const envKey = (typeof process !== 'undefined' && process.env?.GEMINI_API_KEY) ? process.env.GEMINI_API_KEY : null;
     const candidateKeys = envKey ? [envKey, ...BACKUP_KEYS] : BACKUP_KEYS;
 
-    // Fast fallback model list in case primary model is temporarily busy
+    // Map deprecated/failing models to active high-speed Gemini 3.6/3.7 models
+    const requestedModel = (!model || model.includes('3.5')) ? 'gemini-3.6-flash' : model;
+
+    // Fast fallback model list
     const candidateModels = Array.from(new Set([
-      model,
-      'gemini-3.5-flash-lite',
-      'gemini-flash-lite-latest'
+      requestedModel,
+      'gemini-3.6-flash',
+      'gemini-3.7-flash',
+      'gemini-flash-latest'
     ]));
 
     const sseParam = sse ? '?alt=sse&key=' : '?key=';
     let lastError = null;
 
-    // Try keys and models sequentially for 100% reliable sub-second response
+    // Try keys and models sequentially with 9s timeout for sub-second failover
     for (const apiKey of candidateKeys) {
       if (!apiKey) continue;
 
@@ -60,7 +64,7 @@ export default async function handler(req) {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload),
-            signal: AbortSignal.timeout(22000)
+            signal: AbortSignal.timeout(9000)
           });
 
           if (geminiRes.ok) {

@@ -60,7 +60,7 @@
       console.warn("Supabase init exception:", e);
     }
     // --- 3. GEMINI AI CONFIGURATION (Secured via /api/chat) ---
-    const activeModel = "gemini-3.5-flash-lite";
+    let activeModel = "gemini-3.6-flash";
     const initialGreeting = "Aao be! Ka dikkat ho gayi? Mirzapur ke hone wale raja se seedha baat kar rahe ho. Koi coding ki samasya ho, dimaag ka bawasir ho, ya koi photo/file dikhaani ho — bolo be, hum karte hain pakka prabandh!";
 
     function getSystemPrompt() {
@@ -3369,15 +3369,18 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         if (popover) popover.style.display = "none";
         
         document.querySelectorAll(".model-option").forEach(opt => opt.classList.remove("active"));
-        if (engineId === "gemini-3.5-flash-lite") {
-          document.getElementById("optModelUltra")?.classList.add("active");
-          showMunnaToast("👑 Munna Ultra v4.5 Flagship Active");
-        } else if (engineId === "gemini-3.5-flash") {
-          document.getElementById("optModelFlash")?.classList.add("active");
-          showMunnaToast("⚡ Gemini 3.5 Flash Engine Active");
-        } else if (engineId === "katta-vision") {
+        if (engineId === "katta-vision") {
           document.getElementById("optModelKatta")?.classList.add("active");
           if (typeof window.openKattaVisionModal === "function") window.openKattaVisionModal();
+        } else {
+          activeModel = engineId || "gemini-3.6-flash";
+          if (label && label.includes("Ultra")) {
+            document.getElementById("optModelUltra")?.classList.add("active");
+            showMunnaToast("👑 Munna Ultra v4.5 Flagship Active (Gemini 3.6)");
+          } else {
+            document.getElementById("optModelFlash")?.classList.add("active");
+            showMunnaToast("⚡ Gemini 3.6 Flash Engine Active");
+          }
         }
       };
 
