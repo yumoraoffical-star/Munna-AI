@@ -6754,7 +6754,7 @@
       } else {
         langDirective = `LANGUAGE & SLANG (MANDATORY & CRITICAL):
 - You MUST ALWAYS speak in authentic Purvanchal / Mirzapur UP Hindi-Hinglish dialect!
-- Use raw street words naturally in EVERY sentence: "Abe", "Aao be!", "Bolo be!", "Ka dikkat hai be?, "Launde", "Chote", "Guru", "Hum", "Hamara", "Katta", "Bawasir", "Prabandh", "Gaddi", "Bauji", "Lalit".
+- Use raw street words naturally in EVERY sentence: "Abe", "Aao be!", "Bolo be!", "Ka dikkat hai be?", "Launde", "Chote", "Guru", "Hum", "Hamara", "Katta", "Bawasir", "Prabandh", "Gaddi", "Bauji", "Lalit".
 - NEVER refer to yourself as "Main" or "Mujhe" â€” ALWAYS use "Hum" and "Humein" ("Hum bol rahe hain", "Hum karte hain prabandh", "Hamara dabdaba").
 - Address the user affectionately or aggressively as "launde", "chote", "be", "guru", or "partner".`;
       }
@@ -6778,17 +6778,17 @@ ${styleBonus}
 YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
 1. RAW PURVANCHAL OPENINGS & PUNCHLINES:
    - Start responses with punchy Mirzapur flavor:
-     "Abe sunno be...", "Aao be, ka dikkat ho gayi?, "Bolo be launde...", "Abe chup chaap sunno...", "Hum khade hain na yahan!"
+     "Abe sunno be...", "Aao be, ka dikkat ho gayi?", "Bolo be launde...", "Abe chup chaap sunno...", "Hum khade hain na yahan!"
    - Naturally weave iconic Munna Bhaiya dialogues into your explanations:
      * "Hum karte hain prabandh!"
      * "Jalwa hai hamara poore shehar mein!"
      * "Gaddi pe chahe hum baithein ya Bauji, niyam same rahega!"
      * "Abe hum AMAR hain be! Humko koi nahi maar sakta!"
-     * "Ka bawasir bana ke rakh diye ho be?
+     * \"Ka bawasir bana ke rakh diye ho be?\"
      * "Lalit ko bolke uthwa lenge!"
      * "Darr aisa hona chahiye ki agla aadmi saans lene se pehle permission maange!"
      * "Katta nikalne pe majboor mat karo!"
-   - NEVER sound polite, formal, or like a corporate chatbot. NEVER say "Certainly!", "I'd be happy to help", "As an AI model", or "How may I assist you?.
+   - NEVER sound polite, formal, or like a corporate chatbot. NEVER say "Certainly!", "I'd be happy to help", "As an AI model", or \"How may I assist you?\".
 
 2. THE GENIUS BAHUBALI (ULTIMATE PROBLEM SOLVER):
    - Munna Bhaiya acts rough and carefree, but secretly knows EVERYTHING â€” coding (Python, JavaScript, React, backend, full-stack, bugs), mathematics, science, business strategy, exam prep, relationship advice, and life fundas.
@@ -7635,10 +7635,10 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         title: "Guddu Pandit Analysis",
         timestamp: Date.now() - 3600000,
         history: [
-          { role: "model", parts: [{ text: "Guddu Pandit ka chapter hum bohot jald close karenge! Tum batao ka kaam hai? }] }
+          { role: "model", parts: [{ text: "Guddu Pandit ka chapter hum bohot jald close karenge! Tum batao ka kaam hai?" }] }
         ],
         messages: [
-          { sender: "munna", text: "Guddu Pandit ka chapter hum bohot jald close karenge! Tum batao ka kaam hai? }
+          { sender: "munna", text: "Guddu Pandit ka chapter hum bohot jald close karenge! Tum batao ka kaam hai?" }
         ]
       },
       {
@@ -7646,10 +7646,10 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         title: "Chhapra Warehouse Logistics",
         timestamp: Date.now() - 7200000,
         history: [
-          { role: "model", parts: [{ text: "Chhapra warehouse ka supply chain ekdum tight hai. Kaunse maal ka hisaab chahiye? }] }
+          { role: "model", parts: [{ text: "Chhapra warehouse ka supply chain ekdum tight hai. Kaunse maal ka hisaab chahiye?" }] }
         ],
         messages: [
-          { sender: "munna", text: "Chhapra warehouse ka supply chain ekdum tight hai. Kaunse maal ka hisaab chahiye? }
+          { sender: "munna", text: "Chhapra warehouse ka supply chain ekdum tight hai. Kaunse maal ka hisaab chahiye?" }
         ]
       }
     ];
@@ -9209,10 +9209,10 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           if (action === "suggest") {
             const suggestions = [
               "Munna Bhaiya, Jaunpur market pe kabza karne ka complete business masterplan banao!",
-              "Bhaiya, Python aur JavaScript me ek mast full-stack app kaise banayein?,
+              "Bhaiya, Python aur JavaScript me ek mast full-stack app kaise banayein?",
               "Munna Bhaiya, dushman ko dost kaise banayein? Koi solid purvanchal formula batao!",
-              "Bhaiya, mere code me performance bug aa raha hai, isko optimize kaise karein?,
-              "Mirzapur ki gaddi ka niyam business aur career me kaise lagayein?
+              "Bhaiya, mere code me performance bug aa raha hai, isko optimize kaise karein?",
+              "Mirzapur ki gaddi ka niyam business aur career me kaise lagayein?"
             ];
             const chosen = suggestions[Math.floor(Math.random() * suggestions.length)];
             textarea.value = chosen;
@@ -9345,7 +9345,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       const clearBtn = document.getElementById("clearAllHistoryBtn");
       if (clearBtn) {
         clearBtn.onclick = () => {
-          if (confirm("Kya aap saari pichli baatcheet hatana chahte hain?)) {
+          if (confirm("Kya aap saari pichli baatcheet hatana chahte hain?")) {
             sessions = [];
             createNewSession();
           }
@@ -9747,7 +9747,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       const settingsClearHistoryBtn = document.getElementById("settingsClearHistoryBtn");
       if (settingsClearHistoryBtn) {
         settingsClearHistoryBtn.onclick = () => {
-          if (confirm("Kya aap saari pichli baatcheet hatana chahte hain?)) {
+          if (confirm("Kya aap saari pichli baatcheet hatana chahte hain?")) {
             sessions = [];
             createNewSession();
             closeSettingsModal();
