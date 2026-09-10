@@ -7,7 +7,8 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👑</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
   <!-- Supabase Cloud Backend SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   
@@ -16,21 +17,40 @@
        EXECUTIVE OBSIDIAN MATTE & GOLD PALETTE (LUXURY LIGHT MODE)
        ========================================================================== */
     :root {
-      --bg-app: #f5f5f9;
-      --bg-sidebar: #eaeaf1;
-      --bg-chat: #ffffff;
-      --bg-card: #ffffff;
-      --bg-card-hover: #f7f7fa;
-      --gold-primary: #c49216;
-      --gold-dim: rgba(196, 146, 22, 0.2);
-      --gold-glow: rgba(196, 146, 22, 0.35);
-      --crimson-primary: #d90429;
-      --crimson-dim: rgba(217, 4, 41, 0.15);
-      --crimson-glow: rgba(217, 4, 41, 0.4);
-      --text-main: #121217;
-      --text-muted: #5e5e72;
-      --border-subtle: rgba(0, 0, 0, 0.08);
-      --border-gold: rgba(196, 146, 22, 0.4);
+      /* Obsidian & Imperial Gold Design System Tokens */
+      --bg-base: #131317;
+      --bg-lowest: #0e0e12;
+      --bg-sidebar: #1b1b1f;
+      --bg-surface-low: #1b1b1f;
+      --bg-surface: #1f1f23;
+      --bg-surface-high: #2a292e;
+      --bg-surface-highest: #353439;
+      --gold-primary: #f2ca50;
+      --gold-hover: #dfb73c;
+      --gold-container: #d4af37;
+      --gold-text-dark: #3c2f00;
+      --text-main: #e4e1e7;
+      --text-muted: #d0c5af;
+      --text-dim: #99907c;
+      --border-dark: #4d4635;
+      --emerald: #34d399;
+      --crimson: #f87171;
+      --font-display: "Space Grotesk", sans-serif;
+      --font-body: "Inter", sans-serif;
+      --font-code: "JetBrains Mono", monospace;
+
+      /* Existing variable mappings for seamless compatibility */
+      --bg-app: #131317;
+      --bg-chat: #131317;
+      --bg-card: #1f1f23;
+      --bg-card-hover: #2a292e;
+      --gold-dim: rgba(242, 202, 80, 0.15);
+      --gold-glow: rgba(242, 202, 80, 0.35);
+      --crimson-primary: #f87171;
+      --crimson-dim: rgba(248, 113, 113, 0.15);
+      --crimson-glow: rgba(248, 113, 113, 0.4);
+      --border-subtle: rgba(77, 70, 53, 0.3);
+      --border-gold: rgba(242, 202, 80, 0.35);
     }
 
     * {
@@ -3986,7 +4006,660 @@
       background: linear-gradient(90deg, transparent, #e0a800, #d90429, transparent);
       animation: scanLaser 1.5s infinite linear;
     }
-  </style>
+  
+    /* ==========================================================================
+       EXECUTIVE OBSIDIAN MATTE & IMPERIAL GOLD DESIGN SYSTEM
+       ========================================================================== */
+    body {
+      font-family: var(--font-body);
+      background-color: var(--bg-base) !important;
+      color: var(--text-main) !important;
+      height: 100vh;
+      overflow: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .font-headline {
+      font-family: var(--font-display);
+    }
+    .font-mono {
+      font-family: var(--font-code);
+    }
+
+    /* Custom Executive Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--bg-surface-highest);
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--border-dark);
+    }
+
+    /* Topbar */
+    .executive-topbar {
+      height: 56px;
+      background: rgba(19, 19, 23, 0.94);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(77, 70, 53, 0.3);
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      z-index: 40;
+      flex-shrink: 0;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .topbar-icon-btn {
+      background: var(--bg-surface);
+      border: 1px solid rgba(77, 70, 53, 0.4);
+      color: var(--text-main);
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .topbar-icon-btn:hover {
+      background: var(--bg-surface-high);
+      border-color: var(--gold-primary);
+      color: var(--gold-primary);
+    }
+
+    .model-switcher-dropdown {
+      position: relative;
+    }
+
+    .model-switcher-btn {
+      background: var(--bg-surface);
+      border: 1px solid rgba(77, 70, 53, 0.4);
+      color: var(--text-main);
+      border-radius: 10px;
+      padding: 6px 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 0.82rem;
+    }
+    .model-switcher-btn:hover {
+      background: var(--bg-surface-high);
+      border-color: var(--gold-primary);
+    }
+
+    .model-menu-popover {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0;
+      width: 300px;
+      background: var(--bg-surface-low);
+      border: 1px solid rgba(242, 202, 80, 0.4);
+      border-radius: 14px;
+      padding: 8px;
+      z-index: 100;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.7);
+    }
+
+    .popover-title {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-dim);
+      padding: 6px 8px;
+      font-weight: 700;
+      font-family: var(--font-code);
+    }
+
+    .model-option {
+      padding: 8px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      transition: all 0.15s ease;
+      margin-bottom: 4px;
+    }
+    .model-option:hover {
+      background: var(--bg-surface-high);
+    }
+    .model-option.active {
+      background: var(--bg-surface-high);
+      border: 1px solid rgba(242, 202, 80, 0.35);
+    }
+    .model-option.active .model-opt-name {
+      color: var(--gold-primary);
+    }
+
+    .model-opt-info {
+      display: flex;
+      flex-direction: column;
+    }
+    .model-opt-name {
+      font-weight: 600;
+      font-size: 0.82rem;
+      color: var(--text-main);
+      font-family: var(--font-display);
+    }
+    .model-opt-sub {
+      font-size: 0.7rem;
+      color: var(--text-dim);
+    }
+
+    .spec-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 8px;
+      border-radius: 9999px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      font-family: var(--font-code);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      white-space: nowrap;
+    }
+    .spec-badge-gold {
+      background: rgba(242, 202, 80, 0.12);
+      color: var(--gold-primary);
+      border: 1px solid rgba(242, 202, 80, 0.35);
+    }
+    .spec-badge-emerald {
+      background: rgba(52, 211, 153, 0.12);
+      color: var(--emerald);
+      border: 1px solid rgba(52, 211, 153, 0.35);
+    }
+
+    .darbar-status-pill {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 0.74rem;
+      color: var(--text-dim);
+      background: rgba(0, 0, 0, 0.25);
+      padding: 5px 10px;
+      border-radius: 9999px;
+      border: 1px solid rgba(77, 70, 53, 0.25);
+    }
+    @media (max-width: 768px) {
+      .darbar-status-pill { display: none; }
+    }
+
+    .emerald-pulse-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--emerald);
+      box-shadow: 0 0 8px var(--emerald);
+      animation: emeraldPulse 2s infinite ease-in-out;
+    }
+    @keyframes emeraldPulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.35); opacity: 0.75; }
+    }
+
+    .darbar-channel-text {
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+    }
+    .status-sep {
+      color: rgba(77, 70, 53, 0.6);
+    }
+    .status-latency {
+      color: var(--gold-primary);
+      font-size: 0.72rem;
+    }
+
+    .spec-btn {
+      background: var(--bg-surface);
+      border: 1px solid rgba(77, 70, 53, 0.4);
+      color: var(--text-main);
+      padding: 6px 12px;
+      border-radius: 10px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      font-family: var(--font-display);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+    .spec-btn:hover {
+      background: var(--bg-surface-high);
+      border-color: var(--gold-primary);
+      color: var(--gold-primary);
+    }
+
+    .topbar-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: var(--gold-primary);
+      color: var(--gold-text-dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 8px rgba(242, 202, 80, 0.3);
+    }
+    .topbar-avatar:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 14px rgba(242, 202, 80, 0.5);
+    }
+
+    /* Sidebar Brand & Solid Gold Button */
+    .chat-sidebar {
+      background-color: var(--bg-sidebar) !important;
+      border-right: 1px solid rgba(77, 70, 53, 0.3) !important;
+    }
+
+    .sidebar-brand-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      padding: 0 4px;
+    }
+
+    .sidebar-brand-gold {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .brand-dot-gold {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--gold-primary);
+      box-shadow: 0 0 8px var(--gold-primary);
+    }
+
+    .brand-title-text {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 0.98rem;
+      letter-spacing: 0.06em;
+      color: var(--gold-primary);
+    }
+
+    .sidebar-icon-action {
+      background: transparent;
+      border: none;
+      color: var(--text-dim);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+      border-radius: 6px;
+      transition: all 0.2s ease;
+    }
+    .sidebar-icon-action:hover {
+      color: var(--gold-primary);
+      background: var(--bg-surface-high);
+    }
+
+    .btn-gold-new-chat {
+      background: var(--gold-primary) !important;
+      color: var(--gold-text-dark) !important;
+      font-family: var(--font-display) !important;
+      font-weight: 700 !important;
+      font-size: 0.85rem !important;
+      letter-spacing: 0.04em !important;
+      padding: 10px 14px !important;
+      border-radius: 12px !important;
+      border: none !important;
+      cursor: pointer !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 8px !important;
+      margin-bottom: 18px !important;
+      transition: all 0.2s ease !important;
+      box-shadow: 0 3px 10px rgba(242, 202, 80, 0.25) !important;
+      width: 100% !important;
+    }
+    .btn-gold-new-chat:hover {
+      background: var(--gold-hover) !important;
+      transform: translateY(-1px) !important;
+      box-shadow: 0 5px 16px rgba(242, 202, 80, 0.4) !important;
+    }
+    .btn-gold-new-chat:active {
+      transform: scale(0.98) !important;
+    }
+
+    .vip-tier-card {
+      background: var(--bg-surface);
+      border: 1px solid rgba(77, 70, 53, 0.4);
+      border-radius: 12px;
+      padding: 10px 12px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .vip-tier-card:hover {
+      border-color: var(--gold-primary);
+      background: var(--bg-surface-high);
+      transform: translateY(-1px);
+    }
+    .vip-tier-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 4px;
+    }
+    .vip-tier-badge-title {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      color: var(--gold-primary);
+      font-size: 0.78rem;
+      font-weight: 700;
+      font-family: var(--font-display);
+    }
+    .vip-tier-desc {
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      line-height: 1.35;
+    }
+
+    /* Welcome Hero */
+    .welcome-hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      margin: auto 0;
+      padding: 36px 20px 24px;
+      animation: fadeInHero 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      max-width: 820px;
+      width: 100%;
+    }
+
+    .welcome-crest {
+      width: 60px;
+      height: 60px;
+      background: var(--bg-surface) !important;
+      border: 1px solid rgba(242, 202, 80, 0.4) !important;
+      border-radius: 16px !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      color: var(--gold-primary) !important;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 16px rgba(242, 202, 80, 0.2) !important;
+      margin-bottom: 18px !important;
+    }
+    .welcome-crest .crown-icon {
+      font-size: 32px;
+      color: var(--gold-primary);
+    }
+
+    .welcome-title {
+      font-size: 1.85rem !important;
+      font-weight: 700 !important;
+      color: var(--text-main) !important;
+      font-family: var(--font-display) !important;
+      letter-spacing: -0.02em !important;
+      margin-bottom: 10px !important;
+    }
+
+    .welcome-subtitle {
+      font-size: 0.88rem !important;
+      color: var(--text-muted) !important;
+      line-height: 1.6 !important;
+      max-width: 620px !important;
+      margin-bottom: 24px !important;
+    }
+
+    .welcome-action-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .welcome-chip {
+      background: var(--bg-surface);
+      border: 1px solid rgba(77, 70, 53, 0.35);
+      color: var(--text-main);
+      border-radius: 12px;
+      padding: 9px 16px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      font-family: var(--font-display);
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+    .welcome-chip:hover {
+      background: var(--bg-surface-high);
+      border-color: var(--gold-primary);
+      color: var(--gold-primary);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Composer Layout */
+    .composer-tool-pills {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      width: 100%;
+      max-width: 840px;
+      padding-bottom: 4px;
+    }
+
+    .pill-tool {
+      background: var(--bg-surface);
+      border: 1px solid rgba(77, 70, 53, 0.4);
+      color: var(--text-muted);
+      border-radius: 9999px;
+      padding: 5px 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      font-family: var(--font-display);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+    .pill-tool:hover {
+      border-color: var(--gold-primary);
+      color: var(--gold-primary);
+      background: var(--bg-surface-high);
+    }
+    .pill-tool.active {
+      background: var(--bg-surface-high);
+      border-color: var(--gold-primary);
+      color: var(--gold-primary);
+      box-shadow: 0 0 12px rgba(242, 202, 80, 0.25);
+    }
+
+    .composer-card {
+      background: var(--bg-surface) !important;
+      border: 1px solid rgba(242, 202, 80, 0.3) !important;
+      border-radius: 14px !important;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5) !important;
+    }
+    .composer-card:hover {
+      border-color: rgba(242, 202, 80, 0.5) !important;
+    }
+    .composer-card:focus-within {
+      border-color: var(--gold-primary) !important;
+      box-shadow: 0 10px 36px rgba(0, 0, 0, 0.6), 0 0 16px rgba(242, 202, 80, 0.2) !important;
+    }
+
+    .composer-send-btn {
+      width: 36px !important;
+      height: 36px !important;
+      border-radius: 50% !important;
+      background: var(--gold-primary) !important;
+      color: var(--gold-text-dark) !important;
+      border: none !important;
+      box-shadow: 0 2px 8px rgba(242, 202, 80, 0.35) !important;
+    }
+    .composer-send-btn:hover:not(.disabled) {
+      background: var(--gold-hover) !important;
+      transform: scale(1.05) !important;
+    }
+
+    .composer-enclave-footer {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 840px;
+      padding: 3px 4px 0;
+      font-size: 0.68rem;
+      color: var(--text-dim);
+    }
+    .enclave-left {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .emerald-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--emerald);
+      display: inline-block;
+      box-shadow: 0 0 6px var(--emerald);
+    }
+
+    /* Chat Messages: Obsidian Assistant & Gold User */
+    .msg.munna .ai-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .msg.munna .ai-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: var(--bg-surface-high);
+      border: 1px solid rgba(242, 202, 80, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gold-primary);
+      flex-shrink: 0;
+    }
+    .msg.munna .ai-identity {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .msg.munna .ai-name {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 0.88rem;
+      color: var(--text-main);
+    }
+    .msg.munna .ai-content-body {
+      background: var(--bg-surface) !important;
+      border: 1px solid rgba(242, 202, 80, 0.15) !important;
+      border-radius: 16px !important;
+      padding: 16px 20px !important;
+      font-size: 0.88rem !important;
+      line-height: 1.65 !important;
+      color: var(--text-main) !important;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3) !important;
+    }
+
+    .msg.user {
+      align-self: flex-end;
+      max-width: 780px;
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+    .msg.user .user-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+      padding-right: 44px;
+    }
+    .msg.user .user-time {
+      font-size: 0.7rem;
+      color: var(--text-dim);
+    }
+    .msg.user .user-name {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 0.84rem;
+      color: var(--text-main);
+    }
+    .msg.user .user-msg-wrap {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .msg.user .bubble {
+      background: rgba(212, 175, 55, 0.18) !important;
+      border: 1px solid rgba(242, 202, 80, 0.35) !important;
+      border-radius: 16px !important;
+      padding: 14px 18px !important;
+      font-size: 0.88rem !important;
+      line-height: 1.6 !important;
+      color: var(--text-main) !important;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25) !important;
+    }
+    .msg.user .user-avatar-box {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: var(--gold-primary);
+      color: var(--gold-text-dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(242, 202, 80, 0.35);
+    }
+</style>
 </head>
 <body>
 
@@ -4152,19 +4825,22 @@
     
     <!-- Left Sidebar -->
     <aside class="chat-sidebar" id="chatSidebar">
-      <div class="sidebar-header">
-        <div class="sidebar-brand">
-          <div class="brand-crest">👑</div>
-          <div>
-            <div class="sidebar-title">Munna AI</div>
-            <div class="sidebar-subtitle">King of AI Models</div>
-          </div>
+      <div class="sidebar-brand-row">
+        <div class="sidebar-brand-gold">
+          <span class="brand-dot-gold"></span>
+          <span class="brand-title-text font-headline">MUNNA AI</span>
         </div>
-        <button id="closeSidebar" class="btn-icon mobile-only" title="Sidebar band karein">&times;</button>
+        <div style="display:flex;align-items:center;gap:4px;">
+          <button type="button" class="sidebar-icon-action" id="sidebarNewChatIconBtn" title="New Chat" onclick="window.startNewChat();">
+            <span class="material-symbols-outlined" style="font-size:18px;">edit_square</span>
+          </button>
+          <button id="closeSidebar" class="sidebar-icon-action mobile-only" title="Sidebar band karein">&times;</button>
+        </div>
       </div>
 
-      <button id="newChatBtn" class="btn-new-chat">
-        <span>➕</span> New Chat
+      <button id="newChatBtn" class="btn-gold-new-chat" onclick="window.startNewChat();">
+        <span class="material-symbols-outlined" style="font-size:18px;">add</span>
+        <span>NEW CHAT</span>
       </button>
 
       <div class="sidebar-section-title">Operations & Strategy</div>
@@ -4173,6 +4849,18 @@
       </ul>
 
       <div class="sidebar-footer" id="sidebarFooter">
+                <!-- VIP Tier Card in Sidebar Footer -->
+        <div class="vip-tier-card" id="sidebarVipTierCard" onclick="window.openNazranaModal ? window.openNazranaModal() : null;" title="VIP Tier Active">
+          <div class="vip-tier-top">
+            <div class="vip-tier-badge-title">
+              <span class="material-symbols-outlined" style="font-size:16px;">workspace_premium</span>
+              <span>VIP Darbar Tier</span>
+            </div>
+            <span class="spec-badge spec-badge-gold">Active</span>
+          </div>
+          <div class="vip-tier-desc">Unlimited high-speed intelligence tokens enabled.</div>
+        </div>
+
         <button id="clearAllHistoryBtn" class="btn-clear-history">
           <span>🗑️</span> Saari History Mitao
         </button>
@@ -4262,8 +4950,71 @@
     <!-- Main Chat Area -->
     <div class="chat-wrapper">
       
-      <!-- Minimal Floating Sidebar Toggle (Modern AI Style) -->
-      <button id="toggleSidebar" class="floating-sidebar-toggle" title="Sidebar kholein / band karein" aria-label="Toggle Sidebar">☰</button>
+      <!-- Executive Obsidian Topbar -->
+      <header class="executive-topbar" id="executiveTopbar">
+        <div class="topbar-left">
+          <button id="toggleSidebar" class="topbar-icon-btn" title="Toggle Sidebar" aria-label="Toggle Sidebar">
+            <span class="material-symbols-outlined" style="font-size:20px;">menu</span>
+          </button>
+
+          <!-- Model Switcher Pill -->
+          <div class="model-switcher-dropdown" id="modelSwitcherDropdown">
+            <button type="button" id="modelSwitcherBtn" class="model-switcher-btn" onclick="window.toggleModelMenu();">
+              <span class="material-symbols-outlined model-icon" style="color:var(--gold-primary); font-size:18px;">neurology</span>
+              <span id="currentModelLabel" class="model-label">Munna Ultra v4.5</span>
+              <span class="material-symbols-outlined chevron-icon" style="font-size:16px; color:var(--text-dim);">expand_more</span>
+            </button>
+            
+            <div id="modelMenuPopover" class="model-menu-popover" style="display:none;">
+              <div class="popover-title">SELECT DARBAR AI ENGINE</div>
+              <div class="model-option active" id="optModelUltra" onclick="window.selectModelEngine('Munna Ultra v4.5', 'gemini-3.5-flash-lite')">
+                <div class="model-opt-info">
+                  <div class="model-opt-name">Munna Ultra v4.5</div>
+                  <div class="model-opt-sub">Executive commands & high-speed reasoning</div>
+                </div>
+                <span class="spec-badge spec-badge-gold">Flagship</span>
+              </div>
+              <div class="model-option" id="optModelFlash" onclick="window.selectModelEngine('Gemini 3.5 Flash', 'gemini-3.5-flash')">
+                <div class="model-opt-info">
+                  <div class="model-opt-name">Gemini 3.5 Flash</div>
+                  <div class="model-opt-sub">Sub-second latency text & code synthesis</div>
+                </div>
+                <span class="spec-badge spec-badge-emerald">Fast</span>
+              </div>
+              <div class="model-option" id="optModelKatta" onclick="window.selectModelEngine('Katta Vision 2.0', 'katta-vision')">
+                <div class="model-opt-info">
+                  <div class="model-opt-name">Katta Vision 2.0</div>
+                  <div class="model-opt-sub">Optical inspection & target perimeter schema</div>
+                </div>
+                <span class="spec-badge spec-badge-gold">Vision</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Status Indicator Pill -->
+          <div class="darbar-status-pill">
+            <span class="emerald-pulse-dot"></span>
+            <span class="darbar-channel-text">DARBAR SECURE EXECUTIVE CHANNEL</span>
+            <span class="status-sep">•</span>
+            <span class="status-latency font-mono" id="networkLatencyBadge">1.42ms</span>
+          </div>
+        </div>
+
+        <div class="topbar-right">
+          <button type="button" class="spec-btn" id="openSpecBtn" onclick="window.openDesignSpecModal();" title="Design System Spec">
+            <span class="material-symbols-outlined" style="font-size:16px; color:var(--gold-primary);">palette</span>
+            <span>Design Spec</span>
+          </button>
+
+          <button type="button" class="topbar-icon-btn" id="topbarSettingsBtn" onclick="window.openSettingsModal();" title="Settings">
+            <span class="material-symbols-outlined" style="font-size:18px;">settings</span>
+          </button>
+
+          <div class="topbar-avatar" id="topbarAvatarBtn" onclick="window.openProfileModal();" title="Abhishek (Boss)">
+            <span class="material-symbols-outlined" style="font-size:18px;">person</span>
+          </div>
+        </div>
+      </header>
 
       <!-- Messages Stream -->
       <main class="chat-messages" id="chatMessages">
@@ -4272,6 +5023,25 @@
 
       <!-- Premium Modern AI Composer -->
       <footer class="chat-input-container">
+        <!-- Executive Tool Pills Row -->
+        <div class="composer-tool-pills">
+          <button type="button" class="pill-tool" id="pillKattaVision" onclick="window.openKattaVisionModal();">
+            <span class="material-symbols-outlined" style="font-size:15px; color:var(--crimson);">visibility</span>
+            <span>Katta Vision</span>
+          </button>
+          <button type="button" class="pill-tool" id="pillPhotoBanao" onclick="window.openPhotoBanaoModal();">
+            <span class="material-symbols-outlined" style="font-size:15px; color:var(--gold-primary);">palette</span>
+            <span>Photo Banao</span>
+          </button>
+          <button type="button" class="pill-tool" id="pillSuggestPrompt" onclick="window.injectStarterPrompt('Jaunpur deal corridor ka risk assessment compile karo');">
+            <span class="material-symbols-outlined" style="font-size:15px; color:var(--gold-primary);">lightbulb</span>
+            <span>Suggest Prompt</span>
+          </button>
+          <button type="button" class="pill-tool" id="pillWebSearch" onclick="window.injectStarterPrompt('Latest global tech and AI market intelligence report nikaalo');">
+            <span class="material-symbols-outlined" style="font-size:15px; color:#60a5fa;">language</span>
+            <span>Web Search</span>
+          </button>
+        </div>
         <!-- Attachment Preview Tray -->
         <div id="attachmentPreviewTray" class="attachment-preview-tray" style="display:none;">
           <div class="attachment-preview-card">
@@ -4331,7 +5101,7 @@
               id="userInput" 
               class="composer-textarea" 
               rows="1" 
-              placeholder="Bolo bhai, kya bawal hai? (kuch bhi pucho...)" 
+              placeholder="Boliye kya hukum hai... (Press Enter to send)" 
               autocomplete="off" 
               autofocus
             ></textarea>
@@ -4344,7 +5114,7 @@
             </button>
 
             <button type="button" id="sendBtn" class="composer-send-btn disabled" title="Bhejo (Enter)" aria-label="Send Message" onclick="window.handleSend();">
-              <span class="send-icon">➤</span>
+              <span class="material-symbols-outlined" style="font-size:18px;">arrow_upward</span>
             </button>
           </div>
         </div>
@@ -4385,13 +5155,114 @@
           </button>
         </div>
 
-        <!-- Personality Line -->
-        <div class="composer-personality-line">
-          Baaki sab chhodo... sawaal daalo, jawab hum sambhal lenge.
+        <!-- Enclave Subtext -->
+        <div class="composer-enclave-footer">
+          <div class="enclave-left">
+            <span class="emerald-dot"></span>
+            <span>Munna AI v4.5 Secure Enclave</span>
+          </div>
+          <div class="enclave-right">
+            <span>Encrypted End-to-End • VIP Darbar Tier</span>
+          </div>
         </div>
       </footer>
     </div>
 
+  </div>
+
+  <!-- JAUNPUR DEAL & FINANCIALS MODAL -->
+  <div class="modal-backdrop" id="jaunpurModal" onclick="if(event.target === this) window.closeJaunpurModal();">
+    <div class="modal-box" style="max-width:540px; background:var(--bg-surface-low); border:1px solid rgba(242,202,80,0.4);">
+      <div class="modal-top" style="border-bottom:1px solid rgba(77,70,53,0.3); padding-bottom:12px;">
+        <div class="modal-brand">
+          <span class="material-symbols-outlined" style="font-size:24px; color:var(--gold-primary);">analytics</span>
+          <div>
+            <h3 class="font-headline" style="color:var(--text-main); font-size:1.05rem;">Jaunpur Deal Financials</h3>
+            <div style="font-size:0.7rem; color:var(--text-dim);">Darbar Secured Pipeline • Corridor v4.5</div>
+          </div>
+        </div>
+        <button class="modal-close-btn" onclick="window.closeJaunpurModal();">&times;</button>
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:16px 0;">
+        <div style="background:var(--bg-surface); border:1px solid rgba(77,70,53,0.3); border-radius:10px; padding:12px;">
+          <div style="font-size:0.7rem; color:var(--text-dim);">Consignment Volume</div>
+          <div class="font-headline" style="font-size:1.2rem; font-weight:700; color:var(--gold-primary);">42,500 MT</div>
+          <div style="font-size:0.7rem; color:var(--emerald); font-family:var(--font-code);">+18.4% Transit</div>
+        </div>
+        <div style="background:var(--bg-surface); border:1px solid rgba(77,70,53,0.3); border-radius:10px; padding:12px;">
+          <div style="font-size:0.7rem; color:var(--text-dim);">Darbar Net Realization</div>
+          <div class="font-headline" style="font-size:1.2rem; font-weight:700; color:var(--gold-primary);">₹148.6 Cr</div>
+          <div style="font-size:0.7rem; color:var(--emerald); font-family:var(--font-code);">+24.1% EBITDA</div>
+        </div>
+      </div>
+
+      <div style="background:var(--bg-surface); border:1px solid rgba(77,70,53,0.3); border-radius:10px; padding:12px; font-size:0.78rem; line-height:1.6; margin-bottom:16px;">
+        <div style="font-weight:700; color:var(--gold-primary); margin-bottom:6px; font-family:var(--font-display);">Corridor Security Status</div>
+        <div style="display:flex; justify-content:space-between; border-bottom:1px solid rgba(77,70,53,0.2); padding:4px 0;">
+          <span>Varanasi-Jaunpur Fleet:</span>
+          <span class="font-mono" style="color:var(--text-main);">Fleet A-1 to A-6 En Route</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; padding:4px 0;">
+          <span>Katta Vision Drone Grid:</span>
+          <span class="font-mono" style="color:var(--emerald);">32/32 Nodes Active</span>
+        </div>
+      </div>
+
+      <div style="display:flex; justify-content:flex-end;">
+        <button type="button" class="btn-gold-new-chat" style="width:auto !important; padding:8px 18px !important; margin:0 !important;" onclick="window.closeJaunpurModal();">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DESIGN SYSTEM SPEC MODAL -->
+  <div class="modal-backdrop" id="specModal" onclick="if(event.target === this) window.closeDesignSpecModal();">
+    <div class="modal-box" style="max-width:760px; max-height:85vh; overflow-y:auto; background:var(--bg-surface-low); border:1px solid rgba(242,202,80,0.4);">
+      <div class="modal-top" style="border-bottom:1px solid rgba(77,70,53,0.3); padding-bottom:12px;">
+        <div class="modal-brand">
+          <span class="material-symbols-outlined" style="font-size:24px; color:var(--gold-primary);">palette</span>
+          <div>
+            <h3 class="font-headline" style="color:var(--text-main); font-size:1.1rem;">Munna AI — Executive Design System</h3>
+            <div style="font-size:0.72rem; color:var(--text-dim);">Obsidian & Imperial Gold Architecture Specification</div>
+          </div>
+        </div>
+        <button class="modal-close-btn" onclick="window.closeDesignSpecModal();">&times;</button>
+      </div>
+
+      <div style="margin:16px 0;">
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:10px; margin-bottom:16px;">
+          <div style="background:var(--bg-surface); border:1px solid rgba(77,70,53,0.3); border-radius:8px; overflow:hidden;">
+            <div style="height:44px; background:#f2ca50; color:#3c2f00; font-weight:700; font-size:0.75rem; display:flex; align-items:flex-end; padding:4px 8px;">#f2ca50</div>
+            <div style="padding:8px; font-size:0.75rem; font-weight:600; color:var(--text-main);">Imperial Gold</div>
+          </div>
+          <div style="background:var(--bg-surface); border:1px solid rgba(77,70,53,0.3); border-radius:8px; overflow:hidden;">
+            <div style="height:44px; background:#131317; border-bottom:1px solid rgba(255,255,255,0.1); color:#fff; font-size:0.75rem; display:flex; align-items:flex-end; padding:4px 8px;">#131317</div>
+            <div style="padding:8px; font-size:0.75rem; font-weight:600; color:var(--text-main);">Obsidian Core</div>
+          </div>
+          <div style="background:var(--bg-surface); border:1px solid rgba(77,70,53,0.3); border-radius:8px; overflow:hidden;">
+            <div style="height:44px; background:#1b1b1f; color:#fff; font-size:0.75rem; display:flex; align-items:flex-end; padding:4px 8px;">#1b1b1f</div>
+            <div style="padding:8px; font-size:0.75rem; font-weight:600; color:var(--text-main);">Surface Sidebar</div>
+          </div>
+          <div style="background:var(--bg-surface); border:1px solid rgba(77,70,53,0.3); border-radius:8px; overflow:hidden;">
+            <div style="height:44px; background:#34d399; color:#064e3b; font-weight:700; font-size:0.75rem; display:flex; align-items:flex-end; padding:4px 8px;">#34d399</div>
+            <div style="padding:8px; font-size:0.75rem; font-weight:600; color:var(--text-main);">Emerald Pulse</div>
+          </div>
+        </div>
+
+        <div style="background:var(--bg-surface); border:1px solid rgba(77,70,53,0.3); border-radius:10px; padding:14px; margin-bottom:16px;">
+          <div class="font-headline" style="font-weight:700; color:var(--gold-primary); font-size:0.88rem; margin-bottom:6px;">Typography Stack</div>
+          <div style="font-size:0.8rem; color:var(--text-muted); line-height:1.6;">
+            • <strong>Display:</strong> Space Grotesk (Titles, Crest, Engine labels)<br>
+            • <strong>Body:</strong> Inter (Chat stream, controls, descriptions)<br>
+            • <strong>Code:</strong> JetBrains Mono (Terminal, latency badges, formulas)
+          </div>
+        </div>
+
+        <div style="display:flex; justify-content:flex-end; gap:8px;">
+          <button type="button" class="btn-gold-new-chat" style="width:auto !important; padding:8px 18px !important; margin:0 !important;" onclick="window.closeDesignSpecModal();">Dismiss</button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- 1. NAZRANA / TIP (UPI QR) MODAL -->
@@ -5010,7 +5881,7 @@
       aiStyle: safeGet("munna_setting_ai_style", "swag"),
       voiceSpeed: parseFloat(safeGet("munna_setting_voice_speed", "1")),
       language: safeGet("munna_setting_language", "hinglish"),
-      theme: safeGet("munna_theme", "light_obsidian"),
+      theme: safeGet("munna_theme", "obsidian_gold"),
       autoSpeak: safeGet("munna_setting_auto_speak", "false") === "true"
     };
 
@@ -6585,16 +7456,17 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       const msgDiv = document.createElement("div");
 
       if (sender === "munna") {
-        msgDiv.className = "msg munna document-style";
+        msgDiv.className = "msg munna executive-style";
 
-        // AI Header (👑 Munna AI \n Online)
+        // AI Header (Executive Neurology Icon, Munna AI, Ultra v4.5 Badge, Timestamp)
         const header = document.createElement("div");
         header.className = "ai-header";
         header.innerHTML = `
-          <div class="ai-avatar">👑</div>
+          <div class="ai-avatar"><span class="material-symbols-outlined" style="font-size:20px; color:var(--gold-primary);">neurology</span></div>
           <div class="ai-identity">
-            <span class="ai-name">Munna AI</span>
-            <span class="ai-status">Online</span>
+            <span class="ai-name font-headline">Munna AI</span>
+            <span class="spec-badge spec-badge-gold">Munna Ultra v4.5</span>
+            <span class="ai-time-stamp">${getTime()}</span>
           </div>
         `;
 
@@ -6692,22 +7564,31 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         }
         return { msgDiv, bubble: contentBody };
       } else {
-        // User message (compact right-aligned bubble)
+        // User message (Executive gold ambient bubble with user avatar)
         msgDiv.className = "msg user";
+
+        const userHeader = document.createElement("div");
+        userHeader.className = "user-header";
+        userHeader.innerHTML = `
+          <span class="user-time">${getTime()}</span>
+          <span class="user-name font-headline">${escapeHTML(userData?.name || "Abhishek (Boss)")}</span>
+        `;
+
+        const userWrap = document.createElement("div");
+        userWrap.className = "user-msg-wrap";
 
         const bubble = document.createElement("div");
         bubble.className = "bubble";
 
-        const footer = document.createElement("div");
-        footer.className = "msg-footer";
+        const avatar = document.createElement("div");
+        avatar.className = "user-avatar-box";
+        avatar.innerHTML = `<span class="material-symbols-outlined" style="font-size:18px;">person</span>`;
 
-        const timeSpan = document.createElement("span");
-        timeSpan.className = "time";
-        timeSpan.innerText = getTime();
-        footer.appendChild(timeSpan);
+        userWrap.appendChild(bubble);
+        userWrap.appendChild(avatar);
 
-        msgDiv.appendChild(bubble);
-        msgDiv.appendChild(footer);
+        msgDiv.appendChild(userHeader);
+        msgDiv.appendChild(userWrap);
 
         if (chatMessages) {
           chatMessages.appendChild(msgDiv);
@@ -6839,56 +7720,43 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       hero.className = "welcome-hero";
       hero.id = "welcomeHero";
       hero.innerHTML = `
-        <div class="welcome-crest">👑</div>
-        <h1 class="welcome-title">Munna AI — King of AI Models</h1>
-        <p class="welcome-subtitle">"Bolo bhai, kya bawal hai? Poori problem solve karke denge, hum khade hain na peeche!"</p>
-        <div class="welcome-grid">
-          <button type="button" class="starter-card" data-prompt="Munna Bhaiya, ek modern full-stack web application banane ka complete blueprint aur architecture batao!">
-            <span class="starter-icon">💻</span>
-            <div class="starter-body">
-              <span class="starter-heading">Full-Stack Web App</span>
-              <span class="starter-desc">React, Node, databases aur production deployment</span>
-            </div>
+        <div class="welcome-crest">
+          <span class="material-symbols-outlined crown-icon">workspace_premium</span>
+        </div>
+        <h1 class="welcome-title font-headline">Bolo be launde, ka prabandh karna hai...</h1>
+        <p class="welcome-subtitle">Munna AI Ultra v4.5 is online. State your intent, execute code, synthesize global market strategies, or generate visionary assets instantly.</p>
+        <div class="welcome-action-chips">
+          <button type="button" class="welcome-chip" id="welcomeChipKatta">
+            <span class="material-symbols-outlined" style="color:var(--crimson); font-size:18px;">visibility</span>
+            <span>Katta Vision</span>
           </button>
-          <button type="button" class="starter-card" data-prompt="Bhaiya, mere code me bug aur performance issue aa raha hai, isko debug aur optimize kaise karein?">
-            <span class="starter-icon">⚡</span>
-            <div class="starter-body">
-              <span class="starter-heading">Code & Bug Fixer</span>
-              <span class="starter-desc">Error solving, refactoring aur speed optimization</span>
-            </div>
+          <button type="button" class="welcome-chip" id="welcomeChipPhoto">
+            <span class="material-symbols-outlined" style="color:var(--gold-primary); font-size:18px;">palette</span>
+            <span>Photo Banao</span>
           </button>
-          <button type="button" class="starter-card" data-prompt="Munna Bhaiya, market me competition ko beat karke business grow karne ka solid strategy batao!">
-            <span class="starter-icon">📊</span>
-            <div class="starter-body">
-              <span class="starter-heading">Business & Strategy</span>
-              <span class="starter-desc">Mirzapur style aggressive market growth roadmap</span>
-            </div>
+          <button type="button" class="welcome-chip" id="welcomeChipSuggest">
+            <span class="material-symbols-outlined" style="color:var(--gold-primary); font-size:18px;">lightbulb</span>
+            <span>Suggest Prompt</span>
           </button>
-          <button type="button" class="starter-card" data-prompt="Photo ya file upload karke problem solve karwao">
-            <span class="starter-icon">🖼️</span>
-            <div class="starter-body">
-              <span class="starter-heading">Multimodal Intel</span>
-              <span class="starter-desc">Screenshots, documents aur PDFs ka instant analysis</span>
-            </div>
+          <button type="button" class="welcome-chip" id="welcomeChipWeb">
+            <span class="material-symbols-outlined" style="color:#60a5fa; font-size:18px;">language</span>
+            <span>Web Search</span>
           </button>
         </div>
       `;
 
-      hero.querySelectorAll(".starter-card").forEach(card => {
-        card.onclick = () => {
-          const prompt = card.getAttribute("data-prompt");
-          const textarea = document.getElementById("userInput");
-          const fileInput = document.getElementById("fileInput");
-          if (prompt === "Photo ya file upload karke problem solve karwao" && fileInput) {
-            fileInput.click();
-          } else if (textarea) {
-            textarea.value = prompt;
-            autoResizeTextarea();
-            updateSendBtnState();
-            window.handleSend();
-          }
-        };
-      });
+      hero.querySelector("#welcomeChipKatta").onclick = () => {
+        if (typeof window.openKattaVisionModal === "function") window.openKattaVisionModal();
+      };
+      hero.querySelector("#welcomeChipPhoto").onclick = () => {
+        if (typeof window.openPhotoBanaoModal === "function") window.openPhotoBanaoModal();
+      };
+      hero.querySelector("#welcomeChipSuggest").onclick = () => {
+        window.injectStarterPrompt("Jaunpur deal corridor ka risk assessment aur logistics plan compile karo");
+      };
+      hero.querySelector("#welcomeChipWeb").onclick = () => {
+        window.injectStarterPrompt("Global AI chip market aur supply chain disruptions par strategic report generate karo");
+      };
 
       chatMessages.appendChild(hero);
     }
@@ -8269,6 +9137,78 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         safeSet("munna_setting_auto_speak", "false");
         localStorage.setItem("munna_auto_speak_migrated", "done");
       }
+
+      // --- EXECUTIVE TOPBAR & MODEL SWITCHER HANDLERS ---
+      window.toggleModelMenu = function() {
+        const popover = document.getElementById("modelMenuPopover");
+        if (popover) {
+          popover.style.display = (popover.style.display === "none" || !popover.style.display) ? "block" : "none";
+        }
+      };
+
+      window.selectModelEngine = function(label, engineId) {
+        const labelEl = document.getElementById("currentModelLabel");
+        if (labelEl) labelEl.textContent = label;
+        const popover = document.getElementById("modelMenuPopover");
+        if (popover) popover.style.display = "none";
+        
+        document.querySelectorAll(".model-option").forEach(opt => opt.classList.remove("active"));
+        if (engineId === "gemini-3.5-flash-lite") {
+          document.getElementById("optModelUltra")?.classList.add("active");
+          showMunnaToast("👑 Munna Ultra v4.5 Flagship Active");
+        } else if (engineId === "gemini-3.5-flash") {
+          document.getElementById("optModelFlash")?.classList.add("active");
+          showMunnaToast("⚡ Gemini 3.5 Flash Engine Active");
+        } else if (engineId === "katta-vision") {
+          document.getElementById("optModelKatta")?.classList.add("active");
+          if (typeof window.openKattaVisionModal === "function") window.openKattaVisionModal();
+        }
+      };
+
+      window.openDesignSpecModal = function() {
+        const modal = document.getElementById("specModal");
+        if (modal) modal.classList.add("show");
+      };
+
+      window.closeDesignSpecModal = function() {
+        const modal = document.getElementById("specModal");
+        if (modal) modal.classList.remove("show");
+      };
+
+      window.openJaunpurModal = function() {
+        const modal = document.getElementById("jaunpurModal");
+        if (modal) modal.classList.add("show");
+      };
+
+      window.closeJaunpurModal = function() {
+        const modal = document.getElementById("jaunpurModal");
+        if (modal) modal.classList.remove("show");
+      };
+
+      window.injectStarterPrompt = function(promptText) {
+        const textarea = document.getElementById("userInput");
+        if (textarea) {
+          textarea.value = promptText;
+          if (typeof autoResizeTextarea === "function") autoResizeTextarea();
+          if (typeof updateSendBtnState === "function") updateSendBtnState();
+          if (typeof window.handleSend === "function") window.handleSend();
+        }
+      };
+
+      window.startNewChat = function() {
+        if (typeof createNewSession === "function") {
+          createNewSession();
+          showMunnaToast("👑 Nayi darbar chat shuru ho gayi!");
+        }
+      };
+
+      document.addEventListener("click", function(e) {
+        const dropdown = document.getElementById("modelSwitcherDropdown");
+        const popover = document.getElementById("modelMenuPopover");
+        if (dropdown && popover && !dropdown.contains(e.target)) {
+          popover.style.display = "none";
+        }
+      });
 
       syncUserUI();
       updateQuotaUI();

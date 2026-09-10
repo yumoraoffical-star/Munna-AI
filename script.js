@@ -37,7 +37,7 @@
       aiStyle: safeGet("munna_setting_ai_style", "swag"),
       voiceSpeed: parseFloat(safeGet("munna_setting_voice_speed", "1")),
       language: safeGet("munna_setting_language", "hinglish"),
-      theme: safeGet("munna_theme", "light_obsidian"),
+      theme: safeGet("munna_theme", "obsidian_gold"),
       autoSpeak: safeGet("munna_setting_auto_speak", "false") === "true"
     };
 
@@ -1612,16 +1612,17 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       const msgDiv = document.createElement("div");
 
       if (sender === "munna") {
-        msgDiv.className = "msg munna document-style";
+        msgDiv.className = "msg munna executive-style";
 
-        // AI Header (👑 Munna AI \n Online)
+        // AI Header (Executive Neurology Icon, Munna AI, Ultra v4.5 Badge, Timestamp)
         const header = document.createElement("div");
         header.className = "ai-header";
         header.innerHTML = `
-          <div class="ai-avatar">👑</div>
+          <div class="ai-avatar"><span class="material-symbols-outlined" style="font-size:20px; color:var(--gold-primary);">neurology</span></div>
           <div class="ai-identity">
-            <span class="ai-name">Munna AI</span>
-            <span class="ai-status">Online</span>
+            <span class="ai-name font-headline">Munna AI</span>
+            <span class="spec-badge spec-badge-gold">Munna Ultra v4.5</span>
+            <span class="ai-time-stamp">${getTime()}</span>
           </div>
         `;
 
@@ -1719,22 +1720,31 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         }
         return { msgDiv, bubble: contentBody };
       } else {
-        // User message (compact right-aligned bubble)
+        // User message (Executive gold ambient bubble with user avatar)
         msgDiv.className = "msg user";
+
+        const userHeader = document.createElement("div");
+        userHeader.className = "user-header";
+        userHeader.innerHTML = `
+          <span class="user-time">${getTime()}</span>
+          <span class="user-name font-headline">${escapeHTML(userData?.name || "Abhishek (Boss)")}</span>
+        `;
+
+        const userWrap = document.createElement("div");
+        userWrap.className = "user-msg-wrap";
 
         const bubble = document.createElement("div");
         bubble.className = "bubble";
 
-        const footer = document.createElement("div");
-        footer.className = "msg-footer";
+        const avatar = document.createElement("div");
+        avatar.className = "user-avatar-box";
+        avatar.innerHTML = `<span class="material-symbols-outlined" style="font-size:18px;">person</span>`;
 
-        const timeSpan = document.createElement("span");
-        timeSpan.className = "time";
-        timeSpan.innerText = getTime();
-        footer.appendChild(timeSpan);
+        userWrap.appendChild(bubble);
+        userWrap.appendChild(avatar);
 
-        msgDiv.appendChild(bubble);
-        msgDiv.appendChild(footer);
+        msgDiv.appendChild(userHeader);
+        msgDiv.appendChild(userWrap);
 
         if (chatMessages) {
           chatMessages.appendChild(msgDiv);
@@ -1866,56 +1876,43 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       hero.className = "welcome-hero";
       hero.id = "welcomeHero";
       hero.innerHTML = `
-        <div class="welcome-crest">👑</div>
-        <h1 class="welcome-title">Munna AI — King of AI Models</h1>
-        <p class="welcome-subtitle">"Bolo bhai, kya bawal hai? Poori problem solve karke denge, hum khade hain na peeche!"</p>
-        <div class="welcome-grid">
-          <button type="button" class="starter-card" data-prompt="Munna Bhaiya, ek modern full-stack web application banane ka complete blueprint aur architecture batao!">
-            <span class="starter-icon">💻</span>
-            <div class="starter-body">
-              <span class="starter-heading">Full-Stack Web App</span>
-              <span class="starter-desc">React, Node, databases aur production deployment</span>
-            </div>
+        <div class="welcome-crest">
+          <span class="material-symbols-outlined crown-icon">workspace_premium</span>
+        </div>
+        <h1 class="welcome-title font-headline">Bolo be launde, ka prabandh karna hai...</h1>
+        <p class="welcome-subtitle">Munna AI Ultra v4.5 is online. State your intent, execute code, synthesize global market strategies, or generate visionary assets instantly.</p>
+        <div class="welcome-action-chips">
+          <button type="button" class="welcome-chip" id="welcomeChipKatta">
+            <span class="material-symbols-outlined" style="color:var(--crimson); font-size:18px;">visibility</span>
+            <span>Katta Vision</span>
           </button>
-          <button type="button" class="starter-card" data-prompt="Bhaiya, mere code me bug aur performance issue aa raha hai, isko debug aur optimize kaise karein?">
-            <span class="starter-icon">⚡</span>
-            <div class="starter-body">
-              <span class="starter-heading">Code & Bug Fixer</span>
-              <span class="starter-desc">Error solving, refactoring aur speed optimization</span>
-            </div>
+          <button type="button" class="welcome-chip" id="welcomeChipPhoto">
+            <span class="material-symbols-outlined" style="color:var(--gold-primary); font-size:18px;">palette</span>
+            <span>Photo Banao</span>
           </button>
-          <button type="button" class="starter-card" data-prompt="Munna Bhaiya, market me competition ko beat karke business grow karne ka solid strategy batao!">
-            <span class="starter-icon">📊</span>
-            <div class="starter-body">
-              <span class="starter-heading">Business & Strategy</span>
-              <span class="starter-desc">Mirzapur style aggressive market growth roadmap</span>
-            </div>
+          <button type="button" class="welcome-chip" id="welcomeChipSuggest">
+            <span class="material-symbols-outlined" style="color:var(--gold-primary); font-size:18px;">lightbulb</span>
+            <span>Suggest Prompt</span>
           </button>
-          <button type="button" class="starter-card" data-prompt="Photo ya file upload karke problem solve karwao">
-            <span class="starter-icon">🖼️</span>
-            <div class="starter-body">
-              <span class="starter-heading">Multimodal Intel</span>
-              <span class="starter-desc">Screenshots, documents aur PDFs ka instant analysis</span>
-            </div>
+          <button type="button" class="welcome-chip" id="welcomeChipWeb">
+            <span class="material-symbols-outlined" style="color:#60a5fa; font-size:18px;">language</span>
+            <span>Web Search</span>
           </button>
         </div>
       `;
 
-      hero.querySelectorAll(".starter-card").forEach(card => {
-        card.onclick = () => {
-          const prompt = card.getAttribute("data-prompt");
-          const textarea = document.getElementById("userInput");
-          const fileInput = document.getElementById("fileInput");
-          if (prompt === "Photo ya file upload karke problem solve karwao" && fileInput) {
-            fileInput.click();
-          } else if (textarea) {
-            textarea.value = prompt;
-            autoResizeTextarea();
-            updateSendBtnState();
-            window.handleSend();
-          }
-        };
-      });
+      hero.querySelector("#welcomeChipKatta").onclick = () => {
+        if (typeof window.openKattaVisionModal === "function") window.openKattaVisionModal();
+      };
+      hero.querySelector("#welcomeChipPhoto").onclick = () => {
+        if (typeof window.openPhotoBanaoModal === "function") window.openPhotoBanaoModal();
+      };
+      hero.querySelector("#welcomeChipSuggest").onclick = () => {
+        window.injectStarterPrompt("Jaunpur deal corridor ka risk assessment aur logistics plan compile karo");
+      };
+      hero.querySelector("#welcomeChipWeb").onclick = () => {
+        window.injectStarterPrompt("Global AI chip market aur supply chain disruptions par strategic report generate karo");
+      };
 
       chatMessages.appendChild(hero);
     }
@@ -3296,6 +3293,78 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         safeSet("munna_setting_auto_speak", "false");
         localStorage.setItem("munna_auto_speak_migrated", "done");
       }
+
+      // --- EXECUTIVE TOPBAR & MODEL SWITCHER HANDLERS ---
+      window.toggleModelMenu = function() {
+        const popover = document.getElementById("modelMenuPopover");
+        if (popover) {
+          popover.style.display = (popover.style.display === "none" || !popover.style.display) ? "block" : "none";
+        }
+      };
+
+      window.selectModelEngine = function(label, engineId) {
+        const labelEl = document.getElementById("currentModelLabel");
+        if (labelEl) labelEl.textContent = label;
+        const popover = document.getElementById("modelMenuPopover");
+        if (popover) popover.style.display = "none";
+        
+        document.querySelectorAll(".model-option").forEach(opt => opt.classList.remove("active"));
+        if (engineId === "gemini-3.5-flash-lite") {
+          document.getElementById("optModelUltra")?.classList.add("active");
+          showMunnaToast("👑 Munna Ultra v4.5 Flagship Active");
+        } else if (engineId === "gemini-3.5-flash") {
+          document.getElementById("optModelFlash")?.classList.add("active");
+          showMunnaToast("⚡ Gemini 3.5 Flash Engine Active");
+        } else if (engineId === "katta-vision") {
+          document.getElementById("optModelKatta")?.classList.add("active");
+          if (typeof window.openKattaVisionModal === "function") window.openKattaVisionModal();
+        }
+      };
+
+      window.openDesignSpecModal = function() {
+        const modal = document.getElementById("specModal");
+        if (modal) modal.classList.add("show");
+      };
+
+      window.closeDesignSpecModal = function() {
+        const modal = document.getElementById("specModal");
+        if (modal) modal.classList.remove("show");
+      };
+
+      window.openJaunpurModal = function() {
+        const modal = document.getElementById("jaunpurModal");
+        if (modal) modal.classList.add("show");
+      };
+
+      window.closeJaunpurModal = function() {
+        const modal = document.getElementById("jaunpurModal");
+        if (modal) modal.classList.remove("show");
+      };
+
+      window.injectStarterPrompt = function(promptText) {
+        const textarea = document.getElementById("userInput");
+        if (textarea) {
+          textarea.value = promptText;
+          if (typeof autoResizeTextarea === "function") autoResizeTextarea();
+          if (typeof updateSendBtnState === "function") updateSendBtnState();
+          if (typeof window.handleSend === "function") window.handleSend();
+        }
+      };
+
+      window.startNewChat = function() {
+        if (typeof createNewSession === "function") {
+          createNewSession();
+          showMunnaToast("👑 Nayi darbar chat shuru ho gayi!");
+        }
+      };
+
+      document.addEventListener("click", function(e) {
+        const dropdown = document.getElementById("modelSwitcherDropdown");
+        const popover = document.getElementById("modelMenuPopover");
+        if (dropdown && popover && !dropdown.contains(e.target)) {
+          popover.style.display = "none";
+        }
+      });
 
       syncUserUI();
       updateQuotaUI();
