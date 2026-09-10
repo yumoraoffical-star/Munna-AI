@@ -3700,3 +3700,275 @@
       transform: translateY(-1px);
       box-shadow: 0 4px 16px rgba(196, 146, 22, 0.4);
     }
+
+    /* ==========================================================================
+       AI PHOTO BANAO (IMAGE GENERATOR) & ART STUDIO STYLES
+       ========================================================================== */
+    .quick-chip.photo-banao-chip {
+      background: linear-gradient(135deg, rgba(224, 168, 0, 0.15), rgba(114, 9, 183, 0.15));
+      border: 1.5px solid #e0a800;
+      color: #ffd166;
+      font-weight: 700;
+      box-shadow: 0 0 10px rgba(224, 168, 0, 0.2);
+    }
+    .quick-chip.photo-banao-chip:hover {
+      background: linear-gradient(135deg, rgba(224, 168, 0, 0.3), rgba(114, 9, 183, 0.3));
+      border-color: #ffd166;
+      box-shadow: 0 0 16px rgba(224, 168, 0, 0.4);
+      transform: translateY(-2px);
+    }
+    .image-gen-box {
+      max-width: 540px;
+      width: 92%;
+      background: linear-gradient(180deg, #18151f 0%, #0d0a12 100%);
+      border: 1.5px solid rgba(224, 168, 0, 0.4);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 30px rgba(224, 168, 0, 0.2);
+      color: #f0f0f5;
+      border-radius: 20px;
+      padding: 24px;
+      position: relative;
+    }
+    .image-gen-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+    .image-gen-title-wrap h3 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #ffd166;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .image-gen-title-wrap span {
+      font-size: 0.8rem;
+      color: #a0a0b8;
+    }
+    .image-style-scroll {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      margin-bottom: 16px;
+      scrollbar-width: thin;
+    }
+    .image-style-chip {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(224, 168, 0, 0.3);
+      color: #e0e0ea;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .image-style-chip.active, .image-style-chip:hover {
+      background: linear-gradient(135deg, #e0a800, #d90429);
+      border-color: #ffd166;
+      color: #fff;
+      box-shadow: 0 0 12px rgba(224, 168, 0, 0.35);
+    }
+    .image-prompt-textarea {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1.5px solid rgba(224, 168, 0, 0.3);
+      border-radius: 12px;
+      padding: 12px 14px;
+      color: #fff;
+      font-family: inherit;
+      font-size: 0.95rem;
+      resize: vertical;
+      min-height: 90px;
+      margin-bottom: 14px;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+    .image-prompt-textarea:focus {
+      border-color: #ffd166;
+      box-shadow: 0 0 14px rgba(224, 168, 0, 0.25);
+    }
+    .image-suggestions-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 18px;
+    }
+    .image-sugg-tag {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #a0a0b8;
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .image-sugg-tag:hover {
+      background: rgba(224, 168, 0, 0.15);
+      border-color: #e0a800;
+      color: #ffd166;
+    }
+    .image-submit-btn {
+      width: 100%;
+      background: linear-gradient(135deg, #e0a800, #d90429);
+      border: none;
+      color: #fff;
+      font-weight: 800;
+      font-size: 1rem;
+      padding: 12px 18px;
+      border-radius: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 16px rgba(224, 168, 0, 0.3);
+    }
+    .image-submit-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(224, 168, 0, 0.45);
+    }
+    .image-submit-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    /* Generated Art Card in Chat */
+    .munna-art-card {
+      margin-top: 10px;
+      background: linear-gradient(180deg, rgba(20, 16, 26, 0.95), rgba(10, 8, 14, 0.98));
+      border: 1.5px solid rgba(224, 168, 0, 0.5);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 20px rgba(224, 168, 0, 0.15);
+      position: relative;
+    }
+    .munna-art-header {
+      padding: 10px 14px;
+      background: rgba(0, 0, 0, 0.3);
+      border-bottom: 1px solid rgba(224, 168, 0, 0.2);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.78rem;
+    }
+    .munna-art-badge {
+      color: #ffd166;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .munna-art-engine {
+      color: #a0a0b8;
+      font-family: monospace;
+      font-size: 0.72rem;
+    }
+    .munna-art-image-wrapper {
+      position: relative;
+      width: 100%;
+      max-height: 480px;
+      overflow: hidden;
+      background: #08060a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .munna-art-img {
+      width: 100%;
+      height: auto;
+      max-height: 480px;
+      object-fit: contain;
+      cursor: pointer;
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .munna-art-img:hover {
+      transform: scale(1.02);
+    }
+    .munna-art-footer {
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      background: rgba(0, 0, 0, 0.2);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .munna-art-actions {
+      display: flex;
+      gap: 8px;
+      width: 100%;
+    }
+    .munna-art-action-btn {
+      flex: 1;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(224, 168, 0, 0.3);
+      color: #ffd166;
+    }
+    .munna-art-action-btn:hover {
+      background: linear-gradient(135deg, #e0a800, #d90429);
+      color: #fff;
+      border-color: #ffd166;
+      box-shadow: 0 0 12px rgba(224, 168, 0, 0.35);
+    }
+
+    /* Skeleton Loading State for Image Generation */
+    .image-generating-skeleton {
+      width: 100%;
+      min-height: 240px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #18151f 0%, #0d0a12 100%);
+      border: 1.5px dashed rgba(224, 168, 0, 0.4);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      position: relative;
+      overflow: hidden;
+      margin-top: 10px;
+      padding: 24px;
+      text-align: center;
+    }
+    .skeleton-art-pulse {
+      font-size: 2.2rem;
+      animation: crownFloat 1.5s ease-in-out infinite;
+    }
+    .skeleton-art-text {
+      color: #ffd166;
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+    .skeleton-art-sub {
+      color: #a0a0b8;
+      font-size: 0.8rem;
+    }
+    .skeleton-bar-wrap {
+      width: 180px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 6px;
+    }
+    .skeleton-bar-active {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, #e0a800, #d90429, transparent);
+      animation: scanLaser 1.5s infinite linear;
+    }

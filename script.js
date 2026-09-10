@@ -650,6 +650,170 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       }
     }
 
+    // --- 11. AI IMAGE GENERATION (PIXAZO & FLUX.1 ENGINE) ---
+    let currentImageGenStyle = "mirzapur";
+    let activeLightboxImageUrl = "";
+
+    function openImageGenModal() {
+      const m = document.getElementById("imageGenModal");
+      if (m) {
+        m.classList.add("show");
+        const inp = document.getElementById("imageGenPromptInput");
+        if (inp) {
+          setTimeout(() => inp.focus(), 150);
+        }
+      }
+    }
+
+    function closeImageGenModal() {
+      const m = document.getElementById("imageGenModal");
+      if (m) m.classList.remove("show");
+    }
+
+    function showArtLightbox(url) {
+      activeLightboxImageUrl = url;
+      const m = document.getElementById("artLightboxModal");
+      const img = document.getElementById("artLightboxImg");
+      if (img) img.src = url;
+      if (m) m.classList.add("show");
+    }
+
+    function closeArtLightbox() {
+      const m = document.getElementById("artLightboxModal");
+      if (m) m.classList.remove("show");
+    }
+
+    async function downloadArtImage(url) {
+      try {
+        showMunnaToast("⏳ Photo download ho rahi hai...");
+        const response = await fetch(url);
+        const blob = await response.blob();
+        const blobUrl = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = blobUrl;
+        a.download = `MunnaAI_${Date.now()}.png`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(blobUrl);
+        showMunnaToast("✅ Photo successfully download ho gayi!");
+      } catch (e) {
+        const a = document.createElement("a");
+        a.href = url;
+        a.target = "_blank";
+        a.download = `MunnaAI_${Date.now()}.png`;
+        a.click();
+        showMunnaToast("✅ Photo nayi tab me open ho gayi!");
+      }
+    }
+
+    async function generateAIImage(promptText, styleName = "mirzapur") {
+      if (!promptText || !promptText.trim()) {
+        showMunnaToast("⚠️ Pehle batao toh sahi kaisi photo banani hai!");
+        return;
+      }
+
+      closeImageGenModal();
+
+      // Render user prompt
+      const userDisplay = `🎨 Photo Banao: "${promptText.trim()}"`;
+      renderMessage(userDisplay, "user");
+      const session = getCurrentSession();
+      session.messages.push({ sender: "user", text: userDisplay });
+      saveSessions();
+
+      // Render Munna AI Loading Skeleton
+      const msgObj = createMessageElement("munna");
+      const bubbleElem = msgObj.bubble;
+      bubbleElem.innerHTML = `
+        <div class="image-generating-skeleton">
+          <div class="skeleton-art-pulse">👑</div>
+          <div class="skeleton-art-text">Munna Bhaiya ka karigar painting bana raha hai...</div>
+          <div class="skeleton-art-sub">Aesthetic: <strong>${styleName.toUpperCase()}</strong> • 1024x1024 HD</div>
+          <div class="skeleton-bar-wrap">
+            <div class="skeleton-bar-active"></div>
+          </div>
+        </div>
+      `;
+
+      try {
+        const res = await fetch("/api/image", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            prompt: promptText.trim(),
+            style: styleName,
+            width: 1024,
+            height: 1024
+          })
+        });
+
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(errData.error || `HTTP ${res.status}`);
+        }
+
+        const data = await res.json();
+        const imgUrl = data.imageUrl;
+        const engineLabel = data.engine === "pixazo" ? "⚡ PIXAZO GATEWAY" : "⚡ FLUX.1 HD ENGINE";
+
+        const munnaQuotes = [
+          "Ye lo be launde! Mirzapur ke karigar ka dabdaba! Aisi photo poore Purvanchal me koi bana ke dikha de toh batana!",
+          "Kaisa laga maal? Hamare darbar me aisi hi cheezein banti hain — ekdum solid aur lajawab!",
+          "Photo dekho aur maze lo! Jalwa hai hamara, prabandh hum hamesha top class karte hain!",
+          "Ye rahi tumhari photo! Frame karwa ke deewar pe laga lo, Bahubali lag rahe ho!"
+        ];
+        const quote = munnaQuotes[Math.floor(Math.random() * munnaQuotes.length)];
+
+        bubbleElem.innerHTML = `
+          <p style="margin-bottom:10px; font-weight:600;">${quote}</p>
+          <div class="munna-art-card">
+            <div class="munna-art-header">
+              <span class="munna-art-badge">🎨 MUNNA AI ART STUDIO</span>
+              <span class="munna-art-engine">${engineLabel}</span>
+            </div>
+            <div class="munna-art-image-wrapper">
+              <img src="${imgUrl}" alt="${promptText}" class="munna-art-img" onclick="showArtLightbox('${imgUrl}')" loading="lazy" />
+            </div>
+            <div class="munna-art-footer">
+              <div class="munna-art-actions">
+                <button type="button" class="munna-art-action-btn" onclick="showArtLightbox('${imgUrl}')">
+                  <span>🔍 Fullscreen</span>
+                </button>
+                <button type="button" class="munna-art-action-btn" onclick="downloadArtImage('${imgUrl}')">
+                  <span>⬇️ Download HD</span>
+                </button>
+                <button type="button" class="munna-art-action-btn" onclick="generateAIImage('${promptText.replace(/'/g, "\\'")}', '${styleName}')">
+                  <span>🔄 Phir Se Banao</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+
+        session.messages.push({
+          sender: "munna",
+          text: quote,
+          isImageCard: true,
+          imageUrl: imgUrl,
+          imagePrompt: promptText,
+          imageEngine: engineLabel
+        });
+        saveSessions();
+        if (typeof playKattaAudio === "function") playKattaAudio("lock");
+
+      } catch (err) {
+        console.error("Image generation failed:", err);
+        bubbleElem.innerHTML = `
+          <p>⚠️ <strong>Abe karigar ka hathiyar thoda ruk gaya tha!</strong></p>
+          <p style="margin-top:6px; color:#a0a0b8; font-size:0.85rem;">Error: ${err.message || 'Server busy'}</p>
+          <button type="button" class="munna-art-action-btn" style="margin-top:10px; max-width:200px;" onclick="generateAIImage('${promptText.replace(/'/g, "\\'")}', '${styleName}')">
+            <span>🔄 Dobara Koshish Karo</span>
+          </button>
+        `;
+      }
+    }
+
     function openHelpModal() {
       const m = document.getElementById("helpModal");
       if (m) m.classList.add("show");
@@ -2055,6 +2219,33 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         updateQuotaUI();
       }
 
+      // Auto-detect image generation request
+      const isImageRequest = !currentAttachment && (
+        text.startsWith("/image ") ||
+        text.startsWith("/photo ") ||
+        text.toLowerCase().startsWith("photo banao:") ||
+        text.toLowerCase().startsWith("image banao:") ||
+        /(photo|image|tasveer|picture|drawing)\s+(banao|generate|create|karo|bana|dikhao)/i.test(text) ||
+        /(generate|create|draw)\s+(an?\s+)?(image|photo|picture|wallpaper)/i.test(text)
+      );
+
+      if (isImageRequest) {
+        let cleanPrompt = text
+          .replace(/^\/(image|photo)\s+/i, "")
+          .replace(/^(photo|image)\s+banao:\s*/i, "")
+          .replace(/^(munna bhaiya|bhaiya|munna|ai|hey)\s*,?\s*/i, "")
+          .replace(/(ek\s+)?(photo|image|tasveer|picture)\s+(banao|generate karo|generate|dikhao|karo)/i, "")
+          .trim();
+        if (!cleanPrompt) cleanPrompt = text;
+
+        textarea.value = "";
+        autoResizeTextarea();
+        clearAttachment();
+
+        generateAIImage(cleanPrompt, currentImageGenStyle || "mirzapur");
+        return;
+      }
+
       // Immediately clear textarea & attachment
       textarea.value = "";
       autoResizeTextarea();
@@ -2185,6 +2376,10 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           if (plusBtn) plusBtn.classList.remove("active");
 
           const tool = item.getAttribute("data-tool");
+          if (tool === "image-gen") {
+            openImageGenModal();
+            return;
+          }
           if (tool === "katta-vision") {
             openKattaVisionModal();
             return;
@@ -2223,6 +2418,10 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       // 4. Quick Action Chips
       document.querySelectorAll(".quick-chip").forEach(chip => {
         chip.addEventListener("click", () => {
+          if (chip.id === "photoBanaoBtn") {
+            openImageGenModal();
+            return;
+          }
           if (chip.id === "kattaVisionBtn") {
             openKattaVisionModal();
             return;
@@ -2520,6 +2719,8 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           closeLightbox();
           closeAuthModal();
           closeKattaVisionModal();
+          closeImageGenModal();
+          closeArtLightbox();
         }
       });
 
@@ -2591,6 +2792,15 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       const closeKattaBtn = document.getElementById("closeKattaVisionBtn");
       if (closeKattaBtn) closeKattaBtn.onclick = closeKattaVisionModal;
 
+      const closeImageGenBtn = document.getElementById("closeImageGenBtn");
+      if (closeImageGenBtn) closeImageGenBtn.onclick = closeImageGenModal;
+
+      const closeArtLight = document.getElementById("closeArtLightboxBtn");
+      if (closeArtLight) closeArtLight.onclick = closeArtLightbox;
+
+      const artLightDl = document.getElementById("artLightboxDownloadBtn");
+      if (artLightDl) artLightDl.onclick = () => downloadArtImage(activeLightboxImageUrl);
+
       // Close modals when clicking backdrop
       const profModal = document.getElementById("profileModal");
       const setModal = document.getElementById("settingsModal");
@@ -2598,12 +2808,59 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       const logModal = document.getElementById("logoutConfirmModal");
       const aModal = document.getElementById("authModal");
       const kattaModalElem = document.getElementById("kattaVisionModal");
+      const imgGenModalElem = document.getElementById("imageGenModal");
+      const artLightModalElem = document.getElementById("artLightboxModal");
       [profModal, setModal, hModal, logModal, aModal].forEach(m => {
         if (m) m.onclick = (e) => { if (e.target === m) m.classList.remove("show"); };
       });
       if (kattaModalElem) {
         kattaModalElem.onclick = (e) => {
           if (e.target === kattaModalElem) closeKattaVisionModal();
+        };
+      }
+      if (imgGenModalElem) {
+        imgGenModalElem.onclick = (e) => {
+          if (e.target === imgGenModalElem) closeImageGenModal();
+        };
+      }
+      if (artLightModalElem) {
+        artLightModalElem.onclick = (e) => {
+          if (e.target === artLightModalElem) closeArtLightbox();
+        };
+      }
+
+      // Image Generator Style Chips
+      document.querySelectorAll(".image-style-chip").forEach(chip => {
+        chip.onclick = () => {
+          document.querySelectorAll(".image-style-chip").forEach(c => c.classList.remove("active"));
+          chip.classList.add("active");
+          currentImageGenStyle = chip.getAttribute("data-style") || "mirzapur";
+        };
+      });
+
+      // Image Generator Suggestion Tags
+      document.querySelectorAll(".image-sugg-tag").forEach(tag => {
+        tag.onclick = () => {
+          const sugg = tag.getAttribute("data-sugg");
+          const inp = document.getElementById("imageGenPromptInput");
+          if (inp && sugg) {
+            inp.value = sugg;
+            inp.focus();
+          }
+        };
+      });
+
+      // Image Generator Submit Button
+      const imageSubmitBtn = document.getElementById("imageGenSubmitBtn");
+      if (imageSubmitBtn) {
+        imageSubmitBtn.onclick = () => {
+          const inp = document.getElementById("imageGenPromptInput");
+          const prompt = inp ? inp.value.trim() : "";
+          if (!prompt) {
+            showMunnaToast("⚠️ Pehle koi prompt likho be!");
+            return;
+          }
+          generateAIImage(prompt, currentImageGenStyle || "mirzapur");
         };
       }
 

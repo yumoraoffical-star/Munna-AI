@@ -3714,6 +3714,278 @@
       transform: translateY(-1px);
       box-shadow: 0 4px 16px rgba(196, 146, 22, 0.4);
     }
+
+    /* ==========================================================================
+       AI PHOTO BANAO (IMAGE GENERATOR) & ART STUDIO STYLES
+       ========================================================================== */
+    .quick-chip.photo-banao-chip {
+      background: linear-gradient(135deg, rgba(224, 168, 0, 0.15), rgba(114, 9, 183, 0.15));
+      border: 1.5px solid #e0a800;
+      color: #ffd166;
+      font-weight: 700;
+      box-shadow: 0 0 10px rgba(224, 168, 0, 0.2);
+    }
+    .quick-chip.photo-banao-chip:hover {
+      background: linear-gradient(135deg, rgba(224, 168, 0, 0.3), rgba(114, 9, 183, 0.3));
+      border-color: #ffd166;
+      box-shadow: 0 0 16px rgba(224, 168, 0, 0.4);
+      transform: translateY(-2px);
+    }
+    .image-gen-box {
+      max-width: 540px;
+      width: 92%;
+      background: linear-gradient(180deg, #18151f 0%, #0d0a12 100%);
+      border: 1.5px solid rgba(224, 168, 0, 0.4);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 30px rgba(224, 168, 0, 0.2);
+      color: #f0f0f5;
+      border-radius: 20px;
+      padding: 24px;
+      position: relative;
+    }
+    .image-gen-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+    .image-gen-title-wrap h3 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #ffd166;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .image-gen-title-wrap span {
+      font-size: 0.8rem;
+      color: #a0a0b8;
+    }
+    .image-style-scroll {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      margin-bottom: 16px;
+      scrollbar-width: thin;
+    }
+    .image-style-chip {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(224, 168, 0, 0.3);
+      color: #e0e0ea;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .image-style-chip.active, .image-style-chip:hover {
+      background: linear-gradient(135deg, #e0a800, #d90429);
+      border-color: #ffd166;
+      color: #fff;
+      box-shadow: 0 0 12px rgba(224, 168, 0, 0.35);
+    }
+    .image-prompt-textarea {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1.5px solid rgba(224, 168, 0, 0.3);
+      border-radius: 12px;
+      padding: 12px 14px;
+      color: #fff;
+      font-family: inherit;
+      font-size: 0.95rem;
+      resize: vertical;
+      min-height: 90px;
+      margin-bottom: 14px;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+    .image-prompt-textarea:focus {
+      border-color: #ffd166;
+      box-shadow: 0 0 14px rgba(224, 168, 0, 0.25);
+    }
+    .image-suggestions-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 18px;
+    }
+    .image-sugg-tag {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #a0a0b8;
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .image-sugg-tag:hover {
+      background: rgba(224, 168, 0, 0.15);
+      border-color: #e0a800;
+      color: #ffd166;
+    }
+    .image-submit-btn {
+      width: 100%;
+      background: linear-gradient(135deg, #e0a800, #d90429);
+      border: none;
+      color: #fff;
+      font-weight: 800;
+      font-size: 1rem;
+      padding: 12px 18px;
+      border-radius: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 16px rgba(224, 168, 0, 0.3);
+    }
+    .image-submit-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(224, 168, 0, 0.45);
+    }
+    .image-submit-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    /* Generated Art Card in Chat */
+    .munna-art-card {
+      margin-top: 10px;
+      background: linear-gradient(180deg, rgba(20, 16, 26, 0.95), rgba(10, 8, 14, 0.98));
+      border: 1.5px solid rgba(224, 168, 0, 0.5);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 20px rgba(224, 168, 0, 0.15);
+      position: relative;
+    }
+    .munna-art-header {
+      padding: 10px 14px;
+      background: rgba(0, 0, 0, 0.3);
+      border-bottom: 1px solid rgba(224, 168, 0, 0.2);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.78rem;
+    }
+    .munna-art-badge {
+      color: #ffd166;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .munna-art-engine {
+      color: #a0a0b8;
+      font-family: monospace;
+      font-size: 0.72rem;
+    }
+    .munna-art-image-wrapper {
+      position: relative;
+      width: 100%;
+      max-height: 480px;
+      overflow: hidden;
+      background: #08060a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .munna-art-img {
+      width: 100%;
+      height: auto;
+      max-height: 480px;
+      object-fit: contain;
+      cursor: pointer;
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .munna-art-img:hover {
+      transform: scale(1.02);
+    }
+    .munna-art-footer {
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      background: rgba(0, 0, 0, 0.2);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .munna-art-actions {
+      display: flex;
+      gap: 8px;
+      width: 100%;
+    }
+    .munna-art-action-btn {
+      flex: 1;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(224, 168, 0, 0.3);
+      color: #ffd166;
+    }
+    .munna-art-action-btn:hover {
+      background: linear-gradient(135deg, #e0a800, #d90429);
+      color: #fff;
+      border-color: #ffd166;
+      box-shadow: 0 0 12px rgba(224, 168, 0, 0.35);
+    }
+
+    /* Skeleton Loading State for Image Generation */
+    .image-generating-skeleton {
+      width: 100%;
+      min-height: 240px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #18151f 0%, #0d0a12 100%);
+      border: 1.5px dashed rgba(224, 168, 0, 0.4);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      position: relative;
+      overflow: hidden;
+      margin-top: 10px;
+      padding: 24px;
+      text-align: center;
+    }
+    .skeleton-art-pulse {
+      font-size: 2.2rem;
+      animation: crownFloat 1.5s ease-in-out infinite;
+    }
+    .skeleton-art-text {
+      color: #ffd166;
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+    .skeleton-art-sub {
+      color: #a0a0b8;
+      font-size: 0.8rem;
+    }
+    .skeleton-bar-wrap {
+      width: 180px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 6px;
+    }
+    .skeleton-bar-active {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, #e0a800, #d90429, transparent);
+      animation: scanLaser 1.5s infinite linear;
+    }
   </style>
 </head>
 <body>
@@ -4026,6 +4298,10 @@
 
             <!-- Floating Dropdown / Popover Menu -->
             <div class="composer-tools-menu" id="composerToolsMenu">
+              <button type="button" class="tool-menu-item" data-tool="image-gen" style="color:#ffd166; font-weight:700;">
+                <span class="tool-icon">🎨</span>
+                <span class="tool-label">Photo Banao</span>
+              </button>
               <button type="button" class="tool-menu-item" data-tool="katta-vision" style="color:#ff2a51; font-weight:700;">
                 <span class="tool-icon">🎯</span>
                 <span class="tool-label">Katta Vision</span>
@@ -4075,6 +4351,10 @@
 
         <!-- Quick Action Chips Row -->
         <div class="quick-chips-row" id="quickChipsRow">
+          <button type="button" class="quick-chip photo-banao-chip" id="photoBanaoBtn" title="AI Photo Banao (Pixazo & FLUX HD)">
+            <span class="chip-icon">🎨</span>
+            <span>Photo Banao</span>
+          </button>
           <button type="button" class="quick-chip katta-vision-chip" id="kattaVisionBtn" title="Katta Vision AI Scanner (Target & Asla Roast)">
             <span class="chip-icon">🎯</span>
             <span>Katta Vision</span>
@@ -4625,6 +4905,62 @@
         <button type="button" class="katta-action-btn primary" id="kattaScanExecuteBtn" disabled>
           <span class="btn-icon">⚡</span>
           <span id="kattaScanBtnText">Nishana Lagao (Scan)</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9. AI PHOTO BANAO (IMAGE GENERATOR) MODAL -->
+  <div class="modal-backdrop" id="imageGenModal">
+    <div class="modal-box image-gen-box">
+      <!-- Header -->
+      <div class="image-gen-header">
+        <div class="image-gen-title-wrap">
+          <h3>🎨 AI PHOTO BANAO</h3>
+          <span>Pixazo Gateway & FLUX.1 HD Studio</span>
+        </div>
+        <button type="button" class="modal-close-btn" id="closeImageGenBtn">&times;</button>
+      </div>
+
+      <!-- Style Presets Horizontal Scroll -->
+      <div class="image-style-scroll" id="imageStyleScroll">
+        <button type="button" class="image-style-chip active" data-style="mirzapur">👑 Mirzapur Haveli</button>
+        <button type="button" class="image-style-chip" data-style="gangster">🔫 Badass Gangster</button>
+        <button type="button" class="image-style-chip" data-style="cyberpunk">🕶️ Desi Cyberpunk</button>
+        <button type="button" class="image-style-chip" data-style="avatar">🦁 Bahubali Sher</button>
+        <button type="button" class="image-style-chip" data-style="realistic">📸 8K Realistic</button>
+      </div>
+
+      <!-- Prompt Input -->
+      <textarea 
+        id="imageGenPromptInput" 
+        class="image-prompt-textarea" 
+        placeholder="Kaisi photo banani hai? (Jaise: Golden sunglasses pehne hue sher, Mirzapur ki sadak pe bullet gaddi...)"
+      ></textarea>
+
+      <!-- Quick Suggestion Tags -->
+      <div class="image-suggestions-row">
+        <span class="image-sugg-tag" data-sugg="Royal Haveli throne room with gold guns and red carpets">🏰 Royal Throne Haveli</span>
+        <span class="image-sugg-tag" data-sugg="Badass Indian gangster standing near black vintage Ambassador car">🕶️ Gangster & Car</span>
+        <span class="image-sugg-tag" data-sugg="Cyberpunk Mirzapur alleyway with neon signs and flying auto-rickshaw">🚀 Cyberpunk Purvanchal</span>
+        <span class="image-sugg-tag" data-sugg="A fierce majestic lion wearing a golden crown and heavy chains">🦁 Crowned Lion King</span>
+      </div>
+
+      <!-- Submit Button -->
+      <button type="button" class="image-submit-btn" id="imageGenSubmitBtn">
+        <span>⚡ Photo Generate Karo (1024x1024)</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- 10. FULLSCREEN ART LIGHTBOX MODAL -->
+  <div class="modal-backdrop" id="artLightboxModal" style="z-index:9999;">
+    <div style="position:relative; max-width:92vw; max-height:92vh; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+      <button type="button" class="modal-close-btn" id="closeArtLightboxBtn" style="position:absolute; top:-40px; right:0; color:#fff; font-size:2rem; background:none; border:none; cursor:pointer;">&times;</button>
+      <img id="artLightboxImg" src="" alt="Full Resolution Art" style="max-width:92vw; max-height:80vh; border-radius:12px; border:2px solid #ffd166; box-shadow:0 0 30px rgba(0,0,0,0.9); object-fit:contain;" />
+      <div style="margin-top:14px; display:flex; gap:12px; width:100%; justify-content:center;">
+        <button type="button" id="artLightboxDownloadBtn" class="munna-art-action-btn" style="padding:10px 24px; font-size:0.92rem; max-width:280px;">
+          <span>⬇️ Download High-Res PNG</span>
         </button>
       </div>
     </div>
@@ -5284,6 +5620,170 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         btn.disabled = false;
         btn.innerHTML = "<span>📸 Download Official Gangster Report Card</span>";
         showMunnaToast("⚠️ Card download nahi ho paya, dobara try karein!");
+      }
+    }
+
+    // --- 11. AI IMAGE GENERATION (PIXAZO & FLUX.1 ENGINE) ---
+    let currentImageGenStyle = "mirzapur";
+    let activeLightboxImageUrl = "";
+
+    function openImageGenModal() {
+      const m = document.getElementById("imageGenModal");
+      if (m) {
+        m.classList.add("show");
+        const inp = document.getElementById("imageGenPromptInput");
+        if (inp) {
+          setTimeout(() => inp.focus(), 150);
+        }
+      }
+    }
+
+    function closeImageGenModal() {
+      const m = document.getElementById("imageGenModal");
+      if (m) m.classList.remove("show");
+    }
+
+    function showArtLightbox(url) {
+      activeLightboxImageUrl = url;
+      const m = document.getElementById("artLightboxModal");
+      const img = document.getElementById("artLightboxImg");
+      if (img) img.src = url;
+      if (m) m.classList.add("show");
+    }
+
+    function closeArtLightbox() {
+      const m = document.getElementById("artLightboxModal");
+      if (m) m.classList.remove("show");
+    }
+
+    async function downloadArtImage(url) {
+      try {
+        showMunnaToast("⏳ Photo download ho rahi hai...");
+        const response = await fetch(url);
+        const blob = await response.blob();
+        const blobUrl = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = blobUrl;
+        a.download = `MunnaAI_${Date.now()}.png`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(blobUrl);
+        showMunnaToast("✅ Photo successfully download ho gayi!");
+      } catch (e) {
+        const a = document.createElement("a");
+        a.href = url;
+        a.target = "_blank";
+        a.download = `MunnaAI_${Date.now()}.png`;
+        a.click();
+        showMunnaToast("✅ Photo nayi tab me open ho gayi!");
+      }
+    }
+
+    async function generateAIImage(promptText, styleName = "mirzapur") {
+      if (!promptText || !promptText.trim()) {
+        showMunnaToast("⚠️ Pehle batao toh sahi kaisi photo banani hai!");
+        return;
+      }
+
+      closeImageGenModal();
+
+      // Render user prompt
+      const userDisplay = `🎨 Photo Banao: "${promptText.trim()}"`;
+      renderMessage(userDisplay, "user");
+      const session = getCurrentSession();
+      session.messages.push({ sender: "user", text: userDisplay });
+      saveSessions();
+
+      // Render Munna AI Loading Skeleton
+      const msgObj = createMessageElement("munna");
+      const bubbleElem = msgObj.bubble;
+      bubbleElem.innerHTML = `
+        <div class="image-generating-skeleton">
+          <div class="skeleton-art-pulse">👑</div>
+          <div class="skeleton-art-text">Munna Bhaiya ka karigar painting bana raha hai...</div>
+          <div class="skeleton-art-sub">Aesthetic: <strong>${styleName.toUpperCase()}</strong> • 1024x1024 HD</div>
+          <div class="skeleton-bar-wrap">
+            <div class="skeleton-bar-active"></div>
+          </div>
+        </div>
+      `;
+
+      try {
+        const res = await fetch("/api/image", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            prompt: promptText.trim(),
+            style: styleName,
+            width: 1024,
+            height: 1024
+          })
+        });
+
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(errData.error || `HTTP ${res.status}`);
+        }
+
+        const data = await res.json();
+        const imgUrl = data.imageUrl;
+        const engineLabel = data.engine === "pixazo" ? "⚡ PIXAZO GATEWAY" : "⚡ FLUX.1 HD ENGINE";
+
+        const munnaQuotes = [
+          "Ye lo be launde! Mirzapur ke karigar ka dabdaba! Aisi photo poore Purvanchal me koi bana ke dikha de toh batana!",
+          "Kaisa laga maal? Hamare darbar me aisi hi cheezein banti hain — ekdum solid aur lajawab!",
+          "Photo dekho aur maze lo! Jalwa hai hamara, prabandh hum hamesha top class karte hain!",
+          "Ye rahi tumhari photo! Frame karwa ke deewar pe laga lo, Bahubali lag rahe ho!"
+        ];
+        const quote = munnaQuotes[Math.floor(Math.random() * munnaQuotes.length)];
+
+        bubbleElem.innerHTML = `
+          <p style="margin-bottom:10px; font-weight:600;">${quote}</p>
+          <div class="munna-art-card">
+            <div class="munna-art-header">
+              <span class="munna-art-badge">🎨 MUNNA AI ART STUDIO</span>
+              <span class="munna-art-engine">${engineLabel}</span>
+            </div>
+            <div class="munna-art-image-wrapper">
+              <img src="${imgUrl}" alt="${promptText}" class="munna-art-img" onclick="showArtLightbox('${imgUrl}')" loading="lazy" />
+            </div>
+            <div class="munna-art-footer">
+              <div class="munna-art-actions">
+                <button type="button" class="munna-art-action-btn" onclick="showArtLightbox('${imgUrl}')">
+                  <span>🔍 Fullscreen</span>
+                </button>
+                <button type="button" class="munna-art-action-btn" onclick="downloadArtImage('${imgUrl}')">
+                  <span>⬇️ Download HD</span>
+                </button>
+                <button type="button" class="munna-art-action-btn" onclick="generateAIImage('${promptText.replace(/'/g, "\\'")}', '${styleName}')">
+                  <span>🔄 Phir Se Banao</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+
+        session.messages.push({
+          sender: "munna",
+          text: quote,
+          isImageCard: true,
+          imageUrl: imgUrl,
+          imagePrompt: promptText,
+          imageEngine: engineLabel
+        });
+        saveSessions();
+        if (typeof playKattaAudio === "function") playKattaAudio("lock");
+
+      } catch (err) {
+        console.error("Image generation failed:", err);
+        bubbleElem.innerHTML = `
+          <p>⚠️ <strong>Abe karigar ka hathiyar thoda ruk gaya tha!</strong></p>
+          <p style="margin-top:6px; color:#a0a0b8; font-size:0.85rem;">Error: ${err.message || 'Server busy'}</p>
+          <button type="button" class="munna-art-action-btn" style="margin-top:10px; max-width:200px;" onclick="generateAIImage('${promptText.replace(/'/g, "\\'")}', '${styleName}')">
+            <span>🔄 Dobara Koshish Karo</span>
+          </button>
+        `;
       }
     }
 
@@ -6692,6 +7192,33 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         updateQuotaUI();
       }
 
+      // Auto-detect image generation request
+      const isImageRequest = !currentAttachment && (
+        text.startsWith("/image ") ||
+        text.startsWith("/photo ") ||
+        text.toLowerCase().startsWith("photo banao:") ||
+        text.toLowerCase().startsWith("image banao:") ||
+        /(photo|image|tasveer|picture|drawing)\s+(banao|generate|create|karo|bana|dikhao)/i.test(text) ||
+        /(generate|create|draw)\s+(an?\s+)?(image|photo|picture|wallpaper)/i.test(text)
+      );
+
+      if (isImageRequest) {
+        let cleanPrompt = text
+          .replace(/^\/(image|photo)\s+/i, "")
+          .replace(/^(photo|image)\s+banao:\s*/i, "")
+          .replace(/^(munna bhaiya|bhaiya|munna|ai|hey)\s*,?\s*/i, "")
+          .replace(/(ek\s+)?(photo|image|tasveer|picture)\s+(banao|generate karo|generate|dikhao|karo)/i, "")
+          .trim();
+        if (!cleanPrompt) cleanPrompt = text;
+
+        textarea.value = "";
+        autoResizeTextarea();
+        clearAttachment();
+
+        generateAIImage(cleanPrompt, currentImageGenStyle || "mirzapur");
+        return;
+      }
+
       // Immediately clear textarea & attachment
       textarea.value = "";
       autoResizeTextarea();
@@ -6822,6 +7349,10 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           if (plusBtn) plusBtn.classList.remove("active");
 
           const tool = item.getAttribute("data-tool");
+          if (tool === "image-gen") {
+            openImageGenModal();
+            return;
+          }
           if (tool === "katta-vision") {
             openKattaVisionModal();
             return;
@@ -6860,6 +7391,10 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       // 4. Quick Action Chips
       document.querySelectorAll(".quick-chip").forEach(chip => {
         chip.addEventListener("click", () => {
+          if (chip.id === "photoBanaoBtn") {
+            openImageGenModal();
+            return;
+          }
           if (chip.id === "kattaVisionBtn") {
             openKattaVisionModal();
             return;
@@ -7157,6 +7692,8 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           closeLightbox();
           closeAuthModal();
           closeKattaVisionModal();
+          closeImageGenModal();
+          closeArtLightbox();
         }
       });
 
@@ -7228,6 +7765,15 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       const closeKattaBtn = document.getElementById("closeKattaVisionBtn");
       if (closeKattaBtn) closeKattaBtn.onclick = closeKattaVisionModal;
 
+      const closeImageGenBtn = document.getElementById("closeImageGenBtn");
+      if (closeImageGenBtn) closeImageGenBtn.onclick = closeImageGenModal;
+
+      const closeArtLight = document.getElementById("closeArtLightboxBtn");
+      if (closeArtLight) closeArtLight.onclick = closeArtLightbox;
+
+      const artLightDl = document.getElementById("artLightboxDownloadBtn");
+      if (artLightDl) artLightDl.onclick = () => downloadArtImage(activeLightboxImageUrl);
+
       // Close modals when clicking backdrop
       const profModal = document.getElementById("profileModal");
       const setModal = document.getElementById("settingsModal");
@@ -7235,12 +7781,59 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       const logModal = document.getElementById("logoutConfirmModal");
       const aModal = document.getElementById("authModal");
       const kattaModalElem = document.getElementById("kattaVisionModal");
+      const imgGenModalElem = document.getElementById("imageGenModal");
+      const artLightModalElem = document.getElementById("artLightboxModal");
       [profModal, setModal, hModal, logModal, aModal].forEach(m => {
         if (m) m.onclick = (e) => { if (e.target === m) m.classList.remove("show"); };
       });
       if (kattaModalElem) {
         kattaModalElem.onclick = (e) => {
           if (e.target === kattaModalElem) closeKattaVisionModal();
+        };
+      }
+      if (imgGenModalElem) {
+        imgGenModalElem.onclick = (e) => {
+          if (e.target === imgGenModalElem) closeImageGenModal();
+        };
+      }
+      if (artLightModalElem) {
+        artLightModalElem.onclick = (e) => {
+          if (e.target === artLightModalElem) closeArtLightbox();
+        };
+      }
+
+      // Image Generator Style Chips
+      document.querySelectorAll(".image-style-chip").forEach(chip => {
+        chip.onclick = () => {
+          document.querySelectorAll(".image-style-chip").forEach(c => c.classList.remove("active"));
+          chip.classList.add("active");
+          currentImageGenStyle = chip.getAttribute("data-style") || "mirzapur";
+        };
+      });
+
+      // Image Generator Suggestion Tags
+      document.querySelectorAll(".image-sugg-tag").forEach(tag => {
+        tag.onclick = () => {
+          const sugg = tag.getAttribute("data-sugg");
+          const inp = document.getElementById("imageGenPromptInput");
+          if (inp && sugg) {
+            inp.value = sugg;
+            inp.focus();
+          }
+        };
+      });
+
+      // Image Generator Submit Button
+      const imageSubmitBtn = document.getElementById("imageGenSubmitBtn");
+      if (imageSubmitBtn) {
+        imageSubmitBtn.onclick = () => {
+          const inp = document.getElementById("imageGenPromptInput");
+          const prompt = inp ? inp.value.trim() : "";
+          if (!prompt) {
+            showMunnaToast("⚠️ Pehle koi prompt likho be!");
+            return;
+          }
+          generateAIImage(prompt, currentImageGenStyle || "mirzapur");
         };
       }
 
