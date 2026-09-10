@@ -3134,6 +3134,7 @@
     }
 
     .auth-executive-card {
+      position: relative;
       background: rgba(18, 19, 26, 0.88);
       border: 1.5px solid rgba(196, 146, 22, 0.45);
       border-radius: 22px;
@@ -3141,6 +3142,33 @@
       box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6), 0 0 30px rgba(196, 146, 22, 0.15);
       backdrop-filter: blur(20px);
       color: #ffffff;
+    }
+
+    .auth-card-close-btn {
+      position: absolute;
+      top: 16px;
+      right: 18px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(196, 146, 22, 0.35);
+      color: #c4c4d4;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      font-size: 1.25rem;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 5;
+    }
+
+    .auth-card-close-btn:hover {
+      background: rgba(196, 146, 22, 0.25);
+      color: #ffd700;
+      border-color: var(--gold-primary);
+      transform: scale(1.08);
     }
 
     .auth-card-header {
@@ -3340,6 +3368,48 @@
 
     .btn-screen-google svg {
       flex-shrink: 0;
+    }
+
+    /* Guest Access Button */
+    .btn-screen-guest {
+      width: 100%;
+      margin-top: 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1.5px dashed rgba(196, 146, 22, 0.45);
+      border-radius: 12px;
+      padding: 11px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      cursor: pointer;
+      color: #ffd700;
+      font-family: inherit;
+      transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .btn-screen-guest:hover {
+      background: rgba(196, 146, 22, 0.12);
+      border-color: var(--gold-primary);
+      border-style: solid;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 18px rgba(196, 146, 22, 0.25);
+    }
+
+    .guest-btn-content {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #ffd700;
+    }
+
+    .guest-subtext {
+      font-size: 0.72rem;
+      color: #8c8ca0;
+      font-weight: 500;
     }
 
     .auth-security-note {

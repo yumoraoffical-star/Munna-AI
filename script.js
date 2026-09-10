@@ -857,6 +857,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       const accountName = document.getElementById("accountHeaderName");
       const sidebarInitial = document.getElementById("sidebarAvatarInitial");
       const accountInitial = document.getElementById("accountHeaderInitial");
+      const topbarAvatar = document.getElementById("topbarAvatarBtn");
       const cloudPill = document.getElementById("sidebarCloudSync");
       const cloudText = document.getElementById("sidebarCloudText");
       const menuAuthLabel = document.getElementById("menuAuthLabel");
@@ -866,10 +867,20 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         const displayName = user.user_metadata?.full_name || (user.email ? user.email.split("@")[0] : "Munna User");
         const initial = displayName.charAt(0).toUpperCase();
 
+        userData.name = displayName;
+        userData.email = user.email || "";
+        safeSet("munna_user_name", displayName);
+        safeSet("munna_user_email", userData.email);
+
         if (sidebarName) sidebarName.textContent = displayName;
         if (accountName) accountName.textContent = displayName;
         if (sidebarInitial) sidebarInitial.textContent = initial;
         if (accountInitial) accountInitial.textContent = initial;
+
+        if (topbarAvatar) {
+          topbarAvatar.title = displayName + " (Cloud Sync Active)";
+          topbarAvatar.innerHTML = `<span style="font-weight:800; font-size:13px; color:var(--gold-primary);">${initial}</span>`;
+        }
 
         if (cloudPill) {
           cloudPill.classList.remove("offline");
@@ -878,19 +889,31 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         if (cloudText) cloudText.textContent = "Cloud ☁️";
         if (menuAuthLabel) menuAuthLabel.textContent = "Account (" + displayName + ")";
         if (menuLogoutBtn) menuLogoutBtn.style.display = "flex";
+
+        if (typeof syncUserUI === "function") syncUserUI();
       } else {
         const guestName = userData.name || "Abhishek";
-        if (sidebarName) sidebarName.textContent = guestName;
+        const initial = guestName.charAt(0).toUpperCase();
+
+        if (sidebarName) sidebarName.textContent = guestName + " (Guest)";
         if (accountName) accountName.textContent = guestName;
-        if (sidebarInitial) sidebarInitial.textContent = guestName.charAt(0).toUpperCase();
-        if (accountInitial) accountInitial.textContent = guestName.charAt(0).toUpperCase();
+        if (sidebarInitial) sidebarInitial.textContent = initial;
+        if (accountInitial) accountInitial.textContent = initial;
+
+        if (topbarAvatar) {
+          topbarAvatar.title = guestName + " (Guest Mode)";
+          topbarAvatar.innerHTML = `<span class="material-symbols-outlined" style="font-size:18px;">person</span>`;
+        }
 
         if (cloudPill) {
           cloudPill.classList.add("offline");
-          cloudPill.title = "Not signed in (Offline)";
+          cloudPill.title = "Guest Mode (Local Storage Only)";
         }
         if (cloudText) cloudText.textContent = "Offline";
         if (menuAuthLabel) menuAuthLabel.textContent = "Sign In / Register";
+        if (menuLogoutBtn) menuLogoutBtn.style.display = "none";
+
+        if (typeof syncUserUI === "function") syncUserUI();
       }
     }
 
@@ -2908,19 +2931,29 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
 
       const saveProfileBtn = document.getElementById("saveProfileBtn");
       if (saveProfileBtn) {
-        saveProfileBtn.onclick = () => {
+        saveProfileBtn.onclick = async () => {
           const nameInput = document.getElementById("profileNameInput");
           const emailInput = document.getElementById("profileEmailInput");
           const newName = nameInput ? nameInput.value.trim() : "";
           const newEmail = emailInput ? emailInput.value.trim() : "";
 
-          userData.name = newName || "Munna User";
+          userData.name = newName || "Abhishek";
           userData.email = newEmail || "abhishek@mirzapur.ai";
           safeSet("munna_user_name", userData.name);
           safeSet("munna_user_email", userData.email);
 
+          if (supabaseClient && currentUser) {
+            try {
+              await supabaseClient.auth.updateUser({
+                data: { full_name: userData.name }
+              });
+            } catch (e) {
+              console.warn("Supabase profile sync:", e);
+            }
+          }
+
           syncUserUI();
-          showMunnaToast("Profile update ho gayi bhai!");
+          showMunnaToast("👑 Profile update ho gayi bhai!");
           closeProfileModal();
         };
       }
@@ -3138,6 +3171,24 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         };
       }
 
+      // Guest Mode Handlers
+      function proceedAsGuest() {
+        sessionStorage.setItem("munna_guest_mode", "true");
+        hideAuthScreen();
+        updateAuthUI(null);
+        showMunnaToast("👑 Mehman Mode: Munna AI darbar khula hai!");
+      }
+
+      const btnScreenClose = document.getElementById("btnScreenClose");
+      if (btnScreenClose) {
+        btnScreenClose.onclick = proceedAsGuest;
+      }
+
+      const btnScreenGuest = document.getElementById("btnScreenGuest");
+      if (btnScreenGuest) {
+        btnScreenGuest.onclick = proceedAsGuest;
+      }
+
       // Google OAuth Sign-In
       const btnScreenGoogle = document.getElementById("btnScreenGoogle");
       if (btnScreenGoogle) {
@@ -3153,7 +3204,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
             const { data, error } = await supabaseClient.auth.signInWithOAuth({
               provider: 'google',
               options: {
-                redirectTo: window.location.href.split('#')[0]
+                redirectTo: window.location.origin
               }
             });
             if (error) throw error;
@@ -3182,10 +3233,21 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           try {
             const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
             if (error) throw error;
+            currentUser = data.user;
+            sessionStorage.removeItem("munna_guest_mode");
+            updateAuthUI(currentUser);
+            loadSessionsFromCloud();
             hideAuthScreen();
-            showMunnaToast("👑 Welcome to Munna AI!");
+            showMunnaToast("👑 Darbar me swagat hai, " + (currentUser.user_metadata?.full_name || currentUser.email.split("@")[0]) + "!");
           } catch (err) {
-            showMunnaToast("⚠️ " + (err.message || "Unable to sign in"));
+            console.error("Sign in error:", err);
+            let msg = err.message || "Unable to sign in";
+            if (msg.toLowerCase().includes("invalid login credentials")) {
+              msg = "Galat email ya password! Kripya dobara check karein.";
+            } else if (msg.toLowerCase().includes("email not confirmed")) {
+              msg = "Aapka email verify nahi hua hai. Kripya inbox check karein!";
+            }
+            showMunnaToast("⚠️ " + msg);
           } finally {
             btn.classList.remove("loading");
             btn.innerHTML = '<span>Sign In to Munna AI ➔</span>';
@@ -3214,11 +3276,23 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
               options: { data: { full_name: name } }
             });
             if (error) throw error;
-            showMunnaToast("✅ Account created successfully! Please sign in.");
-            if (screenTabSignInBtn) screenTabSignInBtn.click();
-            const inEmail = document.getElementById("screenSignInEmail");
-            if (inEmail) inEmail.value = email;
+            if (data.session && data.user) {
+              currentUser = data.user;
+              sessionStorage.removeItem("munna_guest_mode");
+              updateAuthUI(currentUser);
+              hideAuthScreen();
+              showMunnaToast("👑 Khata ban gaya aur dakhila safal! Swagat hai, " + name + "!");
+              loadSessionsFromCloud();
+            } else {
+              showMunnaToast("✅ Khata ban gaya! Kripya Sign In karein.");
+              if (screenTabSignInBtn) screenTabSignInBtn.click();
+              const inEmail = document.getElementById("screenSignInEmail");
+              if (inEmail) inEmail.value = email;
+              const inPass = document.getElementById("screenSignInPassword");
+              if (inPass) inPass.value = password;
+            }
           } catch (err) {
+            console.error("Sign up error:", err);
             showMunnaToast("⚠️ " + (err.message || "Unable to create account"));
           } finally {
             btn.classList.remove("loading");
@@ -3229,14 +3303,16 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
 
       // Supabase Auth State Initialization
       async function initSupabaseAuth() {
+        const isGuest = sessionStorage.getItem("munna_guest_mode") === "true";
+
         if (!supabaseClient) {
           updateAuthUI(null);
-          showAuthScreen();
+          if (!isGuest) showAuthScreen();
           return;
         }
 
         try {
-          const { data: { session } } = await supabaseClient.auth.getSession();
+          const { data: { session }, error } = await supabaseClient.auth.getSession();
           if (session && session.user) {
             currentUser = session.user;
             updateAuthUI(currentUser);
@@ -3245,17 +3321,23 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           } else {
             currentUser = null;
             updateAuthUI(null);
-            showAuthScreen();
+            if (!isGuest) {
+              showAuthScreen();
+            } else {
+              hideAuthScreen();
+            }
           }
         } catch (e) {
           console.warn("Auth getSession error:", e);
+          currentUser = null;
           updateAuthUI(null);
-          showAuthScreen();
+          if (!isGuest) showAuthScreen();
         }
 
         supabaseClient.auth.onAuthStateChange(async (event, session) => {
           if (event === "SIGNED_IN" && session?.user) {
             currentUser = session.user;
+            sessionStorage.removeItem("munna_guest_mode");
             updateAuthUI(currentUser);
             hideAuthScreen();
             showMunnaToast("👑 Welcome to Munna AI, " + (currentUser.user_metadata?.full_name || currentUser.email.split("@")[0]) + "!");
@@ -3265,7 +3347,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
             updateAuthUI(null);
             sessionStorage.removeItem("munna_guest_mode");
             showAuthScreen();
-            showMunnaToast("You have been signed out.");
+            showMunnaToast("Aap sign out ho gaye hain.");
           }
         });
       }
