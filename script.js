@@ -1,4 +1,4 @@
-﻿// --- 1. STORAGE & APP STATE (INITIALIZED FIRST) ---
+// --- 1. STORAGE & APP STATE (INITIALIZED FIRST) ---
     function safeGet(key, def = null) {
       try {
         const v = localStorage.getItem(key);
@@ -1493,17 +1493,18 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       }
       if (activeVoiceBtn) {
         activeVoiceBtn.classList.remove("active-voice", "loading-voice");
-        activeVoiceBtn.innerHTML = '<span class="act-icon">ðŸ”Š</span>';
+        activeVoiceBtn.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px;">volume_up</span>';
         activeVoiceBtn = null;
       }
       const testBtn = document.getElementById("testVoiceBtn");
       if (testBtn) {
         testBtn.classList.remove("playing");
-        testBtn.innerHTML = '<span>â–¶ï¸</span> Test Human Voice';
+        testBtn.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px; vertical-align:middle;">play_arrow</span> Test Human Voice';
       }
     }
 
-    const ELEVEN_VOICE_ID = "pNInz6obpgDQGcFmaJgB"; // Flagship Adam - Deep, commanding, masculine
+    const CARTESIA_VOICE_ID = "bdab08ad-4137-4548-b9db-6142854c7525"; // Cartesia Sonic Hindi/Hinglish male
+    const ELEVEN_VOICE_ID = "pNInz6obpgDQGcFmaJgB"; // ElevenLabs Fallback Adam
 
     async function speakText(text, btn = null) {
       // If clicked on currently active playing button, stop playback
@@ -1526,7 +1527,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
 
       if (btn) {
         btn.classList.add("loading-voice");
-        btn.innerHTML = '<span class="act-icon">â³</span>';
+        btn.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px;">hourglass_top</span>';
         btn.title = "Aawaz ban rahi hai...";
         activeVoiceBtn = btn;
       }
@@ -1540,7 +1541,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             text: snippet,
-            voiceId: ELEVEN_VOICE_ID
+            voiceId: CARTESIA_VOICE_ID
           })
         });
 
@@ -1567,22 +1568,22 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           if (btn) {
             btn.classList.remove("loading-voice");
             btn.classList.add("active-voice");
-            btn.innerHTML = '<span class="act-icon">â¹ï¸</span>';
+            btn.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px; color:var(--emerald);">stop_circle</span>';
             btn.title = "Aawaz chal rahi hai (Rokne ke liye click karein)";
           }
 
           source.onended = () => {
             if (btn) {
               btn.classList.remove("active-voice", "loading-voice");
-              btn.innerHTML = '<span class="act-icon">ðŸ”Š</span>';
-              btn.title = "Sunno (Realistic Voice)";
+              btn.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px;">volume_up</span>';
+              btn.title = "Sunno (Cartesia Real-Time Voice)";
             }
             if (activeVoiceBtn === btn) activeVoiceBtn = null;
             currentAudioSource = null;
             const testBtn = document.getElementById("testVoiceBtn");
             if (testBtn) {
               testBtn.classList.remove("playing");
-              testBtn.innerHTML = '<span>â–¶ï¸</span> Test Human Voice';
+              testBtn.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px; vertical-align:middle;">play_arrow</span> Test Human Voice';
             }
           };
 
@@ -1600,15 +1601,15 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           if (btn) {
             btn.classList.remove("loading-voice");
             btn.classList.add("active-voice");
-            btn.innerHTML = '<span class="act-icon">â¹ï¸</span>';
+            btn.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px; color:var(--emerald);">stop_circle</span>';
             btn.title = "Aawaz chal rahi hai (Rokne ke liye click karein)";
           }
 
           audio.onended = () => {
             if (btn) {
               btn.classList.remove("active-voice", "loading-voice");
-              btn.innerHTML = '<span class="act-icon">ðŸ”Š</span>';
-              btn.title = "Sunno (Realistic Voice)";
+              btn.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px;">volume_up</span>';
+              btn.title = "Sunno (Cartesia Real-Time Voice)";
             }
             if (activeVoiceBtn === btn) activeVoiceBtn = null;
             currentAudioPlayback = null;
@@ -1618,11 +1619,11 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           return;
         }
       } catch (err) {
-        console.error("ElevenLabs playback error:", err);
-        showMunnaToast("âš ï¸ Aawaz load nahi hui, network check karein.");
+        console.error("Cartesia/ElevenLabs playback error:", err);
+        showMunnaToast("Aawaz load nahi hui, network check karein.");
         if (btn) {
           btn.classList.remove("loading-voice", "active-voice");
-          btn.innerHTML = '<span class="act-icon">ðŸ”Š</span>';
+          btn.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px;">volume_up</span>';
         }
         if (activeVoiceBtn === btn) activeVoiceBtn = null;
       }
@@ -1641,7 +1642,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         const header = document.createElement("div");
         header.className = "ai-header";
         header.innerHTML = `
-          <div class="ai-avatar">ðŸ§ </div>
+          <div class="ai-avatar"><span class="material-symbols-outlined" style="font-size:18px; color:var(--gold-primary);">neurology</span></div>
           <div class="ai-identity">
             <span class="ai-name font-headline">Munna AI</span>
             <span class="spec-badge spec-badge-gold">Munna Ultra v4.5</span>
@@ -1649,11 +1650,11 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           </div>
         `;
 
-        // Clean Document Body (NO card border, NO white rectangular card, NO heavy background)
+        // Clean Document Body
         const contentBody = document.createElement("div");
         contentBody.className = "ai-content-body";
 
-        // Subtle Icon-Only Actions Bar (ðŸ“‹ ðŸ”Š â†» ðŸ‘ ðŸ‘Ž â‹¯)
+        // Subtle Icon-Only Actions Bar
         const actionsBar = document.createElement("div");
         actionsBar.className = "ai-actions-bar";
 
@@ -1662,11 +1663,13 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         copyBtn.type = "button";
         copyBtn.className = "ai-icon-btn btn-copy-ai";
         copyBtn.title = "Copy response";
-        copyBtn.innerHTML = '<span class="act-icon">ðŸ“‹</span>';
+        copyBtn.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px;">content_copy</span>';
         copyBtn.onclick = () => {
           navigator.clipboard.writeText(contentBody.innerText).then(() => {
-            copyBtn.innerHTML = '<span class="act-icon">âœ“</span>';
-            setTimeout(() => copyBtn.innerHTML = '<span class="act-icon">ðŸ“‹</span>', 1800);
+            copyBtn.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px; color:var(--emerald);">check</span>';
+            setTimeout(() => {
+              copyBtn.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px;">content_copy</span>';
+            }, 1800);
           });
         };
         actionsBar.appendChild(copyBtn);
@@ -1675,8 +1678,8 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         const voiceBtn = document.createElement("button");
         voiceBtn.type = "button";
         voiceBtn.className = "ai-icon-btn btn-voice-ai";
-        voiceBtn.title = "Sunno (Realistic Human Voice)";
-        voiceBtn.innerHTML = '<span class="act-icon">ðŸ”Š</span>';
+        voiceBtn.title = "Sunno (Cartesia Real-Time Voice)";
+        voiceBtn.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px;">volume_up</span>';
         voiceBtn.onclick = () => {
           speakText(contentBody.innerText, voiceBtn);
         };
@@ -1687,7 +1690,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         regenBtn.type = "button";
         regenBtn.className = "ai-icon-btn btn-regen-ai";
         regenBtn.title = "Dobara generate karein";
-        regenBtn.innerHTML = '<span class="act-icon">â†»</span>';
+        regenBtn.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px;">refresh</span>';
         regenBtn.onclick = () => handleRegenerate(msgDiv);
         actionsBar.appendChild(regenBtn);
 
@@ -1696,7 +1699,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         likeBtn.type = "button";
         likeBtn.className = "ai-icon-btn btn-like-ai";
         likeBtn.title = "Acha laga (Jalwa!)";
-        likeBtn.innerHTML = '<span class="act-icon">ðŸ‘</span>';
+        likeBtn.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px;">thumb_up</span>';
         likeBtn.onclick = () => {
           likeBtn.classList.toggle("active");
           if (dislikeBtn) dislikeBtn.classList.remove("active");
@@ -1708,7 +1711,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         dislikeBtn.type = "button";
         dislikeBtn.className = "ai-icon-btn btn-dislike-ai";
         dislikeBtn.title = "Kharab laga";
-        dislikeBtn.innerHTML = '<span class="act-icon">ðŸ‘Ž</span>';
+        dislikeBtn.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px;">thumb_down</span>';
         dislikeBtn.onclick = () => {
           dislikeBtn.classList.toggle("active");
           if (likeBtn) likeBtn.classList.remove("active");
@@ -1720,7 +1723,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         moreBtn.type = "button";
         moreBtn.className = "ai-icon-btn btn-more-ai";
         moreBtn.title = "More options";
-        moreBtn.innerHTML = '<span class="act-icon">â‹¯</span>';
+        moreBtn.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px;">more_horiz</span>';
         moreBtn.onclick = () => {
           navigator.clipboard.writeText(contentBody.innerText);
           alert("Munna Bhaiya ka jawab clipboard par copy ho gaya!");
@@ -2027,7 +2030,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       }
       if (activeVoiceBtn) {
         activeVoiceBtn.classList.remove("active-voice", "loading-voice");
-        activeVoiceBtn.innerHTML = '<span class="act-icon">ðŸ”Š</span>';
+        activeVoiceBtn.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px;">volume_up</span>';
         activeVoiceBtn = null;
       }
       const chatMessages = document.getElementById("chatMessages");
@@ -2223,7 +2226,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       }
       if (activeVoiceBtn) {
         activeVoiceBtn.classList.remove("active-voice", "loading-voice");
-        activeVoiceBtn.innerHTML = '<span class="act-icon">ðŸ”Š</span>';
+        activeVoiceBtn.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px;">volume_up</span>';
         activeVoiceBtn = null;
       }
       targetMsgDiv.remove();
@@ -2291,7 +2294,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       }
       if (activeVoiceBtn) {
         activeVoiceBtn.classList.remove("active-voice", "loading-voice");
-        activeVoiceBtn.innerHTML = '<span class="act-icon">ðŸ”Š</span>';
+        activeVoiceBtn.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px;">volume_up</span>';
         activeVoiceBtn = null;
       }
 

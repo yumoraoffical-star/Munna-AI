@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="hi">
 <head>
   <meta charset="UTF-8">
@@ -5753,22 +5753,22 @@
           <div class="darbar-status-pill">
             <span class="emerald-pulse-dot"></span>
             <span class="darbar-channel-text">DARBAR SECURE EXECUTIVE CHANNEL</span>
-            <span class="status-sep">â€¢</span>
+            <span class="status-sep">&bull;</span>
             <span class="status-latency font-mono" id="networkLatencyBadge">1.42ms</span>
           </div>
         </div>
 
         <div class="topbar-right">
           <!-- Voice Studio Compact Chip -->
-          <button type="button" class="topbar-chip-btn" id="topbarVoiceBtn" onclick="window.openVoiceSettings();" title="Voice Studio (ElevenLabs Turbo)">
+          <button type="button" class="topbar-chip-btn" id="topbarVoiceBtn" onclick="window.openVoiceSettings();" title="Voice Studio (Cartesia Sonic 3.6)">
             <span class="material-symbols-outlined chip-icon" style="color:var(--gold-primary);">graphic_eq</span>
-            <span>ðŸŽ™ï¸ ElevenLabs HD</span>
+            <span>Cartesia Sonic 3.6</span>
           </button>
 
           <!-- Language Toggle Compact Chip -->
           <button type="button" class="topbar-chip-btn" id="topbarLangBtn" onclick="window.toggleLanguageMode();" title="Bhasha Chuno">
             <span class="material-symbols-outlined chip-icon">translate</span>
-            <span id="topbarLangLabel">ðŸŒ Hinglish</span>
+            <span id="topbarLangLabel">Hinglish</span>
           </button>
 
           <button type="button" class="spec-btn" id="openSpecBtn" onclick="window.openDesignSpecModal();" title="Design System Spec">
@@ -5902,7 +5902,7 @@
             <span>Munna AI v4.5 Secure Enclave</span>
           </div>
           <div class="enclave-right">
-            <span>Encrypted End-to-End â€¢ VIP Darbar Tier</span>
+            <span>Encrypted End-to-End &bull; VIP Darbar Tier</span>
           </div>
         </div>
       </footer>
@@ -5917,7 +5917,7 @@
           <span class="material-symbols-outlined" style="font-size:16px; color:var(--gold-primary);">format_quote</span>
         </div>
         <p class="tools-quote-text">"Darbar ka niyam simple hai: Dimag tez rakho, zubaan meetha, aur koshish aisi jo zamane ko yaad rahe."</p>
-        <div class="tools-quote-author">â€” Munna Bhaiya</div>
+        <div class="tools-quote-author">&mdash; Munna Bhaiya</div>
       </div>
 
       <!-- Section 2: Quick Tools -->
@@ -5967,7 +5967,7 @@
           <span class="material-symbols-outlined" style="font-size:18px; color:var(--gold-primary);">neurology</span>
           <span>Gemini 3.6 Flash</span>
         </div>
-        <div class="tools-info-specs">Multimodal Â· Sub-Second Latency Â· 32k Tokens</div>
+        <div class="tools-info-specs">Multimodal &bull; Sub-Second Latency &bull; 32k Tokens</div>
         <button type="button" class="tools-info-action-btn" onclick="window.toggleModelMenu();">Change Model</button>
       </div>
 
@@ -5975,12 +5975,12 @@
       <div class="tools-section-title">Audio Synthesis</div>
       <div class="tools-info-card">
         <div class="tools-info-header">
-          <span class="tools-info-title">ElevenLabs Engine</span>
-          <span class="spec-badge spec-badge-emerald">HD 128k</span>
+          <span class="tools-info-title">Cartesia Sonic AI</span>
+          <span class="spec-badge spec-badge-emerald">Sonic 3.6</span>
         </div>
         <div class="tools-info-name">
           <span class="material-symbols-outlined" style="font-size:18px; color:var(--gold-primary);">record_voice_over</span>
-          <span>Adam (Studio HD)</span>
+          <span>Munna Sonic (Real-Time HD)</span>
         </div>
         <div class="tools-info-specs">Bilingual Hinglish / Hindi Expressive Audio</div>
         <button type="button" class="tools-info-action-btn" onclick="window.openVoiceSettings();">Configure Voice</button>
@@ -5995,7 +5995,7 @@
         <ul class="tools-upgrade-list">
           <li><span class="material-symbols-outlined">check_circle</span> Unlimited 3.6 Flash Tokens</li>
           <li><span class="material-symbols-outlined">check_circle</span> Unlimited Photo Banao AI Images</li>
-          <li><span class="material-symbols-outlined">check_circle</span> ElevenLabs Studio HD Voice</li>
+          <li><span class="material-symbols-outlined">check_circle</span> Cartesia Sonic 3.6 Real-Time Voice</li>
           <li><span class="material-symbols-outlined">check_circle</span> Priority Supabase Cloud Sync</li>
         </ul>
         <button type="button" class="tools-upgrade-btn" onclick="if(window.openNazranaModal) window.openNazranaModal();">
@@ -8174,7 +8174,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       }
       if (activeVoiceBtn) {
         activeVoiceBtn.classList.remove("active-voice", "loading-voice");
-        activeVoiceBtn.innerHTML = '<span class="act-icon">ðŸ”Š</span>';
+        activeVoiceBtn.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px;">volume_up</span>';
         activeVoiceBtn = null;
       }
       const testBtn = document.getElementById("testVoiceBtn");
@@ -8184,6 +8184,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       }
     }
 
+    const CARTESIA_VOICE_ID = "bdab08ad-4137-4548-b9db-6142854c7525";
     const ELEVEN_VOICE_ID = "pNInz6obpgDQGcFmaJgB"; // Flagship Adam - Deep, commanding, masculine
 
     async function speakText(text, btn = null) {
@@ -8221,7 +8222,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             text: snippet,
-            voiceId: ELEVEN_VOICE_ID
+            voiceId: CARTESIA_VOICE_ID
           })
         });
 
@@ -8248,22 +8249,22 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           if (btn) {
             btn.classList.remove("loading-voice");
             btn.classList.add("active-voice");
-            btn.innerHTML = '<span class="act-icon">â¹ï¸</span>';
+            btn.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px; color:var(--emerald);">stop_circle</span>';
             btn.title = "Aawaz chal rahi hai (Rokne ke liye click karein)";
           }
 
           source.onended = () => {
             if (btn) {
               btn.classList.remove("active-voice", "loading-voice");
-              btn.innerHTML = '<span class="act-icon">ðŸ”Š</span>';
-              btn.title = "Sunno (Realistic Voice)";
+              btn.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px;">volume_up</span>';
+              btn.title = "Sunno (Cartesia Real-Time Voice)";
             }
             if (activeVoiceBtn === btn) activeVoiceBtn = null;
             currentAudioSource = null;
             const testBtn = document.getElementById("testVoiceBtn");
             if (testBtn) {
               testBtn.classList.remove("playing");
-              testBtn.innerHTML = '<span>â–¶ï¸</span> Test Human Voice';
+              testBtn.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px; vertical-align:middle;">play_arrow</span> Test Human Voice';
             }
           };
 
@@ -8281,15 +8282,15 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           if (btn) {
             btn.classList.remove("loading-voice");
             btn.classList.add("active-voice");
-            btn.innerHTML = '<span class="act-icon">â¹ï¸</span>';
+            btn.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px; color:var(--emerald);">stop_circle</span>';
             btn.title = "Aawaz chal rahi hai (Rokne ke liye click karein)";
           }
 
           audio.onended = () => {
             if (btn) {
               btn.classList.remove("active-voice", "loading-voice");
-              btn.innerHTML = '<span class="act-icon">ðŸ”Š</span>';
-              btn.title = "Sunno (Realistic Voice)";
+              btn.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px;">volume_up</span>';
+              btn.title = "Sunno (Cartesia Real-Time Voice)";
             }
             if (activeVoiceBtn === btn) activeVoiceBtn = null;
             currentAudioPlayback = null;
@@ -8299,11 +8300,11 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           return;
         }
       } catch (err) {
-        console.error("ElevenLabs playback error:", err);
-        showMunnaToast("âš ï¸ Aawaz load nahi hui, network check karein.");
+        console.error("Cartesia/ElevenLabs playback error:", err);
+        showMunnaToast("Aawaz load nahi hui, network check karein.");
         if (btn) {
           btn.classList.remove("loading-voice", "active-voice");
-          btn.innerHTML = '<span class="act-icon">ðŸ”Š</span>';
+          btn.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px;">volume_up</span>';
         }
         if (activeVoiceBtn === btn) activeVoiceBtn = null;
       }
@@ -8322,7 +8323,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         const header = document.createElement("div");
         header.className = "ai-header";
         header.innerHTML = `
-          <div class="ai-avatar">ðŸ§ </div>
+          <div class="ai-avatar"><span class="material-symbols-outlined" style="font-size:18px; color:var(--gold-primary);">neurology</span></div>
           <div class="ai-identity">
             <span class="ai-name font-headline">Munna AI</span>
             <span class="spec-badge spec-badge-gold">Munna Ultra v4.5</span>
@@ -8334,7 +8335,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         const contentBody = document.createElement("div");
         contentBody.className = "ai-content-body";
 
-        // Subtle Icon-Only Actions Bar (ðŸ“‹ ðŸ”Š â†» ðŸ‘ ðŸ‘Ž â‹¯)
+        // Subtle Icon-Only Actions Bar
         const actionsBar = document.createElement("div");
         actionsBar.className = "ai-actions-bar";
 
@@ -8343,11 +8344,13 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         copyBtn.type = "button";
         copyBtn.className = "ai-icon-btn btn-copy-ai";
         copyBtn.title = "Copy response";
-        copyBtn.innerHTML = '<span class="act-icon">ðŸ“‹</span>';
+        copyBtn.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px;">content_copy</span>';
         copyBtn.onclick = () => {
           navigator.clipboard.writeText(contentBody.innerText).then(() => {
-            copyBtn.innerHTML = '<span class="act-icon">âœ“</span>';
-            setTimeout(() => copyBtn.innerHTML = '<span class="act-icon">ðŸ“‹</span>', 1800);
+            copyBtn.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px; color:var(--emerald);">check</span>';
+            setTimeout(() => {
+              copyBtn.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px;">content_copy</span>';
+            }, 1800);
           });
         };
         actionsBar.appendChild(copyBtn);
@@ -8356,8 +8359,8 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         const voiceBtn = document.createElement("button");
         voiceBtn.type = "button";
         voiceBtn.className = "ai-icon-btn btn-voice-ai";
-        voiceBtn.title = "Sunno (Realistic Human Voice)";
-        voiceBtn.innerHTML = '<span class="act-icon">ðŸ”Š</span>';
+        voiceBtn.title = "Sunno (Cartesia Real-Time Voice)";
+        voiceBtn.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px;">volume_up</span>';
         voiceBtn.onclick = () => {
           speakText(contentBody.innerText, voiceBtn);
         };
@@ -8368,7 +8371,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         regenBtn.type = "button";
         regenBtn.className = "ai-icon-btn btn-regen-ai";
         regenBtn.title = "Dobara generate karein";
-        regenBtn.innerHTML = '<span class="act-icon">â†»</span>';
+        regenBtn.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px;">refresh</span>';
         regenBtn.onclick = () => handleRegenerate(msgDiv);
         actionsBar.appendChild(regenBtn);
 
@@ -8377,7 +8380,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         likeBtn.type = "button";
         likeBtn.className = "ai-icon-btn btn-like-ai";
         likeBtn.title = "Acha laga (Jalwa!)";
-        likeBtn.innerHTML = '<span class="act-icon">ðŸ‘</span>';
+        likeBtn.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px;">thumb_up</span>';
         likeBtn.onclick = () => {
           likeBtn.classList.toggle("active");
           if (dislikeBtn) dislikeBtn.classList.remove("active");
@@ -8389,7 +8392,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         dislikeBtn.type = "button";
         dislikeBtn.className = "ai-icon-btn btn-dislike-ai";
         dislikeBtn.title = "Kharab laga";
-        dislikeBtn.innerHTML = '<span class="act-icon">ðŸ‘Ž</span>';
+        dislikeBtn.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px;">thumb_down</span>';
         dislikeBtn.onclick = () => {
           dislikeBtn.classList.toggle("active");
           if (likeBtn) likeBtn.classList.remove("active");
@@ -8401,7 +8404,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         moreBtn.type = "button";
         moreBtn.className = "ai-icon-btn btn-more-ai";
         moreBtn.title = "More options";
-        moreBtn.innerHTML = '<span class="act-icon">â‹¯</span>';
+        moreBtn.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px;">more_horiz</span>';
         moreBtn.onclick = () => {
           navigator.clipboard.writeText(contentBody.innerText);
           alert("Munna Bhaiya ka jawab clipboard par copy ho gaya!");
@@ -8708,7 +8711,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       }
       if (activeVoiceBtn) {
         activeVoiceBtn.classList.remove("active-voice", "loading-voice");
-        activeVoiceBtn.innerHTML = '<span class="act-icon">ðŸ”Š</span>';
+        activeVoiceBtn.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px;">volume_up</span>';
         activeVoiceBtn = null;
       }
       const chatMessages = document.getElementById("chatMessages");
@@ -8904,7 +8907,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       }
       if (activeVoiceBtn) {
         activeVoiceBtn.classList.remove("active-voice", "loading-voice");
-        activeVoiceBtn.innerHTML = '<span class="act-icon">ðŸ”Š</span>';
+        activeVoiceBtn.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px;">volume_up</span>';
         activeVoiceBtn = null;
       }
       targetMsgDiv.remove();
@@ -8972,7 +8975,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       }
       if (activeVoiceBtn) {
         activeVoiceBtn.classList.remove("active-voice", "loading-voice");
-        activeVoiceBtn.innerHTML = '<span class="act-icon">ðŸ”Š</span>';
+        activeVoiceBtn.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px;">volume_up</span>';
         activeVoiceBtn = null;
       }
 

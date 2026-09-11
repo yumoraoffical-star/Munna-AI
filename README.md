@@ -14,9 +14,9 @@ Munna AI is a state-of-the-art conversational AI platform engineered with an **E
 - **🧠 Multimodal Vision Intelligence**:
   - Powered by **Google Gemini 3.6**.
   - Supports image inspection, document analysis, and code reasoning with streaming responses.
-- **🎙️ Studio HD Voice Engine**:
-  - Powered by **ElevenLabs** Adam voice architecture (`pNInz6obpgDQGcFmaJgB`).
-  - Seamless text-to-speech with audio wave visualizer and playback controls.
+- **🎙️ Studio Real-Time Voice Engine**:
+  - Powered by **Cartesia Sonic 3.6** ultra-low latency voice model (`bdab08ad-4137-4548-b9db-6142854c7525`) with seamless ElevenLabs Adam fallback.
+  - Authentic Purvanchal & Hinglish speech with audio wave visualizer and playback controls.
 - **☁️ Supabase Cloud Synchronization**:
   - Cross-device chat session storage, user profiles, and real-time cloud backup.
 - **💎 Executive Obsidian & Gold UI**:
@@ -37,5 +37,5 @@ Munna AI is a state-of-the-art conversational AI platform engineered with an **E
 
 - **Frontend**: HTML5, Vanilla CSS3 (Custom Design System), JavaScript (ES6+)
 - **AI Model**: Google Gemini (`gemini-3.6-flash`)
-- **Speech Engine**: ElevenLabs REST API
+- **Speech Engine**: Cartesia Sonic 3.6 API (Primary) / ElevenLabs API (Fallback)
 - **Cloud Backend**: Supabase Cloud (`@supabase/supabase-js`)
