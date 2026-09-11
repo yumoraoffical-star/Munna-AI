@@ -3528,6 +3528,186 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         }
       };
 
+      // --- COMPLETE SIDEBAR NAVIGATION & MODALS ENGINE ---
+      window.handleNavAction = function(action) {
+        document.querySelectorAll(".sidebar-nav-item").forEach(btn => btn.classList.remove("active"));
+        const clickedBtn = document.querySelector(`.sidebar-nav-item[onclick*="'${action}'"]`);
+        if (clickedBtn) clickedBtn.classList.add("active");
+
+        if (window.innerWidth <= 768 && typeof closeSidebarDrawer === "function") {
+          closeSidebarDrawer();
+        }
+
+        switch (action) {
+          case 'home':
+            const session = getCurrentSession();
+            if (!session || !session.messages || session.messages.length === 0) {
+              renderWelcomeHero();
+            }
+            const chatMessages = document.getElementById("chatMessages");
+            if (chatMessages) chatMessages.scrollTop = chatMessages.scrollHeight;
+            const input = document.getElementById("userInput");
+            if (input) input.focus();
+            break;
+
+          case 'explore':
+            window.openExploreModal();
+            break;
+
+          case 'models':
+            window.toggleModelMenu();
+            break;
+
+          case 'voice':
+            window.openVoiceSettings();
+            break;
+
+          case 'image':
+            window.openPhotoBanaoModal();
+            break;
+
+          case 'documents':
+            window.openKattaVisionModal();
+            break;
+
+          case 'history':
+            const historyList = document.getElementById("historyList");
+            if (historyList) {
+              historyList.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              historyList.style.transition = 'box-shadow 0.3s ease';
+              historyList.style.boxShadow = '0 0 15px rgba(242,202,80,0.4)';
+              setTimeout(() => { historyList.style.boxShadow = ''; }, 1500);
+            }
+            showMunnaToast("📜 Chat History List Active");
+            break;
+
+          case 'saved':
+            window.openSavedModal();
+            break;
+
+          default:
+            console.warn("Unknown nav action:", action);
+        }
+      };
+
+      window.openExploreModal = function() {
+        const modal = document.getElementById("exploreModal");
+        if (modal) modal.classList.add("show");
+      };
+      window.closeExploreModal = function() {
+        const modal = document.getElementById("exploreModal");
+        if (modal) modal.classList.remove("show");
+      };
+
+      window.openSavedModal = function() {
+        const modal = document.getElementById("savedModal");
+        if (modal) {
+          modal.classList.add("show");
+          window.renderSavedList();
+        }
+      };
+      window.closeSavedModal = function() {
+        const modal = document.getElementById("savedModal");
+        if (modal) modal.classList.remove("show");
+      };
+
+      window.renderSavedList = function() {
+        const container = document.getElementById("savedItemsContainer");
+        if (!container) return;
+        let savedItems = [];
+        try {
+          savedItems = JSON.parse(localStorage.getItem("munna_saved_items") || "[]");
+        } catch (e) { savedItems = []; }
+
+        if (savedItems.length === 0) {
+          container.innerHTML = `
+            <div style="text-align:center; padding:32px 16px; color:var(--text-dim);">
+              <span class="material-symbols-outlined" style="font-size:42px; color:var(--gold-primary); opacity:0.6; display:block; margin-bottom:8px;">bookmarks</span>
+              <p style="font-size:0.95rem; margin:0 0 6px 0; color:var(--text-main); font-weight:600;">Abhi koi saved message nahi hai</p>
+              <p style="font-size:0.78rem; margin:0; line-height:1.5;">Kisi bhi chat message ke action bar se messages ko bookmark karke yahan dekh sakte hain.</p>
+            </div>
+          `;
+          return;
+        }
+
+        container.innerHTML = savedItems.map((item, idx) => `
+          <div style="background:var(--bg-surface); border:1px solid rgba(242,202,80,0.25); border-radius:10px; padding:12px 14px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+              <span style="font-size:0.72rem; color:var(--gold-primary); font-family:var(--font-code); font-weight:600;">#${idx+1} • ${item.time || 'Saved'}</span>
+              <div style="display:flex; gap:6px;">
+                <button type="button" class="ai-icon-btn" onclick="navigator.clipboard.writeText(decodeURIComponent('${encodeURIComponent(item.text)}')); showMunnaToast('Copied to clipboard!');" title="Copy">
+                  <span class="material-symbols-outlined" style="font-size:16px;">content_copy</span>
+                </button>
+                <button type="button" class="ai-icon-btn" onclick="window.removeSavedItem(${idx});" title="Delete">
+                  <span class="material-symbols-outlined" style="font-size:16px; color:var(--crimson);">delete</span>
+                </button>
+              </div>
+            </div>
+            <div style="font-size:0.84rem; color:var(--text-main); line-height:1.5;">${item.text}</div>
+          </div>
+        `).join("");
+      };
+
+      window.removeSavedItem = function(idx) {
+        try {
+          let savedItems = JSON.parse(localStorage.getItem("munna_saved_items") || "[]");
+          savedItems.splice(idx, 1);
+          localStorage.setItem("munna_saved_items", JSON.stringify(savedItems));
+          window.renderSavedList();
+          showMunnaToast("Bookmark hata diya gaya");
+        } catch (e) {}
+      };
+
+      window.openVoiceSettings = function() {
+        if (typeof openSettingsModal === "function") openSettingsModal();
+        const tabs = document.querySelectorAll("#settingsTabsNav .settings-tab-btn");
+        tabs.forEach(t => t.classList.remove("active"));
+        const aiTab = document.querySelector('#settingsTabsNav .settings-tab-btn[data-tab="ai"]');
+        if (aiTab) aiTab.classList.add("active");
+        document.querySelectorAll(".settings-tab-panel").forEach(p => p.classList.remove("active"));
+        const panel = document.getElementById("tabAi");
+        if (panel) panel.classList.add("active");
+      };
+
+      window.openPhotoBanaoModal = function() {
+        if (typeof openImageGenModal === "function") openImageGenModal();
+      };
+      window.closePhotoBanaoModal = function() {
+        if (typeof closeImageGenModal === "function") closeImageGenModal();
+      };
+
+      window.openKattaVisionModal = function() {
+        const modal = document.getElementById("kattaVisionModal");
+        if (modal) modal.classList.add("show");
+      };
+      window.closeKattaVisionModal = function() {
+        const modal = document.getElementById("kattaVisionModal");
+        if (modal) modal.classList.remove("show");
+      };
+
+      window.openSettingsModal = function() {
+        if (typeof openSettingsModal === "function") openSettingsModal();
+      };
+      window.closeSettingsModal = function() {
+        if (typeof closeSettingsModal === "function") closeSettingsModal();
+      };
+
+      window.openProfileModal = function() {
+        if (typeof openProfileModal === "function") openProfileModal();
+      };
+      window.closeProfileModal = function() {
+        if (typeof closeProfileModal === "function") closeProfileModal();
+      };
+
+      window.openNazranaModal = function() {
+        const m = document.getElementById("nazranaModal");
+        if (m) m.classList.add("show");
+      };
+      window.closeNazranaModal = function() {
+        const m = document.getElementById("nazranaModal");
+        if (m) m.classList.remove("show");
+      };
+
       document.addEventListener("click", function(e) {
         const dropdown = document.getElementById("modelSwitcherDropdown");
         const popover = document.getElementById("modelMenuPopover");

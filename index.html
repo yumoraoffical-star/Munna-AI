@@ -4858,6 +4858,16 @@
       letter-spacing: 0.3px;
     }
 
+    @keyframes pulseGlow {
+      0% { box-shadow: 0 0 0 0 rgba(242, 202, 80, 0.6); }
+      70% { box-shadow: 0 0 0 10px rgba(242, 202, 80, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(242, 202, 80, 0); }
+    }
+    .highlight-pulse {
+      animation: pulseGlow 1.2s ease-in-out 2;
+      border-radius: 8px;
+    }
+
     /* Sidebar History Section */
     .sidebar-history-section {
       display: flex;
@@ -5597,9 +5607,6 @@
           <span>Saved</span>
         </button>
       </nav>
-        <span class="material-symbols-outlined" style="font-size:18px;">add</span>
-        <span>NEW CHAT</span>
-      </button>
 
       <div class="sidebar-section-title">Operations & Strategy</div>
       <ul class="history-list" id="historyList">
@@ -6634,8 +6641,8 @@
       <div class="image-style-scroll" id="imageStyleScroll">
         <button type="button" class="image-style-chip active" data-style="mirzapur"><span class="material-symbols-outlined" style="font-size:18px; color:var(--gold-primary); vertical-align:middle;">workspace_premium</span> Mirzapur Haveli</button>
         <button type="button" class="image-style-chip" data-style="gangster">ðŸ”« Badass Gangster</button>
-        <button type="button" class="image-style-chip" data-style="cyberpunk">ðŸ•¶ï¸ Desi Cyberpunk</button>
-        <button type="button" class="image-style-chip" data-style="avatar">ðŸ¦ Bahubali Sher</button>
+        <button type="button" class="image-style-chip" data-style="cyberpunk">ðŸ•¶ï¸  Desi Cyberpunk</button>
+        <button type="button" class="image-style-chip" data-style="avatar">ðŸ¦  Bahubali Sher</button>
         <button type="button" class="image-style-chip" data-style="realistic">ðŸ“¸ 8K Realistic</button>
       </div>
 
@@ -6648,8 +6655,6 @@
 
       <!-- Quick Suggestion Tags -->
       <div class="image-suggestions-row">
-        <span class="image-sugg-tag" data-sugg="Royal Haveli throne room with gold guns and red carpets">ðŸ° Royal Throne Haveli</span>
-        <span class="image-sugg-tag" data-sugg="Badass Indian gangster standing near black vintage Ambassador car">ðŸ•¶ï¸ Gangster & Car</span>
         <span class="image-sugg-tag" data-sugg="Cyberpunk Mirzapur alleyway with neon signs and flying auto-rickshaw">ðŸš€ Cyberpunk Purvanchal</span>
         <span class="image-sugg-tag" data-sugg="A fierce majestic lion wearing a golden crown and heavy chains">ðŸ¦ Crowned Lion King</span>
       </div>
@@ -6668,13 +6673,102 @@
       <img id="artLightboxImg" src="" alt="Full Resolution Art" style="max-width:92vw; max-height:80vh; border-radius:12px; border:2px solid #ffd166; box-shadow:0 0 30px rgba(0,0,0,0.9); object-fit:contain;" />
       <div style="margin-top:14px; display:flex; gap:12px; width:100%; justify-content:center;">
         <button type="button" id="artLightboxDownloadBtn" class="munna-art-action-btn" style="padding:10px 24px; font-size:0.92rem; max-width:280px;">
-          <span>â¬‡ï¸ Download High-Res PNG</span>
+          <span>â¬‡ï¸  Download High-Res PNG</span>
         </button>
       </div>
     </div>
   </div>
 
-  <!-- Toast Notification Container -->
+  <!-- EXPLORE PROMPTS & CAPABILITIES MODAL -->
+  <div class="modal-backdrop" id="exploreModal" onclick="if(event.target === this) window.closeExploreModal();">
+    <div class="modal-box" style="max-width:680px; background:var(--bg-surface-low); border:1px solid rgba(242,202,80,0.35); max-height:85vh; overflow-y:auto;">
+      <div class="modal-top" style="border-bottom:1px solid rgba(77,70,53,0.3); padding-bottom:12px;">
+        <div class="modal-brand">
+          <span class="material-symbols-outlined" style="font-size:26px; color:var(--gold-primary);">explore</span>
+          <div>
+            <h3 class="font-headline" style="color:var(--text-main); font-size:1.15rem; margin:0;">Explore Munna Intelligence</h3>
+            <div style="font-size:0.75rem; color:var(--text-dim);">Flagship Prompts, Swag Tools & Live Capabilities</div>
+          </div>
+        </div>
+        <button type="button" class="modal-close-btn" onclick="window.closeExploreModal();">&times;</button>
+      </div>
+
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:12px; margin-top:16px;">
+        <div class="tool-box-card" style="text-align:left; padding:14px; cursor:pointer;" onclick="window.injectStarterPrompt('Mirzapur style mein standup comedy script likho jisme Munna Bhaiya aur Guddu Pandit ka face-off ho.'); window.closeExploreModal();">
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+            <div class="tool-box-icon-wrap" style="color:var(--gold-primary);"><span class="material-symbols-outlined">theater_comedy</span></div>
+            <strong style="color:var(--text-main); font-size:0.95rem;">Mirzapur Standup Comedy</strong>
+          </div>
+          <p style="font-size:0.78rem; color:var(--text-dim); margin:0; line-height:1.5;">Munna Bhaiya aur Guddu Pandit ka raw comedic face-off dialogue script.</p>
+        </div>
+
+        <div class="tool-box-card" style="text-align:left; padding:14px; cursor:pointer;" onclick="window.injectStarterPrompt('Ek production-grade full-stack web application ka complete architecture design karo with FastAPI backend and Next.js frontend.'); window.closeExploreModal();">
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+            <div class="tool-box-icon-wrap" style="color:#60a5fa;"><span class="material-symbols-outlined">terminal</span></div>
+            <strong style="color:var(--text-main); font-size:0.95rem;">Full-Stack Web Architecture</strong>
+          </div>
+          <p style="font-size:0.78rem; color:var(--text-dim); margin:0; line-height:1.5;">Scalable API design, database schemas, auth pipeline, aur deployment plan.</p>
+        </div>
+
+        <div class="tool-box-card" style="text-align:left; padding:14px; cursor:pointer;" onclick="window.injectStarterPrompt('Real-time global intelligence report generate karo on latest AI advancements and market trends.'); window.closeExploreModal();">
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+            <div class="tool-box-icon-wrap" style="color:var(--emerald);"><span class="material-symbols-outlined">public</span></div>
+            <strong style="color:var(--text-main); font-size:0.95rem;">Live Market Intelligence</strong>
+          </div>
+          <p style="font-size:0.78rem; color:var(--text-dim); margin:0; line-height:1.5;">Deep reasoning aur trend synthesis with actionable insights.</p>
+        </div>
+
+        <div class="tool-box-card" style="text-align:left; padding:14px; cursor:pointer;" onclick="if(window.openPhotoBanaoModal) { window.closeExploreModal(); window.openPhotoBanaoModal(); }">
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+            <div class="tool-box-icon-wrap" style="color:#f472b6;"><span class="material-symbols-outlined">palette</span></div>
+            <strong style="color:var(--text-main); font-size:0.95rem;">Pixazo AI Art Creator</strong>
+          </div>
+          <p style="font-size:0.78rem; color:var(--text-dim); margin:0; line-height:1.5;">1024x1024 ultra-HD images generate karein Flux.1 gateway se.</p>
+        </div>
+
+        <div class="tool-box-card" style="text-align:left; padding:14px; cursor:pointer;" onclick="if(window.openVoiceSettings) { window.closeExploreModal(); window.openVoiceSettings(); }">
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+            <div class="tool-box-icon-wrap" style="color:var(--gold-primary);"><span class="material-symbols-outlined">graphic_eq</span></div>
+            <strong style="color:var(--text-main); font-size:0.95rem;">Cartesia Sonic 3.6 Studio</strong>
+          </div>
+          <p style="font-size:0.78rem; color:var(--text-dim); margin:0; line-height:1.5;">Sub-2-second realistic Hinglish & Hindi voice synthesis tune karein.</p>
+        </div>
+
+        <div class="tool-box-card" style="text-align:left; padding:14px; cursor:pointer;" onclick="if(window.openKattaVisionModal) { window.closeExploreModal(); window.openKattaVisionModal(); }">
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+            <div class="tool-box-icon-wrap" style="color:var(--crimson);"><span class="material-symbols-outlined">visibility</span></div>
+            <strong style="color:var(--text-main); font-size:0.95rem;">Katta Vision (Multimodal Docs)</strong>
+          </div>
+          <p style="font-size:0.78rem; color:var(--text-dim); margin:0; line-height:1.5;">Photos, screenshots, aur documents ka instant diagnosis & analysis.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SAVED GEMS & BOOKMARKS MODAL -->
+  <div class="modal-backdrop" id="savedModal" onclick="if(event.target === this) window.closeSavedModal();">
+    <div class="modal-box" style="max-width:600px; background:var(--bg-surface-low); border:1px solid rgba(242,202,80,0.35); max-height:85vh; display:flex; flex-direction:column;">
+      <div class="modal-top" style="border-bottom:1px solid rgba(77,70,53,0.3); padding-bottom:12px;">
+        <div class="modal-brand">
+          <span class="material-symbols-outlined" style="font-size:26px; color:var(--gold-primary);">bookmark</span>
+          <div>
+            <h3 class="font-headline" style="color:var(--text-main); font-size:1.15rem; margin:0;">Saved Darbar Gems</h3>
+            <div style="font-size:0.75rem; color:var(--text-dim);">Aapke bookmarked dialogues aur zaroori responses</div>
+          </div>
+        </div>
+        <button type="button" class="modal-close-btn" onclick="window.closeSavedModal();">&times;</button>
+      </div>
+
+      <div id="savedItemsContainer" style="flex:1; overflow-y:auto; padding:16px 0; display:flex; flex-direction:column; gap:10px;">
+        <div style="text-align:center; padding:32px 16px; color:var(--text-dim);">
+          <span class="material-symbols-outlined" style="font-size:42px; color:var(--gold-primary); opacity:0.6; display:block; margin-bottom:8px;">bookmarks</span>
+          <p style="font-size:0.9rem; margin:0 0 6px 0; color:var(--text-main); font-weight:600;">Abhi koi saved message nahi hai</p>
+          <p style="font-size:0.78rem; margin:0; line-height:1.5;">Kisi bhi chat message ke neeche diye action menu se dialogues ko bookmark karke yahan dekh sakte hain.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div id="munnaToast" class="munna-toast"></div>
 
   <!-- Unified Self-Contained JavaScript Engine -->
@@ -10206,6 +10300,186 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           createNewSession();
           showMunnaToast("[VIP] Nayi darbar chat shuru ho gayi!");
         }
+      };
+
+      // --- COMPLETE SIDEBAR NAVIGATION & MODALS ENGINE ---
+      window.handleNavAction = function(action) {
+        document.querySelectorAll(".sidebar-nav-item").forEach(btn => btn.classList.remove("active"));
+        const clickedBtn = document.querySelector(`.sidebar-nav-item[onclick*="'${action}'"]`);
+        if (clickedBtn) clickedBtn.classList.add("active");
+
+        if (window.innerWidth <= 768 && typeof closeSidebarDrawer === "function") {
+          closeSidebarDrawer();
+        }
+
+        switch (action) {
+          case 'home':
+            const session = getCurrentSession();
+            if (!session || !session.messages || session.messages.length === 0) {
+              renderWelcomeHero();
+            }
+            const chatMessages = document.getElementById("chatMessages");
+            if (chatMessages) chatMessages.scrollTop = chatMessages.scrollHeight;
+            const input = document.getElementById("userInput");
+            if (input) input.focus();
+            break;
+
+          case 'explore':
+            window.openExploreModal();
+            break;
+
+          case 'models':
+            window.toggleModelMenu();
+            break;
+
+          case 'voice':
+            window.openVoiceSettings();
+            break;
+
+          case 'image':
+            window.openPhotoBanaoModal();
+            break;
+
+          case 'documents':
+            window.openKattaVisionModal();
+            break;
+
+          case 'history':
+            const historyList = document.getElementById("historyList");
+            if (historyList) {
+              historyList.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              historyList.style.transition = 'box-shadow 0.3s ease';
+              historyList.style.boxShadow = '0 0 15px rgba(242,202,80,0.4)';
+              setTimeout(() => { historyList.style.boxShadow = ''; }, 1500);
+            }
+            showMunnaToast("📜 Chat History List Active");
+            break;
+
+          case 'saved':
+            window.openSavedModal();
+            break;
+
+          default:
+            console.warn("Unknown nav action:", action);
+        }
+      };
+
+      window.openExploreModal = function() {
+        const modal = document.getElementById("exploreModal");
+        if (modal) modal.classList.add("show");
+      };
+      window.closeExploreModal = function() {
+        const modal = document.getElementById("exploreModal");
+        if (modal) modal.classList.remove("show");
+      };
+
+      window.openSavedModal = function() {
+        const modal = document.getElementById("savedModal");
+        if (modal) {
+          modal.classList.add("show");
+          window.renderSavedList();
+        }
+      };
+      window.closeSavedModal = function() {
+        const modal = document.getElementById("savedModal");
+        if (modal) modal.classList.remove("show");
+      };
+
+      window.renderSavedList = function() {
+        const container = document.getElementById("savedItemsContainer");
+        if (!container) return;
+        let savedItems = [];
+        try {
+          savedItems = JSON.parse(localStorage.getItem("munna_saved_items") || "[]");
+        } catch (e) { savedItems = []; }
+
+        if (savedItems.length === 0) {
+          container.innerHTML = `
+            <div style="text-align:center; padding:32px 16px; color:var(--text-dim);">
+              <span class="material-symbols-outlined" style="font-size:42px; color:var(--gold-primary); opacity:0.6; display:block; margin-bottom:8px;">bookmarks</span>
+              <p style="font-size:0.95rem; margin:0 0 6px 0; color:var(--text-main); font-weight:600;">Abhi koi saved message nahi hai</p>
+              <p style="font-size:0.78rem; margin:0; line-height:1.5;">Kisi bhi chat message ke action bar se messages ko bookmark karke yahan dekh sakte hain.</p>
+            </div>
+          `;
+          return;
+        }
+
+        container.innerHTML = savedItems.map((item, idx) => `
+          <div style="background:var(--bg-surface); border:1px solid rgba(242,202,80,0.25); border-radius:10px; padding:12px 14px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+              <span style="font-size:0.72rem; color:var(--gold-primary); font-family:var(--font-code); font-weight:600;">#${idx+1} • ${item.time || 'Saved'}</span>
+              <div style="display:flex; gap:6px;">
+                <button type="button" class="ai-icon-btn" onclick="navigator.clipboard.writeText(decodeURIComponent('${encodeURIComponent(item.text)}')); showMunnaToast('Copied to clipboard!');" title="Copy">
+                  <span class="material-symbols-outlined" style="font-size:16px;">content_copy</span>
+                </button>
+                <button type="button" class="ai-icon-btn" onclick="window.removeSavedItem(${idx});" title="Delete">
+                  <span class="material-symbols-outlined" style="font-size:16px; color:var(--crimson);">delete</span>
+                </button>
+              </div>
+            </div>
+            <div style="font-size:0.84rem; color:var(--text-main); line-height:1.5;">${item.text}</div>
+          </div>
+        `).join("");
+      };
+
+      window.removeSavedItem = function(idx) {
+        try {
+          let savedItems = JSON.parse(localStorage.getItem("munna_saved_items") || "[]");
+          savedItems.splice(idx, 1);
+          localStorage.setItem("munna_saved_items", JSON.stringify(savedItems));
+          window.renderSavedList();
+          showMunnaToast("Bookmark hata diya gaya");
+        } catch (e) {}
+      };
+
+      window.openVoiceSettings = function() {
+        if (typeof openSettingsModal === "function") openSettingsModal();
+        const tabs = document.querySelectorAll("#settingsTabsNav .settings-tab-btn");
+        tabs.forEach(t => t.classList.remove("active"));
+        const aiTab = document.querySelector('#settingsTabsNav .settings-tab-btn[data-tab="ai"]');
+        if (aiTab) aiTab.classList.add("active");
+        document.querySelectorAll(".settings-tab-panel").forEach(p => p.classList.remove("active"));
+        const panel = document.getElementById("tabAi");
+        if (panel) panel.classList.add("active");
+      };
+
+      window.openPhotoBanaoModal = function() {
+        if (typeof openImageGenModal === "function") openImageGenModal();
+      };
+      window.closePhotoBanaoModal = function() {
+        if (typeof closeImageGenModal === "function") closeImageGenModal();
+      };
+
+      window.openKattaVisionModal = function() {
+        const modal = document.getElementById("kattaVisionModal");
+        if (modal) modal.classList.add("show");
+      };
+      window.closeKattaVisionModal = function() {
+        const modal = document.getElementById("kattaVisionModal");
+        if (modal) modal.classList.remove("show");
+      };
+
+      window.openSettingsModal = function() {
+        if (typeof openSettingsModal === "function") openSettingsModal();
+      };
+      window.closeSettingsModal = function() {
+        if (typeof closeSettingsModal === "function") closeSettingsModal();
+      };
+
+      window.openProfileModal = function() {
+        if (typeof openProfileModal === "function") openProfileModal();
+      };
+      window.closeProfileModal = function() {
+        if (typeof closeProfileModal === "function") closeProfileModal();
+      };
+
+      window.openNazranaModal = function() {
+        const m = document.getElementById("nazranaModal");
+        if (m) m.classList.add("show");
+      };
+      window.closeNazranaModal = function() {
+        const m = document.getElementById("nazranaModal");
+        if (m) m.classList.remove("show");
       };
 
       document.addEventListener("click", function(e) {
