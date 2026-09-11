@@ -8831,7 +8831,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           const errData = await res.json().catch(() => ({}));
           const errMsg = errData.error || `HTTP ${res.status}`;
           if (res.status === 429) {
-            showMunnaToast("âš ï¸ Google Gemini ka daily free quota poora ho gaya hai! Kripya thoda intezaar karein.");
+            showMunnaToast("⚠️ Google Gemini ka daily free quota poora ho gaya hai! Kripya thoda intezaar karein.");
           }
           throw new Error(errMsg);
         }

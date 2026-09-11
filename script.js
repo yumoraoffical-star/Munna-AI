@@ -2150,7 +2150,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           const errData = await res.json().catch(() => ({}));
           const errMsg = errData.error || `HTTP ${res.status}`;
           if (res.status === 429) {
-            showMunnaToast("âš ï¸ Google Gemini ka daily free quota poora ho gaya hai! Kripya thoda intezaar karein.");
+            showMunnaToast("⚠️ Google Gemini ka daily free quota poora ho gaya hai! Kripya thoda intezaar karein.");
           }
           throw new Error(errMsg);
         }
@@ -2159,11 +2159,11 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         fullIncomingText = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
       } catch (err) {
         console.error("AI Generation error:", err);
-        fullIncomingText = "âš ï¸ **Gemini AI Connection Error:** " + (err.message || "Network error") + ". Kripya dobara try karein!";
+        fullIncomingText = "⚠️ **Gemini AI Connection Error:** " + (err.message || "Network error") + ". Kripya dobara try karein!";
       }
 
       if (!fullIncomingText.trim()) {
-        fullIncomingText = "âš ï¸ **No Content:** Gemini AI se response prapt nahi hua. Kripya apna message dobara bhejein.";
+        fullIncomingText = "⚠️ **No Content:** Gemini AI se response prapt nahi hua. Kripya apna message dobara bhejein.";
       }
 
       // Smooth fluid typewriter animation for the real Google Gemini AI response
