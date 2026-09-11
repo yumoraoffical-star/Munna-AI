@@ -1602,6 +1602,508 @@
       font-weight: 700;
     }
 
+    .topbar-upgrade-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: linear-gradient(135deg, rgba(212,175,55,0.18) 0%, rgba(139,0,0,0.24) 100%);
+      border: 1px solid rgba(212,175,55,0.45);
+      color: var(--gold-light, #f3e5ab);
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.16,1,0.3,1);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+      outline: none;
+    }
+    .topbar-upgrade-pill:hover {
+      background: linear-gradient(135deg, rgba(212,175,55,0.32) 0%, rgba(139,0,0,0.4) 100%);
+      border-color: var(--gold-primary, #d4af37);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(212,175,55,0.3);
+    }
+    .topbar-upgrade-pill.vip-king {
+      background: linear-gradient(135deg, rgba(168,85,247,0.2) 0%, rgba(212,175,55,0.2) 100%);
+      border-color: rgba(168,85,247,0.5);
+      color: #e9d5ff;
+    }
+
+    /* --- MULTI-TIER PRICING & SUBSCRIPTION MODAL (CHATGPT STYLE) --- */
+    .subscription-modal-box {
+      max-width: 960px !important;
+      width: 95vw !important;
+      max-height: 92vh !important;
+      overflow-y: auto !important;
+      padding: 28px !important;
+      background: var(--bg-surface-low, #141418) !important;
+      border: 1px solid rgba(242, 202, 80, 0.35) !important;
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.9) !important;
+    }
+
+    .pricing-billing-switch {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+      margin: 16px auto 20px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 30px;
+      padding: 4px;
+      width: fit-content;
+    }
+
+    .billing-cycle-btn {
+      background: none;
+      border: none;
+      color: var(--text-dim, #888);
+      font-size: 0.82rem;
+      font-weight: 600;
+      padding: 8px 18px;
+      border-radius: 24px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+
+    .billing-cycle-btn.active {
+      background: var(--gold-primary, #f2ca50);
+      color: #121217;
+      font-weight: 700;
+      box-shadow: 0 2px 10px rgba(242, 202, 80, 0.3);
+    }
+
+    .discount-pill {
+      background: #10b981;
+      color: #ffffff;
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .pricing-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+
+    .pricing-plan-card {
+      background: var(--bg-surface, #1a1a20);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 24px 20px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .pricing-plan-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(242, 202, 80, 0.4);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .pricing-plan-card.featured-gold {
+      background: linear-gradient(180deg, rgba(242, 202, 80, 0.08) 0%, rgba(26, 26, 32, 0.95) 100%);
+      border: 1.5px solid var(--gold-primary, #f2ca50);
+      box-shadow: 0 8px 32px rgba(242, 202, 80, 0.18);
+    }
+
+    .pricing-plan-card.royal-crown {
+      background: linear-gradient(180deg, rgba(168, 85, 247, 0.1) 0%, rgba(26, 26, 32, 0.95) 100%);
+      border: 1.5px solid rgba(168, 85, 247, 0.55);
+      box-shadow: 0 8px 32px rgba(168, 85, 247, 0.18);
+    }
+
+    .popular-ribbon {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(90deg, #f2ca50, #d4af37);
+      color: #121217;
+      font-size: 0.68rem;
+      font-weight: 800;
+      padding: 3px 12px;
+      border-radius: 12px;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+      white-space: nowrap;
+    }
+
+    .royal-ribbon {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(90deg, #a855f7, #ec4899);
+      color: #ffffff;
+      font-size: 0.68rem;
+      font-weight: 800;
+      padding: 3px 12px;
+      border-radius: 12px;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+      white-space: nowrap;
+    }
+
+    .plan-card-header {
+      margin-bottom: 12px;
+    }
+
+    .plan-badge-neutral {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--text-dim, #777);
+      letter-spacing: 0.5px;
+    }
+
+    .plan-badge-gold {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--gold-primary, #f2ca50);
+      letter-spacing: 0.5px;
+    }
+
+    .plan-badge-royal {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: #c084fc;
+      letter-spacing: 0.5px;
+    }
+
+    .plan-name {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--text-main, #fff);
+      margin: 4px 0 6px;
+      font-family: var(--font-headline);
+    }
+
+    .plan-summary {
+      font-size: 0.78rem;
+      color: var(--text-dim, #888);
+      margin: 0;
+      line-height: 1.4;
+      min-height: 34px;
+    }
+
+    .plan-price-wrap {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      margin: 14px 0 18px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .plan-price {
+      font-size: 2.1rem;
+      font-weight: 800;
+      color: var(--text-main, #fff);
+      font-family: var(--font-headline);
+    }
+
+    .plan-duration {
+      font-size: 0.8rem;
+      color: var(--text-dim, #888);
+    }
+
+    .plan-features-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex: 1;
+    }
+
+    .plan-features-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 0.82rem;
+      color: var(--text-muted, #ccc);
+      line-height: 1.4;
+    }
+
+    .plan-features-list li strong {
+      color: var(--text-main, #fff);
+    }
+
+    .check-icon {
+      font-size: 17px;
+      color: #9ca3af;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .check-icon.gold {
+      color: var(--gold-primary, #f2ca50);
+    }
+
+    .check-icon.purple {
+      color: #c084fc;
+    }
+
+    .plan-card-btn {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: inherit;
+      transition: all 0.2s ease;
+      border: none;
+    }
+
+    .plan-card-btn.current-plan {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-dim, #777);
+      cursor: default;
+    }
+
+    .plan-card-btn.active-plan {
+      background: rgba(52, 211, 153, 0.15);
+      border: 1px solid rgba(52, 211, 153, 0.4);
+      color: #34d399;
+      cursor: default;
+    }
+
+    .plan-card-btn.primary-gold {
+      background: linear-gradient(90deg, #d4af37 0%, #f2ca50 100%);
+      color: #121217;
+      box-shadow: 0 4px 16px rgba(242, 202, 80, 0.25);
+    }
+
+    .plan-card-btn.primary-gold:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 22px rgba(242, 202, 80, 0.4);
+    }
+
+    .plan-card-btn.primary-royal {
+      background: linear-gradient(90deg, #9333ea 0%, #a855f7 100%);
+      color: #ffffff;
+      box-shadow: 0 4px 16px rgba(168, 85, 247, 0.3);
+    }
+
+    .plan-card-btn.primary-royal:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 22px rgba(168, 85, 247, 0.5);
+    }
+
+    /* Checkout Drawer */
+    .plan-checkout-sheet {
+      display: none;
+      background: var(--bg-surface, #1b1b22);
+      border: 1px solid rgba(242, 202, 80, 0.3);
+      border-radius: 14px;
+      padding: 20px;
+      margin-top: 14px;
+      animation: fadeIn 0.25s ease-out;
+    }
+
+    .plan-checkout-sheet.active {
+      display: block;
+    }
+
+    .checkout-summary-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      margin-bottom: 16px;
+    }
+
+    .checkout-label {
+      font-size: 0.75rem;
+      color: var(--text-dim, #888);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .checkout-plan-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--gold-primary, #f2ca50);
+      font-family: var(--font-headline);
+    }
+
+    .checkout-amount-badge {
+      background: rgba(242, 202, 80, 0.15);
+      border: 1px solid var(--gold-primary, #f2ca50);
+      color: var(--gold-primary, #f2ca50);
+      font-size: 1.25rem;
+      font-weight: 800;
+      padding: 4px 14px;
+      border-radius: 10px;
+      font-family: var(--font-headline);
+    }
+
+    .checkout-grid {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 20px;
+      align-items: center;
+    }
+
+    @media (max-width: 650px) {
+      .checkout-grid {
+        grid-template-columns: 1fr;
+        justify-items: center;
+      }
+    }
+
+    .checkout-qr-box {
+      text-align: center;
+      background: #ffffff;
+      padding: 10px;
+      border-radius: 12px;
+    }
+
+    .plan-qr-image {
+      width: 150px;
+      height: 150px;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .checkout-qr-caption {
+      font-size: 0.65rem;
+      color: #555;
+      font-weight: 700;
+      margin-top: 6px;
+    }
+
+    .checkout-details-box {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+    }
+
+    .checkout-upi-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 6px 12px;
+    }
+
+    .checkout-upi-id {
+      font-size: 0.85rem;
+      color: var(--gold-primary, #f2ca50);
+    }
+
+    .btn-copy-sm {
+      background: rgba(242, 202, 80, 0.15);
+      border: 1px solid rgba(242, 202, 80, 0.3);
+      color: var(--gold-primary, #f2ca50);
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .btn-direct-upi-pay {
+      background: #2563eb;
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.88rem;
+      padding: 10px 14px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.2s ease;
+    }
+
+    .btn-direct-upi-pay:hover {
+      background: #1d4ed8;
+    }
+
+    .btn-confirm-payment {
+      background: linear-gradient(90deg, #10b981, #059669);
+      color: #ffffff;
+      border: none;
+      font-weight: 700;
+      font-size: 0.88rem;
+      padding: 11px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.25);
+      transition: all 0.2s ease;
+    }
+
+    .btn-confirm-payment:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+    }
+
+    .checkout-promo-box {
+      display: flex;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .plan-promo-input {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      outline: none;
+    }
+
+    .btn-promo-apply {
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      padding: 0 16px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-promo-apply:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
     .typing-dots {
       display: inline-flex;
       gap: 5px;
@@ -5778,6 +6280,12 @@
             <span id="topbarLangLabel">Hinglish</span>
           </button>
 
+          <!-- Plan Upgrade Pill -->
+          <button type="button" class="topbar-upgrade-pill" id="topbarUpgradeBtn" onclick="window.openVipModal();" title="Chuno Apna Darbar Plan">
+            <span class="material-symbols-outlined" style="font-size:16px; color:var(--gold-primary);">workspace_premium</span>
+            <span id="topbarUpgradeLabel">Upgrade</span>
+          </button>
+
           <button type="button" class="spec-btn" id="openSpecBtn" onclick="window.openDesignSpecModal();" title="Design System Spec">
             <span class="material-symbols-outlined" style="font-size:16px; color:var(--gold-primary);">palette</span>
             <span>Design Spec</span>
@@ -6148,36 +6656,149 @@
     </div>
   </div>
 
-  <!-- 2. BAHUBALI VIP PASS MODAL -->
+  <!-- 2. MULTI-TIER SUBSCRIPTION & DARBAR PASS MODAL (CHATGPT STYLE) -->
   <div class="modal-backdrop" id="vipModal">
-    <div class="modal-box vip-box">
+    <div class="modal-box subscription-modal-box">
+      <!-- Modal Top Header -->
       <div class="modal-top">
         <div class="modal-brand">
-          <span style="font-size:24px;"><span class="material-symbols-outlined" style="font-size:18px; color:var(--gold-primary); vertical-align:middle;">workspace_premium</span></span>
-          <h3>Bahubali VIP Pass</h3>
+          <span class="material-symbols-outlined" style="font-size:28px; color:var(--gold-primary);">workspace_premium</span>
+          <div>
+            <h3 style="margin:0; font-size:1.35rem; color:var(--text-main, #fff); font-family:var(--font-headline);">Chuno Apna Darbar Plan</h3>
+            <div style="font-size:0.78rem; color:var(--text-dim, #999); margin-top:2px;">Munna AI Flagship Reasoning, Cartesia Real-Time Voice & Multimodal Superpowers</div>
+          </div>
         </div>
         <button class="modal-close-btn" id="closeVipBtn">&times;</button>
       </div>
 
-      <div class="vip-pricing-badge">
-        <span class="vip-price">₹49</span>
-        <span class="vip-period">/ Mahina (Ek Chai ke barabar)</span>
+      <!-- Billing Cycle Toggle (Monthly vs Annual with 20% Discount) -->
+      <div class="pricing-billing-switch">
+        <button type="button" class="billing-cycle-btn active" id="billingCycleMonthlyBtn" onclick="window.setBillingCycle('monthly')">Mahina (Monthly)</button>
+        <button type="button" class="billing-cycle-btn" id="billingCycleAnnualBtn" onclick="window.setBillingCycle('annual')">Salana (Annual) <span class="discount-pill">Save 20%</span></button>
       </div>
 
-      <ul class="vip-perks-list">
-        <li><span class="material-symbols-outlined" style="font-size:18px; color:var(--gold-primary); vertical-align:middle;">local_fire_department</span> <strong>Unlimited Messages</strong> (Daily quota ka koi jhanjhat nahi)</li>
-        <li><span class="material-symbols-outlined" style="font-size:18px; color:var(--gold-primary); vertical-align:middle;">volume_up</span> <strong>Munna Bhaiya Voice & Mic</strong> (Aawaz mein sunno aur bol ke baat karo)</li>
-        <li><span class="material-symbols-outlined" style="font-size:18px; color:var(--gold-primary); vertical-align:middle;">bolt</span> <strong>Fast Priority Server</strong> (Zero wait time, superfast streaming)</li>
-        <li><span class="material-symbols-outlined" style="font-size:18px; color:var(--gold-primary); vertical-align:middle;">terminal</span> <strong>Pro Code & Project Generator</strong> (Poora e-commerce, apps, blueprints)</li>
-      </ul>
+      <!-- 3 Tier Pricing Cards Grid -->
+      <div class="pricing-cards-grid">
+        <!-- Tier 1: Mehman (Free) -->
+        <div class="pricing-plan-card" id="planCardFree">
+          <div class="plan-card-header">
+            <span class="plan-badge-neutral">Basic Access</span>
+            <h4 class="plan-name">Mehman (Free)</h4>
+            <p class="plan-summary">Standard intelligence & casual exploration</p>
+          </div>
+          <div class="plan-price-wrap">
+            <span class="plan-price">₹0</span>
+            <span class="plan-duration">/ forever</span>
+          </div>
+          <ul class="plan-features-list">
+            <li><span class="material-symbols-outlined check-icon">check</span> 10 free messages daily</li>
+            <li><span class="material-symbols-outlined check-icon">check</span> Gemini 3.6 Flash standard model</li>
+            <li><span class="material-symbols-outlined check-icon">check</span> Text conversation & problem solving</li>
+            <li><span class="material-symbols-outlined check-icon">check</span> Katta Vision preview inspection</li>
+            <li><span class="material-symbols-outlined check-icon">check</span> Local browser session memory</li>
+          </ul>
+          <div class="plan-btn-container" id="btnContainerFree">
+            <button type="button" class="plan-card-btn current-plan" disabled>Aapka Current Plan</button>
+          </div>
+        </div>
 
-      <div class="vip-action-section">
-        <button id="unlockVipWithUpiBtn" class="btn-vip-checkout">
-          <span class="material-symbols-outlined" style="font-size:18px; vertical-align:middle; margin-right:6px;">credit_card</span> ₹49 Me Unlock Karein (UPI)
-        </button>
-        <div class="vip-secret-row">
-          <input type="text" id="vipCodeInput" class="vip-code-input" placeholder="Secret Promo Code (MUNNA99)" />
-          <button id="applyCodeBtn" class="btn-apply-code">Apply</button>
+        <!-- Tier 2: Bahubali Pro (Featured Gold - Most Popular) -->
+        <div class="pricing-plan-card featured-gold" id="planCardPro">
+          <div class="popular-ribbon"><span class="material-symbols-outlined" style="font-size:13px; vertical-align:middle; margin-right:3px;">star</span> MOST POPULAR</div>
+          <div class="plan-card-header">
+            <span class="plan-badge-gold">Daily Power Users</span>
+            <h4 class="plan-name">Bahubali Pro</h4>
+            <p class="plan-summary">Zero limits, real-time voice & creative studio</p>
+          </div>
+          <div class="plan-price-wrap">
+            <span class="plan-price" id="proPriceDisplay">₹99</span>
+            <span class="plan-duration" id="proPeriodDisplay">/ mahina</span>
+          </div>
+          <ul class="plan-features-list">
+            <li><span class="material-symbols-outlined check-icon gold">check_circle</span> <strong>Unlimited Messages & Token Quota</strong></li>
+            <li><span class="material-symbols-outlined check-icon gold">check_circle</span> <strong>Sub-Second Priority Streaming</strong> (Zero queue)</li>
+            <li><span class="material-symbols-outlined check-icon gold">check_circle</span> <strong>Cartesia Sonic 3.6 Real-Time Voice</strong></li>
+            <li><span class="material-symbols-outlined check-icon gold">check_circle</span> <strong>Unlimited Photo Banao</strong> (Flux.1 / Pixazo HD)</li>
+            <li><span class="material-symbols-outlined check-icon gold">check_circle</span> <strong>Katta Vision Gangster Report Card</strong> downloads</li>
+            <li><span class="material-symbols-outlined check-icon gold">check_circle</span> Priority Supabase Cloud Sync</li>
+          </ul>
+          <div class="plan-btn-container" id="btnContainerPro">
+            <button type="button" class="plan-card-btn primary-gold" onclick="window.selectPlanPayment('pro')">
+              <span>Upgrade to Bahubali Pro</span>
+              <span class="material-symbols-outlined" style="font-size:16px;">arrow_forward</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Tier 3: Akhand Darbar King (Ultra Royal Tier) -->
+        <div class="pricing-plan-card royal-crown" id="planCardKing">
+          <div class="royal-ribbon"><span class="material-symbols-outlined" style="font-size:13px; vertical-align:middle; margin-right:3px;">workspace_premium</span> ULTIMATE KING</div>
+          <div class="plan-card-header">
+            <span class="plan-badge-royal">Executive & Builders</span>
+            <h4 class="plan-name">Akhand Darbar King</h4>
+            <p class="plan-summary">Full sovereign AI suite with deep reasoning</p>
+          </div>
+          <div class="plan-price-wrap">
+            <span class="plan-price" id="kingPriceDisplay">₹299</span>
+            <span class="plan-duration" id="kingPeriodDisplay">/ mahina</span>
+          </div>
+          <ul class="plan-features-list">
+            <li><span class="material-symbols-outlined check-icon purple">check_circle</span> <strong>Sabhi Bahubali Pro Features Included</strong></li>
+            <li><span class="material-symbols-outlined check-icon purple">check_circle</span> <strong>Deep Reasoning & Code Lab</strong> architecture engine</li>
+            <li><span class="material-symbols-outlined check-icon purple">check_circle</span> <strong>Jaunpur Deal Financials & Live Market Intel</strong></li>
+            <li><span class="material-symbols-outlined check-icon purple">check_circle</span> <strong>Custom Persona Tuning</strong> (Swag, Mentor, Mafia)</li>
+            <li><span class="material-symbols-outlined check-icon purple">check_circle</span> <strong>Royal Crown Gold Verified Badge</strong> (Profile & Topbar)</li>
+            <li><span class="material-symbols-outlined check-icon purple">check_circle</span> <strong>Direct 24/7 Darbar VIP Priority Support</strong></li>
+          </ul>
+          <div class="plan-btn-container" id="btnContainerKing">
+            <button type="button" class="plan-card-btn primary-royal" onclick="window.selectPlanPayment('king')">
+              <span>Claim King's Seat</span>
+              <span class="material-symbols-outlined" style="font-size:16px;">crown</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Selected Plan Payment Sheet & Dynamic UPI QR Section -->
+      <div class="plan-checkout-sheet" id="planCheckoutSheet">
+        <div class="checkout-summary-row">
+          <div>
+            <div class="checkout-label">Select Kiya Hua Plan:</div>
+            <div class="checkout-plan-title" id="checkoutPlanTitle">Bahubali Pro (₹99 / Mahina)</div>
+          </div>
+          <div class="checkout-amount-badge" id="checkoutAmountBadge">₹99</div>
+        </div>
+
+        <div class="checkout-grid">
+          <!-- Left: Dynamic UPI QR Code -->
+          <div class="checkout-qr-box">
+            <img id="planUpiQrImg" src="" alt="Plan Payment QR" class="plan-qr-image" />
+            <div class="checkout-qr-caption">GPay • PhonePe • Paytm • BHIM</div>
+          </div>
+
+          <!-- Right: Direct Pay & Activation Buttons -->
+          <div class="checkout-details-box">
+            <div class="checkout-upi-row">
+              <span class="font-mono checkout-upi-id" id="checkoutUpiIdText">munnabhaiya@upi</span>
+              <button type="button" class="btn-copy-sm" onclick="window.copyCheckoutUpi()">Copy UPI</button>
+            </div>
+
+            <a id="planPayDirectLink" href="#" class="btn-direct-upi-pay">
+              <span class="material-symbols-outlined" style="font-size:18px;">open_in_new</span>
+              <span>Seedha Kisi Bhi UPI App Se Pay Karein</span>
+            </a>
+
+            <button type="button" id="confirmPlanPaymentBtn" class="btn-confirm-payment" onclick="window.verifyAndActivatePlan()">
+              <span class="material-symbols-outlined" style="font-size:18px;">verified</span>
+              <span>Paise Bhej Diye? Turant Activate Karein</span>
+            </button>
+
+            <!-- Secret Promo Code Form -->
+            <div class="checkout-promo-box">
+              <input type="text" id="planPromoInput" class="plan-promo-input" placeholder="Secret Promo Code (MUNNA99 ya MIRZAPURKING)" />
+              <button type="button" class="btn-promo-apply" onclick="window.applyPlanPromoCode()">Apply</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -6792,7 +7413,8 @@
     }
 
     let isSending = false;
-    let isVip = safeGet("munna_is_vip") === "true";
+    let userPlan = safeGet("munna_user_plan", safeGet("munna_is_vip") === "true" ? "pro" : "free");
+    let isVip = (userPlan === "pro" || userPlan === "king");
     let dailyQuota = 10;
     const todayStr = new Date().toDateString();
     if (safeGet("munna_quota_date") !== todayStr) {
@@ -6809,6 +7431,7 @@
       name: safeGet("munna_user_name", "Abhishek"),
       email: safeGet("munna_user_email", "abhishek@mirzapur.ai"),
       joined: safeGet("munna_user_joined", "Sept 2026"),
+      plan: userPlan,
       enterToSend: safeGet("munna_setting_enter_send", "true") === "true",
       soundEffects: safeGet("munna_setting_sound", "true") === "true",
       aiStyle: safeGet("munna_setting_ai_style", "swag"),
@@ -6914,9 +7537,24 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
     function syncUserUI() {
       const displayName = userData.name && userData.name.trim() ? userData.name.trim() : "Munna User";
       const initial = displayName.charAt(0).toUpperCase();
-      const planText = isVip ? "[VIP] VIP Plan" : "Free Plan";
-      const headerPlanText = isVip ? "[VIP] Bahubali VIP" : "Free Plan";
-      const modalPlanText = isVip ? "[VIP] Bahubali VIP Pass" : "Free Plan";
+      const currentTier = (userData && userData.plan) ? userData.plan : (isVip ? "pro" : "free");
+      
+      let planBadgeText = "Free Plan";
+      let headerBadgeText = "Free Plan";
+      let modalBadgeText = "Free Plan";
+      let planDescText = "Daily 10 free messages • Standard server";
+
+      if (currentTier === "king") {
+        planBadgeText = "👑 Akhand King";
+        headerBadgeText = "👑 Akhand Darbar King";
+        modalBadgeText = "👑 Akhand Darbar King Tier";
+        planDescText = "Sovereign Tier: Deep Reasoning, Jaunpur Financials & 24/7 VIP Support";
+      } else if (currentTier === "pro" || isVip) {
+        planBadgeText = "⚡ Bahubali Pro";
+        headerBadgeText = "⚡ Bahubali Pro";
+        modalBadgeText = "⚡ Bahubali Pro VIP";
+        planDescText = "Unlimited messages • Real-time Voice • Unlimited Photo Banao";
+      }
 
       // 1. Sidebar trigger
       const sbInit = document.getElementById("sidebarAvatarInitial");
@@ -6925,7 +7563,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       if (sbInit) sbInit.textContent = initial;
       if (sbName) sbName.textContent = displayName;
       if (sbPlan) {
-        sbPlan.textContent = planText;
+        sbPlan.textContent = planBadgeText;
         sbPlan.classList.toggle("vip", isVip);
       }
 
@@ -6936,7 +7574,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       if (accInit) accInit.textContent = initial;
       if (accName) accName.textContent = displayName;
       if (accPlan) {
-        accPlan.textContent = headerPlanText;
+        accPlan.textContent = headerBadgeText;
         accPlan.classList.toggle("vip", isVip);
       }
 
@@ -6951,15 +7589,13 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       if (profInit) profInit.textContent = initial;
       if (profHeading) profHeading.textContent = displayName;
       if (profBadge) {
-        profBadge.textContent = modalPlanText;
+        profBadge.textContent = modalBadgeText;
         profBadge.classList.toggle("vip", isVip);
       }
       if (profNameIn) profNameIn.value = displayName;
       if (profEmailIn) profEmailIn.value = userData.email || "abhishek@mirzapur.ai";
       if (profPlanDesc) {
-        profPlanDesc.textContent = isVip ?
-          "Unlimited messages • Fast priority server • Voice enabled" :
-          "Daily 10 free messages • Standard server";
+        profPlanDesc.textContent = planDescText;
       }
       if (profMember) {
         profMember.textContent = `Member since ${userData.joined || "Sept 2026"}`;
@@ -6968,9 +7604,27 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       // 4. Settings modal
       const setPlanText = document.getElementById("settingsPlanText");
       if (setPlanText) {
-        setPlanText.textContent = isVip ?
-          "[VIP] Bahubali VIP Pass (Unlimited Messages)" :
-          "Free Plan (10 messages/day)";
+        setPlanText.textContent = headerBadgeText + (isVip ? " (Unlimited Messages)" : " (10 messages/day)");
+      }
+
+      // 5. Topbar upgrade pill
+      const tbUpgradeBtn = document.getElementById("topbarUpgradeBtn");
+      const tbUpgradeLabel = document.getElementById("topbarUpgradeLabel");
+      if (tbUpgradeLabel) {
+        if (currentTier === "king") {
+          tbUpgradeLabel.textContent = "👑 Akhand King";
+          if (tbUpgradeBtn) tbUpgradeBtn.className = "topbar-upgrade-pill vip-king";
+        } else if (currentTier === "pro" || isVip) {
+          tbUpgradeLabel.textContent = "⚡ Bahubali Pro";
+          if (tbUpgradeBtn) tbUpgradeBtn.className = "topbar-upgrade-pill";
+        } else {
+          tbUpgradeLabel.textContent = "Upgrade Plan";
+          if (tbUpgradeBtn) tbUpgradeBtn.className = "topbar-upgrade-pill";
+        }
+      }
+
+      if (typeof updateSubscriptionModalUI === "function") {
+        updateSubscriptionModalUI();
       }
       const enterToggle = document.getElementById("enterToSendToggle");
       if (enterToggle) enterToggle.checked = userData.enterToSend;
@@ -7897,8 +8551,12 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
     function updateQuotaUI() {
       const badge = document.getElementById("quotaBadge");
       if (!badge) return;
-      if (isVip) {
-        badge.textContent = "[VIP] VIP Unlimited";
+      const currentTier = (userData && userData.plan) ? userData.plan : (isVip ? "pro" : "free");
+      if (currentTier === "king") {
+        badge.textContent = "👑 King Unlimited";
+        badge.classList.add("unlimited");
+      } else if (currentTier === "pro" || isVip) {
+        badge.textContent = "⚡ Pro Unlimited";
         badge.classList.add("unlimited");
       } else {
         badge.textContent = `${dailyQuota} Free Left`;
@@ -7925,26 +8583,187 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       if (m) m.classList.remove("show");
     }
 
-    function openVipModal() {
-      const m = document.getElementById("vipModal");
-      if (m) m.classList.add("show");
-    }
+    // --- MULTI-TIER SUBSCRIPTION CONTROLLER (CHATGPT STYLE) ---
+    let currentBillingCycle = "monthly"; // "monthly" | "annual"
+    let selectedCheckoutTier = "pro"; // "pro" | "king"
 
-    function closeVipModal() {
+    window.openVipModal = function() {
+      const m = document.getElementById("vipModal");
+      if (m) {
+        if (typeof updateSubscriptionModalUI === "function") updateSubscriptionModalUI();
+        m.classList.add("show");
+      }
+    };
+
+    window.closeVipModal = function() {
       const m = document.getElementById("vipModal");
       if (m) m.classList.remove("show");
+      const sheet = document.getElementById("planCheckoutSheet");
+      if (sheet) sheet.classList.remove("active");
+    };
+
+    window.setBillingCycle = function(cycle) {
+      currentBillingCycle = cycle;
+      const mBtn = document.getElementById("billingCycleMonthlyBtn");
+      const aBtn = document.getElementById("billingCycleAnnualBtn");
+      const proPrice = document.getElementById("proPriceDisplay");
+      const proPeriod = document.getElementById("proPeriodDisplay");
+      const kingPrice = document.getElementById("kingPriceDisplay");
+      const kingPeriod = document.getElementById("kingPeriodDisplay");
+
+      if (cycle === "annual") {
+        if (mBtn) mBtn.classList.remove("active");
+        if (aBtn) aBtn.classList.add("active");
+        if (proPrice) proPrice.textContent = "₹79";
+        if (proPeriod) proPeriod.textContent = "/ mahina (Billed ₹948/yr)";
+        if (kingPrice) kingPrice.textContent = "₹239";
+        if (kingPeriod) kingPeriod.textContent = "/ mahina (Billed ₹2868/yr)";
+      } else {
+        if (mBtn) mBtn.classList.add("active");
+        if (aBtn) aBtn.classList.remove("active");
+        if (proPrice) proPrice.textContent = "₹99";
+        if (proPeriod) proPeriod.textContent = "/ mahina";
+        if (kingPrice) kingPrice.textContent = "₹299";
+        if (kingPeriod) kingPeriod.textContent = "/ mahina";
+      }
+      updateCheckoutSheet();
+    };
+
+    window.selectPlanPayment = function(tier) {
+      selectedCheckoutTier = tier;
+      const sheet = document.getElementById("planCheckoutSheet");
+      if (sheet) {
+        sheet.classList.add("active");
+        sheet.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
+      updateCheckoutSheet();
+    };
+
+    function updateCheckoutSheet() {
+      const isAnnual = (currentBillingCycle === "annual");
+      const isKing = (selectedCheckoutTier === "king");
+      
+      const amount = isKing ? (isAnnual ? 2868 : 299) : (isAnnual ? 948 : 99);
+      const title = isKing ? 
+        `Akhand Darbar King (${isAnnual ? '₹239/mo, Billed Annual ₹2868' : '₹299 / Mahina'})` : 
+        `Bahubali Pro (${isAnnual ? '₹79/mo, Billed Annual ₹948' : '₹99 / Mahina'})`;
+
+      const titleEl = document.getElementById("checkoutPlanTitle");
+      const badgeEl = document.getElementById("checkoutAmountBadge");
+      const qrImg = document.getElementById("planUpiQrImg");
+      const link = document.getElementById("planPayDirectLink");
+      const upiIdText = document.getElementById("checkoutUpiIdText");
+
+      if (titleEl) titleEl.textContent = title;
+      if (badgeEl) badgeEl.textContent = `₹${amount}`;
+      if (upiIdText) upiIdText.textContent = currentUpiId;
+
+      const upiStr = `upi://pay?pa=${encodeURIComponent(currentUpiId)}&pn=Munna%20AI%20Darbar&am=${amount}&cu=INR`;
+      if (qrImg) {
+        qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(upiStr)}`;
+      }
+      if (link) {
+        link.href = upiStr;
+      }
     }
 
-    function activateVip(promo = false) {
-      isVip = true;
-      safeSet("munna_is_vip", "true");
+    window.copyCheckoutUpi = function() {
+      navigator.clipboard.writeText(currentUpiId).then(() => {
+        showMunnaToast("UPI ID copy ho gaya: " + currentUpiId);
+      }).catch(() => {
+        showMunnaToast("UPI ID: " + currentUpiId);
+      });
+    };
+
+    window.verifyAndActivatePlan = function() {
+      const isKing = (selectedCheckoutTier === "king");
+      const planName = isKing ? "king" : "pro";
+      activatePlan(planName, false);
+    };
+
+    window.applyPlanPromoCode = function() {
+      const input = document.getElementById("planPromoInput");
+      if (!input) return;
+      const code = input.value.trim().toUpperCase();
+      if (code === "MIRZAPURKING" || code === "KINGDARBAR" || code === "GANGSTERKING") {
+        activatePlan("king", true);
+      } else if (code === "MUNNA99" || code === "BAHUBALI" || code === "MIRZAPUR") {
+        activatePlan("pro", true);
+      } else if (code === "BARFI50") {
+        showMunnaToast("50% Discount Promo Lag Gaya! Pro Plan ab sirf ₹49 me!");
+        const badgeEl = document.getElementById("checkoutAmountBadge");
+        if (badgeEl) badgeEl.textContent = "₹49";
+        const qrImg = document.getElementById("planUpiQrImg");
+        const link = document.getElementById("planPayDirectLink");
+        const upiStr = `upi://pay?pa=${encodeURIComponent(currentUpiId)}&pn=Munna%20AI%20Darbar&am=49&cu=INR`;
+        if (qrImg) qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(upiStr)}`;
+        if (link) link.href = upiStr;
+      } else {
+        alert("Galat Promo Code be! Asli code daalo (MUNNA99 ya MIRZAPURKING) ya seedha UPI se unlock karo!");
+      }
+    };
+
+    function updateSubscriptionModalUI() {
+      const currentTier = (userData && userData.plan) ? userData.plan : (isVip ? "pro" : "free");
+      const btnFree = document.getElementById("btnContainerFree");
+      const btnPro = document.getElementById("btnContainerPro");
+      const btnKing = document.getElementById("btnContainerKing");
+
+      if (btnFree) {
+        if (currentTier === "free") {
+          btnFree.innerHTML = '<button type="button" class="plan-card-btn current-plan" disabled>Aapka Current Plan</button>';
+        } else {
+          btnFree.innerHTML = '<button type="button" class="plan-card-btn current-plan" style="opacity:0.6;" disabled>Basic Mehman Tier</button>';
+        }
+      }
+
+      if (btnPro) {
+        if (currentTier === "pro") {
+          btnPro.innerHTML = '<button type="button" class="plan-card-btn active-plan" disabled><span class="material-symbols-outlined">check_circle</span> Active Pro Plan</button>';
+        } else if (currentTier === "king") {
+          btnPro.innerHTML = '<button type="button" class="plan-card-btn active-plan" style="opacity:0.85;" disabled><span class="material-symbols-outlined">check_circle</span> Included in King</button>';
+        } else {
+          btnPro.innerHTML = '<button type="button" class="plan-card-btn primary-gold" onclick="window.selectPlanPayment(\'pro\')"><span>Upgrade to Bahubali Pro</span><span class="material-symbols-outlined" style="font-size:16px;">arrow_forward</span></button>';
+        }
+      }
+
+      if (btnKing) {
+        if (currentTier === "king") {
+          btnKing.innerHTML = '<button type="button" class="plan-card-btn active-plan" disabled><span class="material-symbols-outlined">workspace_premium</span> Active King Plan 👑</button>';
+        } else {
+          btnKing.innerHTML = '<button type="button" class="plan-card-btn primary-royal" onclick="window.selectPlanPayment(\'king\')"><span>Claim King\'s Seat</span><span class="material-symbols-outlined" style="font-size:16px;">crown</span></button>';
+        }
+      }
+    }
+
+    function activatePlan(planName, promo = false) {
+      userData.plan = planName;
+      isVip = (planName === "pro" || planName === "king");
+      safeSet("munna_user_plan", planName);
+      safeSet("munna_is_vip", isVip ? "true" : "false");
+
       updateQuotaUI();
       syncUserUI();
       closeVipModal();
-      const msg = promo ?
-        "Jalwa hai hamara! Secret Promo Code lag gaya aur Bahubali VIP Pass activate ho gaya hai! Ab jo marzi aaye be-jhijhak pucho!" :
-        "Mubarak ho! Bahubali VIP Pass activate ho gaya hai! Ab poora Mirzapur aapka hai, unlimited baat karo!";
+
+      let msg = "";
+      if (planName === "king") {
+        msg = promo ?
+          "👑 **PRABANDH HO GAYA!** Secret Code se Akhand Darbar King Tier unlock ho gaya hai! Ab aap King of Mirzapur ke barabar baith kar deep reasoning aur exclusive tools chalao!" :
+          "👑 **MUBARAK HO KING!** Akhand Darbar VIP Tier activate ho chuka hai! Deep reasoning, priority servers, aur sarvashreshth aawaz sab aapka hai!";
+      } else {
+        msg = promo ?
+          "⚡ **JALWA HAI HAMARA!** Secret Promo Code lag gaya aur Bahubali Pro activate ho gaya hai! Unlimited messages aur audio enable ho chuka hai!" :
+          "⚡ **BAHUBALI PRO ACTIVATED!** Daily quota limit khatam ho gayi hai aur ultra-fast priority streaming enable ho gayi hai!";
+      }
+
       renderMessage(msg, "munna");
+      if (typeof playKattaAudio === "function") playKattaAudio("lock");
+      showMunnaToast(planName === "king" ? "👑 Akhand Darbar King Active!" : "⚡ Bahubali Pro Active!");
+    }
+
+    function activateVip(promo = false) {
+      activatePlan("pro", promo);
     }
 
     // --- 4. ATTACHMENT PROCESSING (IMAGES & FILES) ---
@@ -9684,6 +10503,12 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       const closeAuthBtn = document.getElementById("closeAuthBtn");
       if (closeAuthBtn) closeAuthBtn.onclick = closeAuthModal;
 
+      const closeVipBtn = document.getElementById("closeVipBtn");
+      if (closeVipBtn) closeVipBtn.onclick = closeVipModal;
+
+      const closeNazranaBtn = document.getElementById("closeNazranaBtn");
+      if (closeNazranaBtn) closeNazranaBtn.onclick = closeNazranaModal;
+
       const cancelLogoutBtn = document.getElementById("cancelLogoutBtn");
       if (cancelLogoutBtn) cancelLogoutBtn.onclick = closeLogoutModal;
 
@@ -9705,10 +10530,12 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       const hModal = document.getElementById("helpModal");
       const logModal = document.getElementById("logoutConfirmModal");
       const aModal = document.getElementById("authModal");
+      const vModal = document.getElementById("vipModal");
+      const nModal = document.getElementById("nazranaModal");
       const kattaModalElem = document.getElementById("kattaVisionModal");
       const imgGenModalElem = document.getElementById("imageGenModal");
       const artLightModalElem = document.getElementById("artLightboxModal");
-      [profModal, setModal, hModal, logModal, aModal].forEach(m => {
+      [profModal, setModal, hModal, logModal, aModal, vModal, nModal].forEach(m => {
         if (m) m.onclick = (e) => { if (e.target === m) m.classList.remove("show"); };
       });
       if (kattaModalElem) {
