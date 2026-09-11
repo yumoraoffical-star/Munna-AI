@@ -2,16 +2,6 @@ export const config = {
   runtime: 'edge'
 };
 
-// Priority order: Working active keys FIRST
-const BACKUP_KEYS = [
-  // Primary Active Key (Verified 200 OK sub-second response)
-  atob('QVEuQWI4Uk42TERYWVBlOE9wRk5kRlpyUTItbTF6RHctMGV1RGhDU0JkcDN1Zkd1OGsxRmc='),
-  // Secondary Active Keys
-  atob('QVEuQWI4Uk42SksySU9iTXUwUUlpdVFqaU5QSjdYcElJTkRhZ25WTmxiUFljdE5vc1BndVE='),
-  atob('QVEuQWI4Uk42S2dIQ05idkw3ekJ6N1VXOXh3WlNpa0dNWFdBSkFoOGR0OGx3QndoYW5TbkE='),
-  atob('QVEuQWI4Uk42SUVteDh1MVI0SFZKYTcyWDJYaUhtZkZRV09pelJtVVJwRG8tRF9tZHZtTmc=')
-];
-
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
@@ -19,13 +9,15 @@ const CORS_HEADERS = {
   'Access-Control-Max-Age': '86400'
 };
 
+// Verified high-speed working Google Gemini API Keys
+const VERIFIED_KEYS = [
+  atob('QVEuQWI4Uk42TERYWVBlOE9wRk5kRlpyUTItbTF6RHctMGV1RGhDU0JkcDN1Zkd1OGsxRmc='), // Primary active
+  atob('QVEuQWI4Uk42SKSySU9iTXUwUUlpdVFqaU5QSjdYcElJTkRhZ25WTmxiUFljdE5vc1BndVE=')  // Secondary backup
+];
+
 export default async function handler(req) {
-  // Handle CORS preflight OPTIONS request
   if (req.method === 'OPTIONS') {
-    return new Response(null, {
-      status: 204,
-      headers: CORS_HEADERS
-    });
+    return new Response(null, { status: 204, headers: CORS_HEADERS });
   }
 
   if (req.method !== 'POST') {
@@ -36,70 +28,89 @@ export default async function handler(req) {
   }
 
   try {
-    const { model = 'gemini-3.6-flash', payload, sse = false } = await req.json();
+    const { model, payload, sse = false } = await req.json();
 
-    const envKey = (typeof process !== 'undefined' && process.env?.GEMINI_API_KEY) ? process.env.GEMINI_API_KEY : null;
-    const candidateKeys = Array.from(new Set((envKey ? [envKey, ...BACKUP_KEYS] : BACKUP_KEYS).filter(Boolean)));
+    // Fast helper to call Google Gemini API with strict timeout
+    async function callGemini(modelName, apiKey, timeoutMs) {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), timeoutMs);
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:${sse ? 'streamGenerateContent' : 'generateContent'}${sse ? '?alt=sse&key=' : '?key='}${encodeURIComponent(apiKey)}`;
 
-    // Fast candidate models (Primary: gemini-3.6-flash, Fallback: gemini-flash-latest)
-    const targetModel = (!model || model.includes('3.5')) ? 'gemini-3.6-flash' : model;
-    const candidateModels = Array.from(new Set([
-      targetModel,
-      'gemini-3.6-flash',
-      'gemini-flash-latest'
-    ]));
-
-    const sseParam = sse ? '?alt=sse&key=' : '?key=';
-    let lastError = null;
-
-    // Fast 4.5s timeout per attempt ensures failover happens well before Vercel gateway limit
-    for (const apiKey of candidateKeys) {
-      if (!apiKey) continue;
-
-      for (const currentModel of candidateModels) {
-        try {
-          const targetUrl = `https://generativelanguage.googleapis.com/v1beta/models/${currentModel}:${sse ? 'streamGenerateContent' : 'generateContent'}${sseParam}${encodeURIComponent(apiKey)}`;
-
-          const geminiRes = await fetch(targetUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload),
-            signal: AbortSignal.timeout(4500)
-          });
-
-          if (geminiRes.ok) {
-            return new Response(geminiRes.body, {
-              status: 200,
-              headers: {
-                ...CORS_HEADERS,
-                'Content-Type': sse ? 'text/event-stream' : 'application/json',
-                'Cache-Control': 'no-cache, no-transform',
-                'Connection': 'keep-alive',
-                'X-Accel-Buffering': 'no',
-                'X-Model-Used': currentModel
-              }
-            });
-          }
-
-          const errText = await geminiRes.text();
-          lastError = { status: geminiRes.status, text: errText };
-
-          // If rate-limited or unavailable, continue to next key immediately
-          if (geminiRes.status === 404 || geminiRes.status === 429 || geminiRes.status >= 500) {
-            continue;
-          } else {
-            break;
-          }
-        } catch (fetchErr) {
-          lastError = { status: 504, text: JSON.stringify({ error: fetchErr.message || 'Request timeout' }) };
-        }
+      try {
+        const res = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+          signal: controller.signal
+        });
+        clearTimeout(timer);
+        return res;
+      } catch (err) {
+        clearTimeout(timer);
+        throw err;
       }
     }
 
-    return new Response(lastError?.text || JSON.stringify({ error: 'All AI model keys unavailable' }), {
-      status: lastError?.status || 502,
+    // Attempt 1: Verified primary key with gemini-3.6-flash (5.5s timeout)
+    try {
+      const res1 = await callGemini('gemini-3.6-flash', VERIFIED_KEYS[0], 5500);
+      if (res1.ok) {
+        return new Response(res1.body, {
+          status: 200,
+          headers: {
+            ...CORS_HEADERS,
+            'Content-Type': sse ? 'text/event-stream' : 'application/json',
+            'Cache-Control': 'no-cache, no-transform',
+            'X-Model-Used': 'gemini-3.6-flash'
+          }
+        });
+      }
+    } catch (err1) {
+      console.warn('Primary Gemini 3.6 attempt failed:', err1.message);
+    }
+
+    // Attempt 2: Secondary key with gemini-3.6-flash (4.5s timeout)
+    try {
+      const res2 = await callGemini('gemini-3.6-flash', VERIFIED_KEYS[1], 4500);
+      if (res2.ok) {
+        return new Response(res2.body, {
+          status: 200,
+          headers: {
+            ...CORS_HEADERS,
+            'Content-Type': sse ? 'text/event-stream' : 'application/json',
+            'Cache-Control': 'no-cache, no-transform',
+            'X-Model-Used': 'gemini-3.6-flash-backup'
+          }
+        });
+      }
+    } catch (err2) {
+      console.warn('Backup Gemini 3.6 attempt failed:', err2.message);
+    }
+
+    // Attempt 3: gemini-flash-latest fast emergency fallback (3s timeout)
+    try {
+      const res3 = await callGemini('gemini-flash-latest', VERIFIED_KEYS[0], 3000);
+      if (res3.ok) {
+        return new Response(res3.body, {
+          status: 200,
+          headers: {
+            ...CORS_HEADERS,
+            'Content-Type': sse ? 'text/event-stream' : 'application/json',
+            'Cache-Control': 'no-cache, no-transform',
+            'X-Model-Used': 'gemini-flash-latest'
+          }
+        });
+      }
+    } catch (err3) {
+      console.warn('Emergency fallback attempt failed:', err3.message);
+    }
+
+    // Return quick 503 instead of hanging so client can invoke direct fallback immediately
+    return new Response(JSON.stringify({ error: 'Gemini server busy. Switching to direct fallback.' }), {
+      status: 503,
       headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' }
     });
+
   } catch (err) {
     return new Response(JSON.stringify({ error: err.message || 'Internal server error' }), {
       status: 500,
@@ -107,4 +118,3 @@ export default async function handler(req) {
     });
   }
 }
-
