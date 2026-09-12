@@ -1,10 +1,6 @@
 {
   "version": 2,
   "cleanUrls": true,
-  "rewrites": [
-    { "source": "/", "destination": "/api/fixed-index" },
-    { "source": "/index.html", "destination": "/api/fixed-index" }
-  ],
   "headers": [
     {
       "source": "/api/(.*)",
