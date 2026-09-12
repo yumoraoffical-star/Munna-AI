@@ -2,25 +2,28 @@
 // MUNNA AI — SERVER-SIDE AUTHENTICATION, CORS & QUOTA MIDDLEWARE (EDGE RUNTIME)
 // ==============================================================================
 
-const SUPABASE_URL = process.env.SUPABASE_URL || 'https://ipnbebwrefxlvoqneaga.supabase.co';
-const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlwbmJlYndyZWZ4bHZvcW5lYWdhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIwNDQ5ODgsImV4cCI6MjA1NzYyMDk4OH0.xQxZ5j-nB2sXp2o0mS8R9q8tW3b5c7e1f4g6h8i0j2k';
+const SUPABASE_URL = process.env.SUPABASE_URL;
+const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
 
-// Allowed origins for CORS
-const ALLOWED_ORIGINS = [
+// Keep this allow-list explicit. Do not reflect arbitrary *.vercel.app origins
+// because that would let another Vercel deployment call the API with credentials.
+const ALLOWED_ORIGINS = new Set([
   'https://munnaai.youmika.site',
   'https://munna-ai.vercel.app'
-];
+]);
 
-// In-memory quota tracker for Edge execution instances
-// Key: identifier (user_id or guest_ip_day), Value: count
+// In-memory quota tracker for Edge execution instances.
+// NOTE: this is best-effort only because Edge instances are ephemeral. For
+// production-grade global quotas, replace this with a durable store (e.g. DB/KV).
 const quotaStore = new Map();
 
 function getClientIdentifier(req, user, isGuest) {
   if (user && user.id) {
     return `user:${user.id}`;
   }
-  const forwarded = req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || 'guest';
-  const ip = forwarded.split(',')[0].trim();
+
+  const forwarded = req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || '';
+  const ip = forwarded.split(',')[0].trim() || 'unknown-ip';
   const guestId = req.headers.get('x-guest-id') || 'anon';
   return `guest:${ip}:${guestId}`;
 }
@@ -30,11 +33,11 @@ function checkAndIncrementQuota(identifier, plan, isGuest) {
   const key = `${identifier}:${today}`;
   const currentCount = quotaStore.get(key) || 0;
 
-  let maxLimit = 10; // Free member default: 10/day
+  let maxLimit = 10;
   if (isGuest) {
-    maxLimit = 5; // Guest trial limit: 5/day
+    maxLimit = 5;
   } else if (plan === 'pro' || plan === 'king' || plan === 'vip') {
-    maxLimit = 1000; // Pro/King limit: 1000/day
+    maxLimit = 1000;
   }
 
   if (currentCount >= maxLimit) {
@@ -58,24 +61,41 @@ function checkAndIncrementQuota(identifier, plan, isGuest) {
 
 export function getCorsHeaders(req) {
   const origin = req.headers.get('origin') || '';
-  let allowedOrigin = 'https://munnaai.youmika.site';
-
-  if (ALLOWED_ORIGINS.includes(origin) || origin.endsWith('.vercel.app') || origin.startsWith('http://localhost:') || origin.startsWith('http://127.0.0.1:')) {
-    allowedOrigin = origin;
-  }
-
-  return {
-    'Access-Control-Allow-Origin': allowedOrigin,
+  const headers = {
     'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Guest-Access, X-Guest-Id',
-    'Access-Control-Max-Age': '86400'
+    'Access-Control-Max-Age': '86400',
+    'Vary': 'Origin'
   };
+
+  if (ALLOWED_ORIGINS.has(origin)) {
+    headers['Access-Control-Allow-Origin'] = origin;
+    headers['Access-Control-Allow-Credentials'] = 'true';
+  }
+
+  if (origin.startsWith('http://localhost:') || origin.startsWith('http://127.0.0.1:')) {
+    headers['Access-Control-Allow-Origin'] = origin;
+  }
+
+  return headers;
 }
 
 export async function verifyAuthAndQuota(req, serviceName = 'chat') {
   const corsHeaders = getCorsHeaders(req);
 
-  // 1. Check for Supabase JWT in Authorization header
+  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+    return {
+      ok: false,
+      response: new Response(JSON.stringify({
+        error: 'SERVER_CONFIG_ERROR',
+        message: 'Supabase server configuration is missing.'
+      }), {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      })
+    };
+  }
+
   const authHeader = req.headers.get('authorization') || '';
   const isGuestHeader = req.headers.get('x-guest-access') === 'true';
 
@@ -84,26 +104,27 @@ export async function verifyAuthAndQuota(req, serviceName = 'chat') {
   let plan = 'free';
 
   if (authHeader.startsWith('Bearer ')) {
-    const token = authHeader.replace('Bearer ', '').trim();
-    try {
-      const userRes = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
-        method: 'GET',
-        headers: {
-          'apikey': SUPABASE_ANON_KEY,
-          'Authorization': `Bearer ${token}`
-        }
-      });
+    const token = authHeader.slice(7).trim();
+    if (token) {
+      try {
+        const userRes = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
+          method: 'GET',
+          headers: {
+            apikey: SUPABASE_ANON_KEY,
+            Authorization: `Bearer ${token}`
+          }
+        });
 
-      if (userRes.ok) {
-        user = await userRes.json();
-        plan = user.app_metadata?.plan || user.user_metadata?.plan || 'free';
+        if (userRes.ok) {
+          user = await userRes.json();
+          plan = user.app_metadata?.plan || user.user_metadata?.plan || 'free';
+        }
+      } catch (e) {
+        console.warn('Supabase token verification error:', e?.message || e);
       }
-    } catch (e) {
-      console.warn('Supabase token verification error:', e.message);
     }
   }
 
-  // 2. If no valid Supabase user, check if guest access is allowed
   if (!user) {
     if (isGuestHeader) {
       isGuest = true;
@@ -122,7 +143,6 @@ export async function verifyAuthAndQuota(req, serviceName = 'chat') {
     }
   }
 
-  // 3. Server-side Quota Enforcement
   const clientId = getClientIdentifier(req, user, isGuest);
   const quotaResult = checkAndIncrementQuota(clientId, plan, isGuest);
 
@@ -151,6 +171,7 @@ export async function verifyAuthAndQuota(req, serviceName = 'chat') {
     user,
     isGuest,
     plan,
+    serviceName,
     corsHeaders,
     quota: quotaResult
   };
