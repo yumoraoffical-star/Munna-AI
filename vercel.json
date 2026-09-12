@@ -1,5 +1,6 @@
 {
   "version": 2,
+  "buildCommand": "node scripts/patch-auth-build.js",
   "cleanUrls": true,
   "headers": [
     {
