@@ -5,16 +5,19 @@
   const mobileMenu = $('#mobileMenu');
   const mobileClose = $('#mobileClose');
   const settingsBtn = $('#settingsBtn');
+  const settingsBtnTop = $('#settingsBtnTop');
   const closeSettings = $('#closeSettings');
   const saveProfile = $('#saveProfile');
   const clearGuest = $('#clearGuest');
 
-  mobileMenu?.addEventListener('click', () => body.classList.toggle('mobile-open'));
-  mobileClose?.addEventListener('click', () => body.classList.remove('mobile-open'));
-  settingsBtn?.addEventListener('click', () => {
+  const openSettings = () => {
     body.classList.remove('mobile-open');
     settings?.classList.add('open');
-  });
+  };
+  mobileMenu?.addEventListener('click', () => body.classList.toggle('mobile-open'));
+  mobileClose?.addEventListener('click', () => body.classList.remove('mobile-open'));
+  settingsBtn?.addEventListener('click', openSettings);
+  settingsBtnTop?.addEventListener('click', openSettings);
   closeSettings?.addEventListener('click', () => settings?.classList.remove('open'));
   settings?.addEventListener('click', (e) => {
     if (e.target === settings) settings.classList.remove('open');
