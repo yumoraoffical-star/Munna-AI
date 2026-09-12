@@ -1,54 +1,51 @@
+import { verifyAuthAndQuota, getCorsHeaders } from './_auth.js';
+
 export const config = {
   runtime: 'edge'
 };
 
-const CORS_HEADERS = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-  'Access-Control-Max-Age': '86400'
-};
-
-// Default high-fidelity Hindi/Hinglish male voice for Cartesia Sonic
 const DEFAULT_CARTESIA_VOICE = 'bdab08ad-4137-4548-b9db-6142854c7525';
 const DEFAULT_ELEVEN_VOICE = 'pNInz6obpgDQGcFmaJgB';
 
 export default async function handler(req) {
+  const corsHeaders = getCorsHeaders(req);
+
   if (req.method === 'OPTIONS') {
-    return new Response(null, {
-      status: 204,
-      headers: CORS_HEADERS
-    });
+    return new Response(null, { status: 204, headers: corsHeaders });
   }
 
   if (req.method !== 'POST') {
     return new Response(JSON.stringify({ error: 'Method not allowed' }), {
       status: 405,
-      headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' }
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
     });
+  }
+
+  // 1. Verify Authentication & Server-Side Quota
+  const auth = await verifyAuthAndQuota(req, 'tts');
+  if (!auth.ok) {
+    return auth.response;
   }
 
   try {
     const { text, voiceId } = await req.json();
-    if (!text) {
+    if (!text || typeof text !== 'string' || !text.trim()) {
       return new Response(JSON.stringify({ error: 'Text is required' }), {
         status: 400,
-        headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' }
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       });
     }
 
     const snippet = text.length > 500 ? text.substring(0, 500) + '...' : text;
 
-    // --- 1. CARTESIA SONIC 3.6 REAL-TIME TTS (Primary Engine) ---
-    const cartesiaKey = (typeof process !== 'undefined' && process.env?.CARTESIA_API_KEY)
-      ? process.env.CARTESIA_API_KEY
-      : atob('c2tfY2FyX05aemVDM3lkM0pidlNyVnNmZW9ocDM=');
+    // Read keys strictly from server environment variables
+    const cartesiaKey = process.env.CARTESIA_API_KEY || null;
+    const elevenApiKey = process.env.ELEVENLABS_API_KEY || process.env.ELEVEN_API_KEY || null;
 
+    // 1. CARTESIA SONIC 3.6 REAL-TIME TTS (Primary Engine)
     if (cartesiaKey) {
       const isUUID = voiceId && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(voiceId);
-      const cartesiaVoiceId = isUUID
-        ? voiceId
-        : ((typeof process !== 'undefined' && process.env?.CARTESIA_VOICE_ID) || DEFAULT_CARTESIA_VOICE);
+      const cartesiaVoiceId = isUUID ? voiceId : (process.env.CARTESIA_VOICE_ID || DEFAULT_CARTESIA_VOICE);
 
       try {
         const cartesiaRes = await fetch('https://api.cartesia.ai/tts/bytes', {
@@ -79,66 +76,71 @@ export default async function handler(req) {
           return new Response(cartesiaRes.body, {
             status: 200,
             headers: {
-              ...CORS_HEADERS,
+              ...corsHeaders,
               'Content-Type': 'audio/mpeg',
               'Cache-Control': 'public, max-age=86400',
-              'X-TTS-Engine': 'Cartesia-Sonic-3.6'
+              'X-TTS-Engine': 'Cartesia-Sonic-3.6',
+              'X-Quota-Remaining': String(auth.quota.remaining)
             }
           });
         }
-
-        const errDetail = await cartesiaRes.text();
-        console.warn('Cartesia TTS returned status', cartesiaRes.status, errDetail);
       } catch (cartesiaErr) {
-        console.warn('Cartesia TTS request failed, attempting ElevenLabs fallback:', cartesiaErr);
+        console.warn('Cartesia TTS request failed, trying ElevenLabs fallback:', cartesiaErr?.message || cartesiaErr);
       }
     }
 
-    // --- 2. ELEVENLABS FALLBACK ENGINE ---
-    const elevenApiKey = (typeof process !== 'undefined' && process.env?.ELEVEN_API_KEY)
-      ? process.env.ELEVEN_API_KEY
-      : atob('c2tfODBjZmMxZDhmMGYyNWI4ZTNlNDdhMzljYTNmNzM0NDYzZWYyNDAyMGM2ZWYzNzUw');
+    // 2. ELEVENLABS FALLBACK ENGINE
+    if (elevenApiKey) {
+      const elevenVoiceId = (voiceId && !voiceId.includes('-')) ? voiceId : DEFAULT_ELEVEN_VOICE;
 
-    const elevenVoiceId = (voiceId && !voiceId.includes('-')) ? voiceId : DEFAULT_ELEVEN_VOICE;
+      try {
+        const elevenRes = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${elevenVoiceId}`, {
+          method: 'POST',
+          headers: {
+            'xi-api-key': elevenApiKey,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            text: snippet,
+            model_id: 'eleven_multilingual_v2',
+            voice_settings: {
+              stability: 0.5,
+              similarity_boost: 0.75
+            }
+          })
+        });
 
-    const elevenRes = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${elevenVoiceId}`, {
-      method: 'POST',
-      headers: {
-        'xi-api-key': elevenApiKey,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        text: snippet,
-        model_id: 'eleven_multilingual_v2',
-        voice_settings: {
-          stability: 0.5,
-          similarity_boost: 0.75
+        if (elevenRes.ok) {
+          return new Response(elevenRes.body, {
+            status: 200,
+            headers: {
+              ...corsHeaders,
+              'Content-Type': 'audio/mpeg',
+              'Cache-Control': 'public, max-age=86400',
+              'X-TTS-Engine': 'ElevenLabs',
+              'X-Quota-Remaining': String(auth.quota.remaining)
+            }
+          });
         }
-      })
-    });
-
-    if (!elevenRes.ok) {
-      const errTxt = await elevenRes.text();
-      return new Response(errTxt, {
-        status: elevenRes.status,
-        headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' }
-      });
+      } catch (elevenErr) {
+        console.warn('ElevenLabs TTS failed:', elevenErr?.message || elevenErr);
+      }
     }
 
-    return new Response(elevenRes.body, {
-      status: 200,
-      headers: {
-        ...CORS_HEADERS,
-        'Content-Type': 'audio/mpeg',
-        'Cache-Control': 'public, max-age=86400',
-        'X-TTS-Engine': 'ElevenLabs'
-      }
+    // If neither key is present or both failed
+    return new Response(JSON.stringify({
+      error: 'TTS_UNAVAILABLE',
+      message: 'Voice synthesis service is currently offline. Please configure CARTESIA_API_KEY or ELEVENLABS_API_KEY.'
+    }), {
+      status: 503,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
     });
+
   } catch (err) {
-    return new Response(JSON.stringify({ error: err.message || 'Internal server error' }), {
+    console.error('TTS Handler Error:', err);
+    return new Response(JSON.stringify({ error: err.message || 'Internal Server Error' }), {
       status: 500,
-      headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' }
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
     });
   }
 }
-

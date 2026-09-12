@@ -70,37 +70,399 @@
       console.warn("Supabase init exception:", e);
     }
 
-        // --- TOP-LEVEL AUTH CONTROLLER & FAIL-SAFE FUNCTIONS ---
-    window.showAuthScreen = function() {
-      if (typeof closeAccountMenu === "function") closeAccountMenu();
-      const scr = document.getElementById("authScreenOverlay");
-      if (scr) {
-        scr.classList.remove("hidden");
-        scr.style.display = "flex";
+            // --- TOP-LEVEL AUTH CONTROLLER (PRODUCTION SECURE ARCHITECTURE) ---
+    const MunnaAuth = {
+      currentUser: null,
+      currentSession: null,
+      isGuest: false,
+
+      async getAuthHeaders() {
+        if (this.currentSession?.access_token) {
+          return {
+            'Authorization': 'Bearer ' + this.currentSession.access_token
+          };
+        }
+        if (this.isGuest) {
+          let guestId = sessionStorage.getItem('munna_guest_id');
+          if (!guestId) {
+            guestId = 'guest_' + Math.random().toString(36).substring(2, 11);
+            sessionStorage.setItem('munna_guest_id', guestId);
+          }
+          return {
+            'X-Guest-Access': 'true',
+            'X-Guest-Id': guestId
+          };
+        }
+        return {};
+      },
+
+      async init() {
+        if (!supabaseClient) {
+          console.warn("Supabase client unavailable");
+          const guestActive = sessionStorage.getItem("munna_guest_mode") === "true";
+          if (guestActive) {
+            this.enterAsGuest();
+          } else {
+            this.showAuthScreen();
+          }
+          return;
+        }
+
+        // 1. Listen to real Supabase Auth State changes as the single source of truth
+        supabaseClient.auth.onAuthStateChange(async (event, session) => {
+          if ((event === "SIGNED_IN" || event === "INITIAL_SESSION" || event === "TOKEN_REFRESHED") && session?.user) {
+            this.currentUser = session.user;
+            this.currentSession = session;
+            this.isGuest = false;
+            sessionStorage.removeItem("munna_guest_mode");
+            sessionStorage.removeItem("munna_guest_id");
+            updateAuthUI(this.currentUser);
+            this.hideAuthScreen();
+            this.closeModal();
+            if (event === "SIGNED_IN") {
+              const name = this.currentUser.user_metadata?.full_name || this.currentUser.email.split("@")[0];
+              showMunnaToast("ðŸ‘‘ Dakhila safal! Darbar me swagat hai, " + name + "!");
+            }
+            if (typeof loadSessionsFromCloud === "function") {
+              try { loadSessionsFromCloud(); } catch(e) {}
+            }
+          } else if (event === "SIGNED_OUT") {
+            this.currentUser = null;
+            this.currentSession = null;
+            this.isGuest = false;
+            sessionStorage.removeItem("munna_guest_mode");
+            sessionStorage.removeItem("munna_guest_id");
+            updateAuthUI(null);
+            this.showAuthScreen();
+            showMunnaToast("Aap sign out ho gaye hain.");
+          }
+        });
+
+        // 2. Handle Google OAuth redirect callback (PKCE code in URL)
+        const urlParams = new URLSearchParams(window.location.search);
+        const authCode = urlParams.get("code");
+        const authError = urlParams.get("error_description") || urlParams.get("error");
+
+        if (authError) {
+          console.error("Google Auth callback error:", authError);
+          showMunnaToast("âš ï¸ Google sign-in could not be completed: " + authError);
+          window.history.replaceState({}, document.title, window.location.pathname);
+          this.showAuthScreen();
+        } else if (authCode) {
+          try {
+            showMunnaToast("ðŸ‘‘ Google authentication verify ho raha hai...");
+            const { data, error } = await supabaseClient.auth.exchangeCodeForSession(authCode);
+            if (error) {
+              showMunnaToast("Google verification error: " + error.message);
+              this.showAuthScreen();
+            } else if (data?.session?.user) {
+              this.currentUser = data.session.user;
+              this.currentSession = data.session;
+              this.isGuest = false;
+              sessionStorage.removeItem("munna_guest_mode");
+              updateAuthUI(this.currentUser);
+              this.hideAuthScreen();
+              this.closeModal();
+              showMunnaToast("ðŸ‘‘ Welcome to Munna AI, " + (this.currentUser.user_metadata?.full_name || this.currentUser.email.split("@")[0]) + "!");
+              if (typeof loadSessionsFromCloud === "function") {
+                try { loadSessionsFromCloud(); } catch(e) {}
+              }
+            }
+          } catch (codeErr) {
+            console.warn("exchangeCodeForSession warning:", codeErr);
+            this.showAuthScreen();
+          } finally {
+            window.history.replaceState({}, document.title, window.location.pathname);
+          }
+        }
+
+        // 3. Check existing real session
+        try {
+          const { data: { session }, error } = await supabaseClient.auth.getSession();
+          if (session && session.user) {
+            this.currentUser = session.user;
+            this.currentSession = session;
+            this.isGuest = false;
+            sessionStorage.removeItem("munna_guest_mode");
+            updateAuthUI(this.currentUser);
+            this.hideAuthScreen();
+            this.closeModal();
+            if (typeof loadSessionsFromCloud === "function") {
+              try { loadSessionsFromCloud(); } catch(e) {}
+            }
+          } else {
+            const guestActive = sessionStorage.getItem("munna_guest_mode") === "true";
+            if (guestActive) {
+              this.enterAsGuest();
+            } else {
+              this.showAuthScreen();
+            }
+          }
+        } catch(e) {
+          console.warn("getSession error:", e);
+          this.showAuthScreen();
+        }
+      },
+
+      async signIn(email, password, triggerBtn) {
+        if (!email || !password) {
+          showMunnaToast("Email aur password dono zaroori hain!");
+          return;
+        }
+        if (!supabaseClient) {
+          showMunnaToast("Auth service offline hai. Kripya thodi der baad prayas karein.");
+          return;
+        }
+
+        let origHtml = "";
+        if (triggerBtn) {
+          triggerBtn.disabled = true;
+          origHtml = triggerBtn.getAttribute("data-orig-html") || triggerBtn.innerHTML;
+          triggerBtn.setAttribute("data-orig-html", origHtml);
+          triggerBtn.innerHTML = '<span>Signing in... â³</span>';
+        }
+
+        try {
+          const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+          if (error) {
+            const msg = (error.message || "").toLowerCase();
+            if (msg.includes("invalid login credentials")) {
+              showMunnaToast("Invalid email or password.");
+            } else if (msg.includes("email not confirmed")) {
+              showMunnaToast("Aapka email abhi confirm nahi hua hai. Kripya apna inbox check karein.");
+            } else {
+              showMunnaToast(error.message || "Dakhila safal nahi hua.");
+            }
+            // NO local fallback user! Remain on auth screen!
+            return;
+          }
+
+          if (data?.user) {
+            this.currentUser = data.user;
+            this.currentSession = data.session;
+            this.isGuest = false;
+            sessionStorage.removeItem("munna_guest_mode");
+            updateAuthUI(this.currentUser);
+            this.hideAuthScreen();
+            this.closeModal();
+            showMunnaToast("ðŸ‘‘ Dakhila safal! Darbar me swagat hai, " + (data.user.user_metadata?.full_name || email.split("@")[0]) + "!");
+            if (typeof loadSessionsFromCloud === "function") {
+              try { loadSessionsFromCloud(); } catch(e) {}
+            }
+          }
+        } catch(err) {
+          console.error("Sign in exception:", err);
+          showMunnaToast("Network error. Kripya dobara prayas karein.");
+        } finally {
+          if (triggerBtn) {
+            triggerBtn.disabled = false;
+            const orig = triggerBtn.getAttribute("data-orig-html");
+            if (orig) triggerBtn.innerHTML = orig;
+          }
+        }
+      },
+
+      async signUp(name, email, password, triggerBtn) {
+        if (!email || !password) {
+          showMunnaToast("Email aur password dono zaroori hain!");
+          return;
+        }
+        if (password.length < 6) {
+          showMunnaToast("Password kam se kam 6 aksharon ka hona chahiye!");
+          return;
+        }
+        if (!supabaseClient) {
+          showMunnaToast("Auth service offline hai. Kripya thodi der baad prayas karein.");
+          return;
+        }
+
+        let origHtml = "";
+        if (triggerBtn) {
+          triggerBtn.disabled = true;
+          origHtml = triggerBtn.getAttribute("data-orig-html") || triggerBtn.innerHTML;
+          triggerBtn.setAttribute("data-orig-html", origHtml);
+          triggerBtn.innerHTML = '<span>Creating account... â³</span>';
+        }
+
+        try {
+          const { data, error } = await supabaseClient.auth.signUp({
+            email,
+            password,
+            options: { data: { full_name: name || email.split("@")[0] } }
+          });
+
+          if (error) {
+            showMunnaToast(error.message || "Khata banane me samasya aayi.");
+            // NO local fallback user!
+            return;
+          }
+
+          if (data?.session) {
+            this.currentUser = data.user;
+            this.currentSession = data.session;
+            this.isGuest = false;
+            sessionStorage.removeItem("munna_guest_mode");
+            updateAuthUI(this.currentUser);
+            this.hideAuthScreen();
+            this.closeModal();
+            showMunnaToast("ðŸ‘‘ Naya khata ban gaya aur dakhila safal! Swagat hai, " + (name || email.split("@")[0]) + "!");
+          } else if (data?.user) {
+            showMunnaToast("Naya khata ban gaya! Kripya apna email check karke confirm karein.");
+            window.switchAuthScreenTab('signin');
+          }
+        } catch(err) {
+          console.error("Sign up exception:", err);
+          showMunnaToast("Network error. Kripya dobara prayas karein.");
+        } finally {
+          if (triggerBtn) {
+            triggerBtn.disabled = false;
+            const orig = triggerBtn.getAttribute("data-orig-html");
+            if (orig) triggerBtn.innerHTML = orig;
+          }
+        }
+      },
+
+      async signInWithGoogle(triggerBtn) {
+        if (!supabaseClient) {
+          showMunnaToast("Supabase service offline hai.");
+          return;
+        }
+
+        let origHtml = "";
+        if (triggerBtn) {
+          triggerBtn.disabled = true;
+          origHtml = triggerBtn.getAttribute("data-orig-html") || triggerBtn.innerHTML;
+          triggerBtn.setAttribute("data-orig-html", origHtml);
+          triggerBtn.innerHTML = '<span>Connecting to Google... â³</span>';
+        }
+
+        const isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1" || window.location.protocol === "file:";
+        const redirectUri = (!isLocal && window.location.origin && window.location.origin !== "null")
+          ? window.location.origin.replace(/\/$/, "")
+          : "https://munnaai.youmika.site";
+
+        try {
+          const { data, error } = await supabaseClient.auth.signInWithOAuth({
+            provider: "google",
+            options: {
+              redirectTo: redirectUri,
+              queryParams: { access_type: "offline", prompt: "select_account" }
+            }
+          });
+
+          if (error) throw error;
+          if (data && data.url) {
+            window.location.href = data.url;
+            return;
+          }
+        } catch (err) {
+          console.warn("Supabase Google OAuth issue:", err);
+          // CRITICAL: DO NOT call guest login! Remain on auth screen!
+          showMunnaToast("Google sign-in could not be completed: " + (err.message || "OAuth unavailable"));
+        } finally {
+          if (triggerBtn) {
+            triggerBtn.disabled = false;
+            const orig = triggerBtn.getAttribute("data-orig-html");
+            if (orig) triggerBtn.innerHTML = orig;
+          }
+        }
+      },
+
+      enterAsGuest() {
+        this.currentUser = null;
+        this.currentSession = null;
+        this.isGuest = true;
+        sessionStorage.setItem("munna_guest_mode", "true");
+        updateAuthUI(null);
+        this.hideAuthScreen();
+        this.closeModal();
+        showMunnaToast("ðŸ‘‘ Mehman Mode (Limited Trial): 5 messages/day. Cloud sync ke liye login karein!");
+      },
+
+      async signOut() {
+        if (supabaseClient && this.currentUser) {
+          try { await supabaseClient.auth.signOut(); } catch(e) {}
+        }
+        this.currentUser = null;
+        this.currentSession = null;
+        this.isGuest = false;
+        sessionStorage.removeItem("munna_guest_mode");
+        sessionStorage.removeItem("munna_guest_id");
+        updateAuthUI(null);
+        this.showAuthScreen();
+        showMunnaToast("Aap sign out ho gaye hain.");
+      },
+
+      showAuthScreen() {
+        if (typeof closeAccountMenu === "function") closeAccountMenu();
+        const scr = document.getElementById("authScreenOverlay");
+        if (scr) {
+          scr.style.display = "flex";
+          scr.classList.remove("hidden");
+        }
+      },
+
+      hideAuthScreen() {
+        const scr = document.getElementById("authScreenOverlay");
+        if (scr) {
+          scr.classList.add("hidden");
+          scr.style.display = "none";
+        }
+      },
+
+      openModal() {
+        if (typeof closeAccountMenu === "function") closeAccountMenu();
+        const m = document.getElementById("authModal");
+        if (m) m.classList.add("show");
+      },
+
+      closeModal() {
+        const m = document.getElementById("authModal");
+        if (m) m.classList.remove("show");
       }
     };
 
-    window.hideAuthScreen = function() {
-      sessionStorage.setItem("munna_guest_mode", "true");
-      localStorage.setItem("munna_guest_mode", "true");
-      const scr = document.getElementById("authScreenOverlay");
-      if (scr) {
-        scr.classList.add("hidden");
-        scr.style.display = "none";
-      }
+    // Global bindings for HTML onclick / onsubmit attributes
+    window.MunnaAuth = MunnaAuth;
+    window.showAuthScreen = () => MunnaAuth.showAuthScreen();
+    window.hideAuthScreen = () => MunnaAuth.hideAuthScreen();
+    window.openAuthModal = () => MunnaAuth.openModal();
+    window.closeAuthModal = () => MunnaAuth.closeModal();
+    window.handleGuestLogin = () => MunnaAuth.enterAsGuest();
+    window.handleGoogleSignIn = (btn) => MunnaAuth.signInWithGoogle(btn);
+
+    window.handleScreenSignInSubmit = async function(e) {
+      if (e && e.preventDefault) e.preventDefault();
+      const email = document.getElementById("screenSignInEmail")?.value.trim() || "";
+      const pass = document.getElementById("screenSignInPassword")?.value || "";
+      const btn = document.getElementById("btnScreenSignIn");
+      await MunnaAuth.signIn(email, pass, btn);
     };
 
-    window.openAuthModal = function() {
-      if (typeof closeAccountMenu === "function") closeAccountMenu();
-      const scr = document.getElementById("authScreenOverlay");
-      if (scr && !scr.classList.contains("hidden") && scr.style.display !== "none") return;
-      const m = document.getElementById("authModal");
-      if (m) m.classList.add("show");
+    window.handleScreenSignUpSubmit = async function(e) {
+      if (e && e.preventDefault) e.preventDefault();
+      const name = document.getElementById("screenSignUpName")?.value.trim() || "";
+      const email = document.getElementById("screenSignUpEmail")?.value.trim() || "";
+      const pass = document.getElementById("screenSignUpPassword")?.value || "";
+      const btn = document.getElementById("btnScreenSignUp");
+      await MunnaAuth.signUp(name, email, pass, btn);
     };
 
-    window.closeAuthModal = function() {
-      const m = document.getElementById("authModal");
-      if (m) m.classList.remove("show");
+    window.handleModalSignInSubmit = async function(e) {
+      if (e && e.preventDefault) e.preventDefault();
+      const email = document.getElementById("signInEmail")?.value.trim() || "";
+      const pass = document.getElementById("signInPassword")?.value || "";
+      const btn = document.getElementById("btnSubmitSignIn");
+      await MunnaAuth.signIn(email, pass, btn);
+    };
+
+    window.handleModalSignUpSubmit = async function(e) {
+      if (e && e.preventDefault) e.preventDefault();
+      const name = document.getElementById("signUpName")?.value.trim() || "";
+      const email = document.getElementById("signUpEmail")?.value.trim() || "";
+      const pass = document.getElementById("signUpPassword")?.value || "";
+      const btn = document.getElementById("btnSubmitSignUp");
+      await MunnaAuth.signUp(name, email, pass, btn);
     };
 
     window.switchAuthScreenTab = function(target) {
@@ -112,25 +474,13 @@
       if (target === "signup") {
         if (tabSignUp) tabSignUp.classList.add("active");
         if (tabSignIn) tabSignIn.classList.remove("active");
-        if (formSignUp) {
-          formSignUp.classList.add("active");
-          formSignUp.style.display = "flex";
-        }
-        if (formSignIn) {
-          formSignIn.classList.remove("active");
-          formSignIn.style.display = "none";
-        }
+        if (formSignUp) { formSignUp.classList.add("active"); formSignUp.style.display = "flex"; }
+        if (formSignIn) { formSignIn.classList.remove("active"); formSignIn.style.display = "none"; }
       } else {
         if (tabSignIn) tabSignIn.classList.add("active");
         if (tabSignUp) tabSignUp.classList.remove("active");
-        if (formSignIn) {
-          formSignIn.classList.add("active");
-          formSignIn.style.display = "flex";
-        }
-        if (formSignUp) {
-          formSignUp.classList.remove("active");
-          formSignUp.style.display = "none";
-        }
+        if (formSignIn) { formSignIn.classList.add("active"); formSignIn.style.display = "flex"; }
+        if (formSignUp) { formSignUp.classList.remove("active"); formSignUp.style.display = "none"; }
       }
     };
 
@@ -143,271 +493,14 @@
       if (target === "signup") {
         if (tabSignUp) tabSignUp.classList.add("active");
         if (tabSignIn) tabSignIn.classList.remove("active");
-        if (formSignUp) {
-          formSignUp.classList.add("active");
-          formSignUp.style.display = "flex";
-        }
-        if (formSignIn) {
-          formSignIn.classList.remove("active");
-          formSignIn.style.display = "none";
-        }
+        if (formSignUp) { formSignUp.classList.add("active"); formSignUp.style.display = "flex"; }
+        if (formSignIn) { formSignIn.classList.remove("active"); formSignIn.style.display = "none"; }
       } else {
         if (tabSignIn) tabSignIn.classList.add("active");
         if (tabSignUp) tabSignUp.classList.remove("active");
-        if (formSignIn) {
-          formSignIn.classList.add("active");
-          formSignIn.style.display = "flex";
-        }
-        if (formSignUp) {
-          formSignUp.classList.remove("active");
-          formSignUp.style.display = "none";
-        }
+        if (formSignIn) { formSignIn.classList.add("active"); formSignIn.style.display = "flex"; }
+        if (formSignUp) { formSignUp.classList.remove("active"); formSignUp.style.display = "none"; }
       }
-    };
-
-    window.loginUserSession = function(user, toastMsg) {
-      currentUser = user;
-      sessionStorage.setItem("munna_guest_mode", "true");
-      localStorage.setItem("munna_guest_mode", "true");
-      localStorage.setItem("munna_local_user", JSON.stringify(user));
-      const displayName = user.user_metadata?.full_name || (user.email ? user.email.split("@")[0] : "Munna User");
-      if (typeof userData !== "undefined" && userData) {
-        userData.name = displayName;
-        if (user.email) userData.email = user.email;
-      }
-      safeSet("munna_user_name", displayName);
-      if (user.email) safeSet("munna_user_email", user.email);
-
-      if (typeof updateAuthUI === "function") updateAuthUI(currentUser);
-      if (typeof syncUserUI === "function") syncUserUI();
-      window.hideAuthScreen();
-      window.closeAuthModal();
-
-      if (typeof loadSessionsFromCloud === "function" && supabaseClient && !user.is_guest) {
-        try { loadSessionsFromCloud(); } catch(e) {}
-      }
-
-      if (typeof showMunnaToast === "function") {
-        showMunnaToast(toastMsg || ("ðŸ‘‘ Darbar me swagat hai, " + displayName + "!"));
-      }
-    };
-
-    window.handleGuestLogin = function(customName) {
-      const guestName = customName || (typeof userData !== "undefined" && userData && userData.name && userData.name !== "Munna User" ? userData.name : "Mehman User");
-      const guestUser = {
-        id: "guest_" + Date.now(),
-        email: "mehman@mirzapur.ai",
-        is_guest: true,
-        user_metadata: { full_name: guestName }
-      };
-      window.loginUserSession(guestUser, "ðŸ‘‘ Mehman entry safal! Swagat hai, " + guestName + "!");
-    };
-
-    window.handleGoogleSignIn = async function(triggerBtn) {
-      let origHtml = "";
-      if (triggerBtn) {
-        triggerBtn.classList.add("loading");
-        origHtml = triggerBtn.getAttribute("data-orig-html") || triggerBtn.innerHTML;
-        triggerBtn.setAttribute("data-orig-html", origHtml);
-        triggerBtn.innerHTML = "<span>Connecting Google... â³</span>";
-      }
-
-      if (!supabaseClient) {
-        window.handleGuestLogin("Google User");
-        return;
-      }
-
-      const isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1" || window.location.protocol === "file:";
-      const redirectUri = (!isLocal && window.location.origin && window.location.origin !== "null")
-        ? window.location.origin.replace(/\/$/, "")
-        : "https://munnaai.youmika.site";
-
-      try {
-        const { data, error } = await supabaseClient.auth.signInWithOAuth({
-          provider: "google",
-          options: {
-            redirectTo: redirectUri,
-            queryParams: {
-              access_type: "offline",
-              prompt: "select_account"
-            }
-          }
-        });
-
-        if (error) throw error;
-
-        if (data && data.url) {
-          window.location.href = data.url;
-          return;
-        }
-      } catch (err) {
-        console.warn("Supabase Google OAuth issue, activating instant Google profile:", err);
-        window.handleGuestLogin("Google User");
-      } finally {
-        if (triggerBtn) {
-          triggerBtn.classList.remove("loading");
-          const orig = triggerBtn.getAttribute("data-orig-html");
-          if (orig) triggerBtn.innerHTML = orig;
-        }
-      }
-    };
-
-    window.handleScreenSignInSubmit = async function(e) {
-      if (e && e.preventDefault) e.preventDefault();
-      const emailInput = document.getElementById("screenSignInEmail");
-      const passInput = document.getElementById("screenSignInPassword");
-      const email = emailInput ? emailInput.value.trim() : "";
-      const password = passInput ? passInput.value : "";
-      const btn = document.getElementById("btnScreenSignIn");
-
-      if (!email) {
-        if (typeof showMunnaToast === "function") showMunnaToast("Pehle apna email toh darj karein!");
-        return;
-      }
-
-      if (btn) {
-        btn.classList.add("loading");
-        btn.setAttribute("data-orig-html", btn.innerHTML);
-        btn.innerHTML = '<span>Dakhil ho rahe hain... â³</span>';
-      }
-
-      try {
-        if (supabaseClient) {
-          const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-          if (!error && data?.user) {
-            window.loginUserSession(data.user, "ðŸ‘‘ Dakhila safal! Darbar me swagat hai, " + (data.user.user_metadata?.full_name || email.split("@")[0]) + "!");
-            return;
-          }
-
-          // If not registered yet or invalid credentials, auto-create account immediately (Zero-Lockout)
-          console.warn("Supabase signin notice, trying auto-signup:", error?.message);
-          try {
-            const signupRes = await supabaseClient.auth.signUp({
-              email,
-              password: password || "MunnaAI@2026",
-              options: { data: { full_name: email.split("@")[0] } }
-            });
-            if (!signupRes.error && signupRes.data?.user) {
-              const u = signupRes.data.user;
-              if (!u.user_metadata) u.user_metadata = {};
-              if (!u.user_metadata.full_name) u.user_metadata.full_name = email.split("@")[0];
-              window.loginUserSession(u, "ðŸ‘‘ Naya khata ban gaya aur dakhila safal! Swagat hai, " + u.user_metadata.full_name + "!");
-              return;
-            }
-          } catch (signUpErr) {
-            console.warn("Supabase auto-signup notice:", signUpErr);
-          }
-        }
-
-        // Guaranteed Zero-Lockout Fallback: local session
-        const localUser = {
-          id: "user_" + Date.now(),
-          email: email,
-          user_metadata: { full_name: email.split("@")[0] }
-        };
-        window.loginUserSession(localUser, "ðŸ‘‘ Darbar me swagat hai, " + localUser.user_metadata.full_name + "!");
-      } catch (err) {
-        console.warn("Sign in catch, fallback to local:", err);
-        const localUser = {
-          id: "user_" + Date.now(),
-          email: email,
-          user_metadata: { full_name: email.split("@")[0] }
-        };
-        window.loginUserSession(localUser, "ðŸ‘‘ Darbar me swagat hai, " + localUser.user_metadata.full_name + "!");
-      } finally {
-        if (btn) {
-          btn.classList.remove("loading");
-          const orig = btn.getAttribute("data-orig-html");
-          if (orig) btn.innerHTML = orig;
-        }
-      }
-    };
-
-    window.handleScreenSignUpSubmit = async function(e) {
-      if (e && e.preventDefault) e.preventDefault();
-      const nameInput = document.getElementById("screenSignUpName");
-      const emailInput = document.getElementById("screenSignUpEmail");
-      const passInput = document.getElementById("screenSignUpPassword");
-      const name = nameInput ? nameInput.value.trim() : "";
-      const email = emailInput ? emailInput.value.trim() : "";
-      const password = passInput ? passInput.value : "";
-      const btn = document.getElementById("btnScreenSignUp");
-
-      if (!email) {
-        if (typeof showMunnaToast === "function") showMunnaToast("Pehle apna email toh darj karein!");
-        return;
-      }
-
-      if (btn) {
-        btn.classList.add("loading");
-        btn.setAttribute("data-orig-html", btn.innerHTML);
-        btn.innerHTML = '<span>Khata ban raha hai... â³</span>';
-      }
-
-      try {
-        if (supabaseClient) {
-          const { data, error } = await supabaseClient.auth.signUp({
-            email,
-            password: password || "MunnaAI@2026",
-            options: { data: { full_name: name || email.split("@")[0] } }
-          });
-
-          if (!error && data?.user) {
-            const u = data.user;
-            if (!u.user_metadata) u.user_metadata = {};
-            if (!u.user_metadata.full_name) u.user_metadata.full_name = name || email.split("@")[0];
-            window.loginUserSession(u, "ðŸ‘‘ Naya khata ban gaya aur dakhila safal! Swagat hai, " + (name || email.split("@")[0]) + "!");
-            return;
-          }
-          console.warn("Supabase signup notice:", error?.message);
-        }
-
-        const localUser = {
-          id: "user_" + Date.now(),
-          email: email,
-          user_metadata: { full_name: name || email.split("@")[0] }
-        };
-        window.loginUserSession(localUser, "ðŸ‘‘ Naya khata ban gaya! Darbar me swagat hai, " + localUser.user_metadata.full_name + "!");
-      } catch (err) {
-        console.warn("Sign up catch, fallback to local:", err);
-        const localUser = {
-          id: "user_" + Date.now(),
-          email: email,
-          user_metadata: { full_name: name || email.split("@")[0] }
-        };
-        window.loginUserSession(localUser, "ðŸ‘‘ Naya khata ban gaya! Darbar me swagat hai, " + localUser.user_metadata.full_name + "!");
-      } finally {
-        if (btn) {
-          btn.classList.remove("loading");
-          const orig = btn.getAttribute("data-orig-html");
-          if (orig) btn.innerHTML = orig;
-        }
-      }
-    };
-
-    window.handleModalSignInSubmit = async function(e) {
-      if (e && e.preventDefault) e.preventDefault();
-      const email = document.getElementById("signInEmail")?.value.trim() || "";
-      const password = document.getElementById("signInPassword")?.value || "";
-      const btn = document.getElementById("btnSubmitSignIn");
-      if (!email) {
-        if (typeof showMunnaToast === "function") showMunnaToast("Pehle apna email toh darj karein!");
-        return;
-      }
-      await window.handleScreenSignInSubmit(e);
-    };
-
-    window.handleModalSignUpSubmit = async function(e) {
-      if (e && e.preventDefault) e.preventDefault();
-      const name = document.getElementById("signUpName")?.value.trim() || "";
-      const email = document.getElementById("signUpEmail")?.value.trim() || "";
-      const password = document.getElementById("signUpPassword")?.value || "";
-      const btn = document.getElementById("btnSubmitSignUp");
-      if (!email) {
-        if (typeof showMunnaToast === "function") showMunnaToast("Pehle apna email toh darj karein!");
-        return;
-      }
-      await window.handleScreenSignUpSubmit(e);
     };
 
     // --- 3. GEMINI AI CONFIGURATION (Secured via /api/chat) ---
@@ -495,7 +588,12 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       let modalBadgeText = "Free Plan";
       let planDescText = "Daily 10 free messages • Standard server";
 
-      if (currentTier === "king") {
+      if (window.MunnaAuth && window.MunnaAuth.isGuest) {
+        planBadgeText = "Mehman (Guest)";
+        headerBadgeText = "Mehman (Guest Mode)";
+        modalBadgeText = "Mehman Guest Mode";
+        planDescText = "Trial Mode (5 messages/day) • Sign in to unlock cloud sync & all models";
+      } else if (currentTier === "king") {
         planBadgeText = "👑 Akhand King";
         headerBadgeText = "👑 Akhand Darbar King";
         modalBadgeText = "👑 Akhand Darbar King Tier";
@@ -1118,6 +1216,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       `;
 
       try {
+        const authHeaders = await MunnaAuth.getAuthHeaders();
         const res = await fetch("/api/image", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -1214,41 +1313,16 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
     }
 
     function showAuthScreen() {
-      if (typeof window.showAuthScreen === "function") {
-        window.showAuthScreen();
-      } else {
-        closeAccountMenu();
-        const scr = document.getElementById("authScreenOverlay");
-        if (scr) scr.classList.remove("hidden");
-      }
+      MunnaAuth.showAuthScreen();
     }
     function hideAuthScreen() {
-      if (typeof window.hideAuthScreen === "function") {
-        window.hideAuthScreen();
-      } else {
-        sessionStorage.setItem("munna_guest_mode", "true");
-        localStorage.setItem("munna_guest_mode", "true");
-        const scr = document.getElementById("authScreenOverlay");
-        if (scr) scr.classList.add("hidden");
-      }
+      MunnaAuth.hideAuthScreen();
     }
-
     function openAuthModal() {
-      if (typeof window.openAuthModal === "function") {
-        window.openAuthModal();
-      } else {
-        closeAccountMenu();
-        const m = document.getElementById("authModal");
-        if (m) m.classList.add("show");
-      }
+      MunnaAuth.openModal();
     }
     function closeAuthModal() {
-      if (typeof window.closeAuthModal === "function") {
-        window.closeAuthModal();
-      } else {
-        const m = document.getElementById("authModal");
-        if (m) m.classList.remove("show");
-      }
+      MunnaAuth.closeModal();
     }
 
     function updateAuthUI(user) {
@@ -1263,13 +1337,11 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       const menuLogoutBtn = document.getElementById("menuLogoutBtn");
 
       if (user) {
-        const displayName = user.user_metadata?.full_name || (user.email ? user.email.split("@")[0] : "Munna User");
+        const displayName = user.user_metadata?.full_name || (user.email ? user.email.split("@")[0] : "Munna Member");
         const initial = displayName.charAt(0).toUpperCase();
 
         userData.name = displayName;
         userData.email = user.email || "";
-        safeSet("munna_user_name", displayName);
-        safeSet("munna_user_email", userData.email);
 
         if (sidebarName) sidebarName.textContent = displayName;
         if (accountName) accountName.textContent = displayName;
@@ -1278,7 +1350,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
 
         if (topbarAvatar) {
           topbarAvatar.title = displayName + " (Cloud Sync Active)";
-          topbarAvatar.innerHTML = `<span style="font-weight:800; font-size:13px; color:var(--gold-primary);">${initial}</span>`;
+          topbarAvatar.innerHTML = <span style="font-weight:800; font-size:13px; color:var(--gold-primary);"> + initial + </span>;
         }
 
         if (cloudPill) {
@@ -1290,18 +1362,43 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         if (menuLogoutBtn) menuLogoutBtn.style.display = "flex";
 
         if (typeof syncUserUI === "function") syncUserUI();
-      } else {
-        const defaultName = userData.name || "Munna User";
-        const initial = defaultName.charAt(0).toUpperCase();
+      } else if (MunnaAuth.isGuest) {
+        const guestName = "Mehman (Guest User)";
+        userData.name = guestName;
+        userData.email = "";
 
+        if (sidebarName) sidebarName.textContent = guestName;
+        if (accountName) accountName.textContent = guestName;
+        if (sidebarInitial) sidebarInitial.textContent = "G";
+        if (accountInitial) accountInitial.textContent = "G";
+
+        if (topbarAvatar) {
+          topbarAvatar.title = "Guest Mode (Trial) - Sign in for full features";
+          topbarAvatar.innerHTML = <span class="material-symbols-outlined" style="font-size:18px; color:var(--gold-primary);">person</span>;
+        }
+
+        if (cloudPill) {
+          cloudPill.classList.add("offline");
+          cloudPill.title = "Guest Mode (Local Trial - Sign In to sync conversations)";
+        }
+        if (cloudText) cloudText.textContent = "Guest Mode";
+        if (menuAuthLabel) menuAuthLabel.textContent = "Sign In / Register";
+        if (menuLogoutBtn) {
+          menuLogoutBtn.style.display = "flex";
+          menuLogoutBtn.querySelector(".account-menu-label")?.replaceChildren(document.createTextNode("Exit Guest Mode"));
+        }
+
+        if (typeof syncUserUI === "function") syncUserUI();
+      } else {
+        const defaultName = "Sign In Required";
         if (sidebarName) sidebarName.textContent = defaultName;
         if (accountName) accountName.textContent = defaultName;
-        if (sidebarInitial) sidebarInitial.textContent = initial;
-        if (accountInitial) accountInitial.textContent = initial;
+        if (sidebarInitial) sidebarInitial.textContent = "?";
+        if (accountInitial) accountInitial.textContent = "?";
 
         if (topbarAvatar) {
           topbarAvatar.title = "Sign In Required";
-          topbarAvatar.innerHTML = `<span class="material-symbols-outlined" style="font-size:18px;">person</span>`;
+          topbarAvatar.innerHTML = <span class="material-symbols-outlined" style="font-size:18px;">lock</span>;
         }
 
         if (cloudPill) {
@@ -1316,7 +1413,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       }
     }
 
-    function toggleAccountMenu(forceState) {
+        function toggleAccountMenu(forceState) {
       const popover = document.getElementById("accountMenuPopover");
       const btn = document.getElementById("userProfileBtn");
       if (!popover || !btn) return;
@@ -2100,6 +2197,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         // Limit to 500 characters for instant low-latency playback
         const snippet = clean.length > 500 ? clean.substring(0, 500) + "..." : clean;
 
+        const authHeaders = await MunnaAuth.getAuthHeaders();
         const response = await fetch("/api/tts", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -2700,9 +2798,13 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       let fullIncomingText = "";
 
       try {
+        const authHeaders = await MunnaAuth.getAuthHeaders();
         const res = await fetch("/api/chat", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            ...authHeaders
+          },
           body: JSON.stringify({
             model: activeModel,
             payload: payload,
@@ -2710,44 +2812,30 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           })
         });
 
+        if (res.status === 401) {
+          showMunnaToast("Aapka session expire ho gaya hai. Kripya login karein.");
+          MunnaAuth.showAuthScreen();
+          return;
+        }
+
+        if (res.status === 429) {
+          const quotaErr = await res.json().catch(() => ({}));
+          const quotaMsg = quotaErr.message || "Daily message limit khatam ho gaya hai!";
+          renderMessage(quotaMsg, "munna");
+          openVipModal();
+          return;
+        }
+
         if (res.ok) {
           const data = await res.json();
           fullIncomingText = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
         } else {
-          throw new Error(`Server status ${res.status}`);
+          const errData = await res.json().catch(() => ({}));
+          fullIncomingText = errData.message || "Abe thoda network mein lafda chal raha hai! Ek baar dobara enter dabao, abhi turant bata dete hain.";
         }
       } catch (err) {
-        console.warn("Primary API route unavailable, invoking direct Google Gemini fallback...", err);
-        // Direct browser fallback directly to Google Gemini API
-        try {
-          const directKey = atob('QVEuQWI4Uk42TERYWVBlOE9wRk5kRlpyUTItbTF6RHctMGV1RGhDU0JkcDN1Zkd1OGsxRmc=');
-          const directRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${directKey}`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload)
-          });
-          if (directRes.ok) {
-            const directData = await directRes.json();
-            fullIncomingText = directData.candidates?.[0]?.content?.parts?.[0]?.text || "";
-          } else {
-            const backupKey = atob('QVEuQWI4Uk42SKSySU9iTXUwUUlpdVFqaU5QSjdYcElJTkRhZ25WTmxiUFljdE5vc1BndVE=');
-            const directRes2 = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${backupKey}`, {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(payload)
-            });
-            if (directRes2.ok) {
-              const directData2 = await directRes2.json();
-              fullIncomingText = directData2.candidates?.[0]?.content?.parts?.[0]?.text || "";
-            }
-          }
-        } catch (directErr) {
-          console.error("Direct fallback error:", directErr);
-        }
-
-        if (!fullIncomingText.trim()) {
-          fullIncomingText = "Abe thoda network mein lafda chal raha hai! Ek baar dobara enter dabao, abhi turant bata dete hain.";
-        }
+        console.warn("API route error:", err);
+        fullIncomingText = "Abe thoda network mein lafda chal raha hai! Ek baar dobara enter dabao, abhi turant bata dete hain.";
       }
 
       if (!fullIncomingText.trim()) {
@@ -3722,358 +3810,19 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         };
       }
 
-      // Session helper to reliably activate user state across both local & cloud
-      function loginUserSession(user, toastMsg) {
-        currentUser = user;
-        sessionStorage.setItem("munna_guest_mode", "true");
-        localStorage.setItem("munna_guest_mode", "true");
-        localStorage.setItem("munna_local_user", JSON.stringify(user));
-        const displayName = user.user_metadata?.full_name || (user.email ? user.email.split("@")[0] : "Munna User");
-        safeSet("munna_user_name", displayName);
-        if (user.email) safeSet("munna_user_email", user.email);
-        updateAuthUI(currentUser);
-        hideAuthScreen();
-        closeAuthModal();
-        if (typeof loadSessionsFromCloud === "function" && supabaseClient && !user.is_guest) {
-          try { loadSessionsFromCloud(); } catch(e) {}
-        }
-        showMunnaToast(toastMsg || ("👑 Darbar me swagat hai, " + displayName + "!"));
-      }
-
-      // Logout Confirmation Actions
+      // Consolidated Auth Logout Action
       const confirmLogoutBtn = document.getElementById("confirmLogoutBtn");
       if (confirmLogoutBtn) {
         confirmLogoutBtn.onclick = async () => {
-          if (supabaseClient && currentUser && !currentUser.is_guest) {
-            try { await supabaseClient.auth.signOut(); } catch (e) {}
-          }
-          sessionStorage.removeItem("munna_guest_mode");
-          localStorage.removeItem("munna_guest_mode");
-          localStorage.removeItem("munna_local_user");
-          currentUser = null;
-          userData.name = "Munna User";
-          safeSet("munna_user_name", "Munna User");
-          safeSet("munna_user_email", "");
-          updateAuthUI(null);
+          closeLogoutModal();
+          await MunnaAuth.signOut();
           sessions = [];
           createNewSession();
-          closeLogoutModal();
-          showAuthScreen();
-          showMunnaToast("Logout safal raha! Phir milte hain bhai.");
         };
       }
 
-      // Supabase Auth Tabs & Actions
-      const tabSignInBtn = document.getElementById("tabSignInBtn");
-      const tabSignUpBtn = document.getElementById("tabSignUpBtn");
-      const signInForm = document.getElementById("signInForm");
-      const signUpForm = document.getElementById("signUpForm");
-
-      if (tabSignInBtn && tabSignUpBtn && signInForm && signUpForm) {
-        tabSignInBtn.onclick = () => {
-          tabSignInBtn.classList.add("active");
-          tabSignUpBtn.classList.remove("active");
-          signInForm.classList.add("active");
-          signUpForm.classList.remove("active");
-        };
-        tabSignUpBtn.onclick = () => {
-          tabSignUpBtn.classList.add("active");
-          tabSignInBtn.classList.remove("active");
-          signUpForm.classList.add("active");
-          signInForm.classList.remove("active");
-        };
-      }
-
-      // Helper function to handle sign in with cloud attempt + zero-lockout fallback
-      async function handleUnifiedSignIn(email, password, btnEl, isScreen) {
-        if (btnEl) {
-          btnEl.classList.add("loading");
-          btnEl.setAttribute("data-orig-html", btnEl.innerHTML);
-          btnEl.innerHTML = '<span>Dakhil ho rahe hain... ⏳</span>';
-        }
-
-        try {
-          if (supabaseClient) {
-            const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-            if (!error && data?.user) {
-              loginUserSession(data.user, "👑 Dakhila safal! Darbar me swagat hai, " + (data.user.user_metadata?.full_name || email.split("@")[0]) + "!");
-              return;
-            }
-            if (error) {
-              console.warn("Supabase auth notice, attempting auto-registration:", error.message);
-              try {
-                const signupRes = await supabaseClient.auth.signUp({
-                  email,
-                  password: password || "MunnaAI@2026",
-                  options: { data: { full_name: email.split("@")[0] } }
-                });
-                if (!signupRes.error && signupRes.data?.user) {
-                  const u = signupRes.data.user;
-                  if (!u.user_metadata) u.user_metadata = {};
-                  if (!u.user_metadata.full_name) u.user_metadata.full_name = email.split("@")[0];
-                  loginUserSession(u, "👑 Naya khata ban gaya aur dakhila safal! Swagat hai, " + u.user_metadata.full_name + "!");
-                  return;
-                }
-              } catch(e) {}
-            }
-          }
-
-          // Zero-Lockout Fallback: activate local session immediately
-          const localUser = {
-            id: "user_" + Date.now(),
-            email: email,
-            user_metadata: { full_name: email.split("@")[0] }
-          };
-          loginUserSession(localUser, "👑 Darbar me swagat hai, " + localUser.user_metadata.full_name + "!");
-        } catch (err) {
-          console.warn("Sign in catch, fallback to local:", err);
-          const localUser = {
-            id: "user_" + Date.now(),
-            email: email,
-            user_metadata: { full_name: email.split("@")[0] }
-          };
-          loginUserSession(localUser, "👑 Darbar me swagat hai!");
-        } finally {
-          if (btnEl) {
-            btnEl.classList.remove("loading");
-            const orig = btnEl.getAttribute("data-orig-html");
-            if (orig) btnEl.innerHTML = orig;
-          }
-        }
-      }
-
-      // Helper function to handle sign up with cloud attempt + zero-lockout fallback
-      async function handleUnifiedSignUp(name, email, password, btnEl, isScreen) {
-        if (btnEl) {
-          btnEl.classList.add("loading");
-          btnEl.setAttribute("data-orig-html", btnEl.innerHTML);
-          btnEl.innerHTML = '<span>Khata ban raha hai... ⏳</span>';
-        }
-
-        try {
-          if (supabaseClient) {
-            const { data, error } = await supabaseClient.auth.signUp({
-              email,
-              password,
-              options: { data: { full_name: name } }
-            });
-
-            if (!error && data?.user) {
-              const userObj = data.user;
-              if (!userObj.user_metadata) userObj.user_metadata = {};
-              if (!userObj.user_metadata.full_name) userObj.user_metadata.full_name = name;
-              loginUserSession(userObj, "👑 Naya khata ban gaya aur dakhila safal! Swagat hai, " + name + "!");
-              return;
-            }
-            if (error) {
-              console.warn("Supabase signup warning, creating local account:", error.message);
-            }
-          }
-
-          // Zero-Lockout Fallback: create local account immediately
-          const localUser = {
-            id: "user_" + Date.now(),
-            email: email,
-            user_metadata: { full_name: name || email.split("@")[0] }
-          };
-          loginUserSession(localUser, "👑 Naya khata ban gaya! Darbar me swagat hai, " + (name || email.split("@")[0]) + "!");
-        } catch (err) {
-          console.warn("Sign up catch, fallback to local:", err);
-          const localUser = {
-            id: "user_" + Date.now(),
-            email: email,
-            user_metadata: { full_name: name || email.split("@")[0] }
-          };
-          loginUserSession(localUser, "👑 Naya khata ban gaya! Darbar me swagat hai, " + (name || email.split("@")[0]) + "!");
-        } finally {
-          if (btnEl) {
-            btnEl.classList.remove("loading");
-            const orig = btnEl.getAttribute("data-orig-html");
-            if (orig) btnEl.innerHTML = orig;
-          }
-        }
-      }
-
-      if (signInForm) {
-        signInForm.onsubmit = async (e) => {
-          e.preventDefault();
-          const email = document.getElementById("signInEmail")?.value.trim() || "";
-          const password = document.getElementById("signInPassword")?.value || "";
-          const btn = document.getElementById("btnSubmitSignIn");
-          await handleUnifiedSignIn(email, password, btn, false);
-        };
-      }
-
-      if (signUpForm) {
-        signUpForm.onsubmit = async (e) => {
-          e.preventDefault();
-          const name = document.getElementById("signUpName")?.value.trim() || "";
-          const email = document.getElementById("signUpEmail")?.value.trim() || "";
-          const password = document.getElementById("signUpPassword")?.value || "";
-          const btn = document.getElementById("btnSubmitSignUp");
-          await handleUnifiedSignUp(name, email, password, btn, false);
-        };
-      }
-
-      // --- FULL-SCREEN AUTH SCREEN CONTROLS ---
-      const screenTabSignInBtn = document.getElementById("screenTabSignInBtn");
-      const screenTabSignUpBtn = document.getElementById("screenTabSignUpBtn");
-      const screenSignInForm = document.getElementById("screenSignInForm");
-      const screenSignUpForm = document.getElementById("screenSignUpForm");
-
-      if (screenTabSignInBtn && screenTabSignUpBtn && screenSignInForm && screenSignUpForm) {
-        screenTabSignInBtn.onclick = () => {
-          screenTabSignInBtn.classList.add("active");
-          screenTabSignUpBtn.classList.remove("active");
-          screenSignInForm.classList.add("active");
-          screenSignUpForm.classList.remove("active");
-        };
-        screenTabSignUpBtn.onclick = () => {
-          screenTabSignUpBtn.classList.add("active");
-          screenTabSignInBtn.classList.remove("active");
-          screenSignUpForm.classList.add("active");
-          screenSignInForm.classList.remove("active");
-        };
-      }
-
-      const btnScreenGoogle = document.getElementById("btnScreenGoogle");
-      if (btnScreenGoogle) {
-        btnScreenGoogle.onclick = () => window.handleGoogleSignIn(btnScreenGoogle);
-      }
-
-      const btnModalGoogle = document.getElementById("btnModalGoogle");
-      if (btnModalGoogle) {
-        btnModalGoogle.onclick = () => window.handleGoogleSignIn(btnModalGoogle);
-      }
-
-      if (screenSignInForm) {
-        screenSignInForm.onsubmit = async (e) => {
-          e.preventDefault();
-          const email = document.getElementById("screenSignInEmail")?.value.trim() || "";
-          const password = document.getElementById("screenSignInPassword")?.value || "";
-          const btn = document.getElementById("btnScreenSignIn");
-          await handleUnifiedSignIn(email, password, btn, true);
-        };
-      }
-
-      if (screenSignUpForm) {
-        screenSignUpForm.onsubmit = async (e) => {
-          e.preventDefault();
-          const name = document.getElementById("screenSignUpName")?.value.trim() || "";
-          const email = document.getElementById("screenSignUpEmail")?.value.trim() || "";
-          const password = document.getElementById("screenSignUpPassword")?.value || "";
-          const btn = document.getElementById("btnScreenSignUp");
-          await handleUnifiedSignUp(name, email, password, btn, true);
-        };
-      }
-
-      // Supabase Auth State Initialization
-      async function initSupabaseAuth() {
-        const isGuest = (sessionStorage.getItem("munna_guest_mode") === "true" || localStorage.getItem("munna_guest_mode") === "true");
-        const savedLocalUser = safeGet("munna_local_user");
-
-        if (savedLocalUser) {
-          try {
-            currentUser = JSON.parse(savedLocalUser);
-            updateAuthUI(currentUser);
-            hideAuthScreen();
-            closeAuthModal();
-          } catch(e) {}
-        } else if (isGuest) {
-          updateAuthUI(currentUser);
-          hideAuthScreen();
-          closeAuthModal();
-        }
-
-        if (!supabaseClient) {
-          if (!isGuest && !savedLocalUser) {
-            showAuthScreen();
-          }
-          return;
-        }
-
-        // 1. Listen to Auth State changes FIRST so no event is lost
-        supabaseClient.auth.onAuthStateChange(async (event, session) => {
-          if ((event === "SIGNED_IN" || event === "INITIAL_SESSION" || event === "TOKEN_REFRESHED") && session?.user) {
-            currentUser = session.user;
-            sessionStorage.setItem("munna_guest_mode", "true");
-            localStorage.setItem("munna_guest_mode", "true");
-            localStorage.setItem("munna_local_user", JSON.stringify(currentUser));
-            updateAuthUI(currentUser);
-            hideAuthScreen();
-            closeAuthModal();
-            if (event === "SIGNED_IN") {
-              showMunnaToast("👑 Welcome to Munna AI, " + (currentUser.user_metadata?.full_name || currentUser.email.split("@")[0]) + "!");
-            }
-            loadSessionsFromCloud();
-          } else if (event === "SIGNED_OUT") {
-            currentUser = null;
-            updateAuthUI(null);
-            sessionStorage.removeItem("munna_guest_mode");
-            localStorage.removeItem("munna_guest_mode");
-            localStorage.removeItem("munna_local_user");
-            showAuthScreen();
-            showMunnaToast("Aap sign out ho gaye hain.");
-          }
-        });
-
-        // 2. Handle Google OAuth redirect callback (PKCE code or error in query params)
-        const urlParams = new URLSearchParams(window.location.search);
-        const authCode = urlParams.get("code");
-        const authError = urlParams.get("error_description") || urlParams.get("error");
-
-        if (authError) {
-          console.error("Google Auth callback error:", authError);
-          showMunnaToast("⚠️ Google Login notice: " + authError);
-          window.history.replaceState({}, document.title, window.location.pathname);
-        } else if (authCode) {
-          try {
-            showMunnaToast("👑 Google authentication verify ho raha hai...");
-            const { data, error } = await supabaseClient.auth.exchangeCodeForSession(authCode);
-            if (!error && data?.session?.user) {
-              currentUser = data.session.user;
-              sessionStorage.setItem("munna_guest_mode", "true");
-              localStorage.setItem("munna_guest_mode", "true");
-              localStorage.setItem("munna_local_user", JSON.stringify(currentUser));
-              updateAuthUI(currentUser);
-              hideAuthScreen();
-              closeAuthModal();
-              showMunnaToast("👑 Welcome to Munna AI, " + (currentUser.user_metadata?.full_name || currentUser.email.split("@")[0]) + "!");
-              loadSessionsFromCloud();
-            }
-          } catch (codeErr) {
-            console.warn("exchangeCodeForSession warning:", codeErr);
-          } finally {
-            window.history.replaceState({}, document.title, window.location.pathname);
-          }
-        }
-
-        // 3. Check existing session in storage
-        try {
-          const { data: { session }, error } = await supabaseClient.auth.getSession();
-          if (session && session.user) {
-            currentUser = session.user;
-            sessionStorage.setItem("munna_guest_mode", "true");
-            localStorage.setItem("munna_guest_mode", "true");
-            localStorage.setItem("munna_local_user", JSON.stringify(currentUser));
-            updateAuthUI(currentUser);
-            loadSessionsFromCloud();
-            hideAuthScreen();
-            closeAuthModal();
-          } else if (!isGuest && !savedLocalUser) {
-            showAuthScreen();
-          }
-        } catch (e) {
-          console.warn("Auth getSession error:", e);
-          if (!isGuest && !savedLocalUser) {
-            showAuthScreen();
-          }
-        }
-      }
-
-
-
-      initSupabaseAuth();
+      // Authoritative Supabase Auth Initialization
+      await MunnaAuth.init();
 
       // Voice Test Button in Settings
       const testVoiceBtn = document.getElementById("testVoiceBtn");

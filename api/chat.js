@@ -1,107 +1,95 @@
+import { verifyAuthAndQuota, getCorsHeaders } from './_auth.js';
+
 export const config = {
   runtime: 'edge'
 };
 
-const CORS_HEADERS = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-  'Access-Control-Max-Age': '86400'
-};
-
-// Verified active Google Gemini API Keys
-const PRIMARY_KEY = atob('QVEuQWI4Uk42TERYWVBlOE9wRk5kRlpyUTItbTF6RHctMGV1RGhDU0JkcDN1Zkd1OGsxRmc=');
-const BACKUP_KEY = atob('QVEuQWI4Uk42SKSySU9iTXUwUUlpdVFqaU5QSjdYcElJTkRhZ25WTmxiUFljdE5vc1BndVE=');
-
 export default async function handler(req) {
+  const corsHeaders = getCorsHeaders(req);
+
   if (req.method === 'OPTIONS') {
-    return new Response(null, { status: 204, headers: CORS_HEADERS });
+    return new Response(null, { status: 204, headers: corsHeaders });
   }
 
   if (req.method !== 'POST') {
     return new Response(JSON.stringify({ error: 'Method not allowed' }), {
       status: 405,
-      headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' }
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+    });
+  }
+
+  // 1. Verify Authentication & Server-Side Quota
+  const auth = await verifyAuthAndQuota(req, 'chat');
+  if (!auth.ok) {
+    return auth.response;
+  }
+
+  // 2. Validate API Key from Server Environment Variables ONLY
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) {
+    return new Response(JSON.stringify({
+      error: 'SERVER_CONFIG_ERROR',
+      message: 'Gemini API key is not configured on the server. Please add GEMINI_API_KEY to Vercel Environment Variables.'
+    }), {
+      status: 500,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
     });
   }
 
   try {
-    const { model, payload, sse = false } = await req.json();
+    const { model = 'gemini-3.6-flash', payload, sse = false } = await req.json();
 
-    const envKey = (typeof process !== 'undefined' && process.env?.GEMINI_API_KEY) ? process.env.GEMINI_API_KEY : null;
-    const activeKey = envKey || PRIMARY_KEY;
-
-    async function callGemini(modelName, apiKey, timeoutMs = 8000) {
-      const controller = new AbortController();
-      const timer = setTimeout(() => controller.abort(), timeoutMs);
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:${sse ? 'streamGenerateContent' : 'generateContent'}${sse ? '?alt=sse&key=' : '?key='}${encodeURIComponent(apiKey)}`;
-
-      try {
-        const res = await fetch(url, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-          signal: controller.signal
-        });
-        clearTimeout(timer);
-        return res;
-      } catch (err) {
-        clearTimeout(timer);
-        throw err;
-      }
+    if (!payload) {
+      return new Response(JSON.stringify({ error: 'Payload is required' }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      });
     }
 
-    // 1. Primary Attempt (gemini-3.6-flash, 8s timeout)
-    let lastErrorDetail = null;
-    try {
-      const res1 = await callGemini('gemini-3.6-flash', activeKey, 8000);
-      if (res1.ok) {
-        return new Response(res1.body, {
-          status: 200,
-          headers: {
-            ...CORS_HEADERS,
-            'Content-Type': sse ? 'text/event-stream' : 'application/json',
-            'Cache-Control': 'no-cache, no-transform',
-            'X-Model-Used': 'gemini-3.6-flash'
-          }
-        });
-      }
-      lastErrorDetail = await res1.text().catch(() => 'Primary non-ok response');
-    } catch (err1) {
-      lastErrorDetail = err1.message;
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 12000);
+    const targetModel = 'gemini-3.6-flash';
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${targetModel}:${sse ? 'streamGenerateContent' : 'generateContent'}${sse ? '?alt=sse&key=' : '?key='}${encodeURIComponent(apiKey)}`;
+
+    const geminiRes = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+      signal: controller.signal
+    });
+    clearTimeout(timer);
+
+    if (geminiRes.ok) {
+      return new Response(geminiRes.body, {
+        status: 200,
+        headers: {
+          ...corsHeaders,
+          'Content-Type': sse ? 'text/event-stream' : 'application/json',
+          'Cache-Control': 'no-cache, no-transform',
+          'X-Model-Used': targetModel,
+          'X-User-Plan': auth.plan,
+          'X-Quota-Remaining': String(auth.quota.remaining)
+        }
+      });
     }
 
-    // 2. Backup Attempt (gemini-3.6-flash with backup key, 5s timeout)
-    try {
-      const res2 = await callGemini('gemini-3.6-flash', BACKUP_KEY, 5000);
-      if (res2.ok) {
-        return new Response(res2.body, {
-          status: 200,
-          headers: {
-            ...CORS_HEADERS,
-            'Content-Type': sse ? 'text/event-stream' : 'application/json',
-            'Cache-Control': 'no-cache, no-transform',
-            'X-Model-Used': 'gemini-3.6-flash-backup'
-          }
-        });
-      }
-      lastErrorDetail = await res2.text().catch(() => 'Backup non-ok response');
-    } catch (err2) {
-      lastErrorDetail = err2.message;
-    }
-
+    const errorDetail = await geminiRes.text().catch(() => 'Gemini API call failed');
     return new Response(JSON.stringify({
-      error: 'Gemini server busy. Switching to direct fallback.',
-      detail: lastErrorDetail
+      error: 'AI_GATEWAY_ERROR',
+      message: 'Munna AI Darbar server busy. Please try again in a moment.',
+      status: geminiRes.status
     }), {
-      status: 503,
-      headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' }
+      status: 502,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
     });
 
   } catch (err) {
-    return new Response(JSON.stringify({ error: err.message || 'Internal server error' }), {
+    return new Response(JSON.stringify({
+      error: 'INTERNAL_ERROR',
+      message: err.message || 'Internal server error'
+    }), {
       status: 500,
-      headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' }
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
     });
   }
 }

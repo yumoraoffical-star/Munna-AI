@@ -1,12 +1,7 @@
+import { verifyAuthAndQuota, getCorsHeaders } from './_auth.js';
+
 export const config = {
   runtime: 'edge'
-};
-
-const CORS_HEADERS = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-  'Access-Control-Max-Age': '86400'
 };
 
 const STYLE_ENHANCERS = {
@@ -18,18 +13,23 @@ const STYLE_ENHANCERS = {
 };
 
 export default async function handler(req) {
+  const corsHeaders = getCorsHeaders(req);
+
   if (req.method === 'OPTIONS') {
-    return new Response(null, {
-      status: 204,
-      headers: CORS_HEADERS
-    });
+    return new Response(null, { status: 204, headers: corsHeaders });
   }
 
   if (req.method !== 'POST') {
     return new Response(JSON.stringify({ error: 'Method not allowed' }), {
       status: 405,
-      headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' }
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
     });
+  }
+
+  // 1. Verify Authentication & Server-Side Quota
+  const auth = await verifyAuthAndQuota(req, 'image');
+  if (!auth.ok) {
+    return auth.response;
   }
 
   try {
@@ -38,7 +38,7 @@ export default async function handler(req) {
     if (!prompt || typeof prompt !== 'string' || !prompt.trim()) {
       return new Response(JSON.stringify({ error: 'Prompt is required' }), {
         status: 400,
-        headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' }
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       });
     }
 
@@ -46,18 +46,17 @@ export default async function handler(req) {
     const enhancer = STYLE_ENHANCERS[style] || STYLE_ENHANCERS.mirzapur;
     const enhancedPrompt = `${cleanPrompt}${enhancer}`;
 
-    const pixazoKey = (typeof process !== 'undefined' && process.env?.PIXAZO_API_KEY)
-      ? process.env.PIXAZO_API_KEY
-      : '048590d608ad468cb5c4904dfb73082d';
+    // Read key exclusively from server environment variable
+    const pixazoKey = process.env.PIXAZO_API_KEY || null;
 
     let imageUrl = null;
     let engineUsed = 'flux-hd';
 
-    // 1. Try Pixazo API Gateway
+    // 1. Try Pixazo API Gateway if configured
     if (pixazoKey) {
       try {
         const pixazoController = new AbortController();
-        const pixazoTimeout = setTimeout(() => pixazoController.abort(), 7000);
+        const pixazoTimeout = setTimeout(() => pixazoController.abort(), 8000);
 
         const pixazoRes = await fetch('https://gateway.pixazo.ai/gpt-image-2/v1/text-to-image', {
           method: 'POST',
@@ -79,11 +78,11 @@ export default async function handler(req) {
           if (imageUrl) engineUsed = 'pixazo';
         }
       } catch (pixErr) {
-        console.warn('Pixazo Gateway fallback triggered:', pixErr?.message || pixErr);
+        console.warn('Pixazo Gateway fallback to FLUX.1:', pixErr?.message || pixErr);
       }
     }
 
-    // 2. High-Definition FLUX.1 Engine Fallback (100% Guaranteed & Free)
+    // 2. High-Definition FLUX.1 Engine Fallback (Clean, Keyless, 100% Reliable)
     if (!imageUrl) {
       const seed = Math.floor(Math.random() * 9999999);
       const encodedPrompt = encodeURIComponent(enhancedPrompt);
@@ -97,17 +96,19 @@ export default async function handler(req) {
       originalPrompt: cleanPrompt,
       enhancedPrompt: enhancedPrompt,
       style: style,
-      engine: engineUsed
+      engine: engineUsed,
+      plan: auth.plan,
+      quotaRemaining: auth.quota.remaining
     }), {
       status: 200,
-      headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' }
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
     });
 
   } catch (err) {
     console.error('Image Generation Error:', err);
     return new Response(JSON.stringify({ error: err.message || 'Internal Server Error' }), {
       status: 500,
-      headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' }
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
     });
   }
 }
