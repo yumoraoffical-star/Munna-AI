@@ -5,6 +5,11 @@
     { "source": "/", "destination": "/api/fixed-index" },
     { "source": "/index.html", "destination": "/api/fixed-index" }
   ],
+  "functions": {
+    "api/fixed-index.js": {
+      "includeFiles": ["index.html"]
+    }
+  },
   "headers": [
     {
       "source": "/api/(.*)",
