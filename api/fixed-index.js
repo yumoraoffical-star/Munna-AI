@@ -18,6 +18,10 @@ module.exports = function fixedIndex(req, res) {
       [
         'topbarAvatar.innerHTML = <span class="material-symbols-outlined" style="font-size:18px;">lock</span>;',
         'topbarAvatar.innerHTML = `<span class="material-symbols-outlined" style="font-size:18px;">lock</span>`;'
+      ],
+      [
+        'detectSessionInUrl: true,',
+        'detectSessionInUrl: false,'
       ]
     ];
 
