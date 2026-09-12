@@ -68,6 +68,21 @@ replaceBetween(
         showMunnaToast('👑 Mehman Mode active hai.');
       },
 
+      async signOut() {
+        try {
+          if (supabaseClient) await supabaseClient.auth.signOut();
+        } catch (e) { console.warn('Supabase sign out:', e); }
+        this.currentUser = null;
+        this.currentSession = null;
+        this.isGuest = false;
+        sessionStorage.removeItem('munna_guest_mode');
+        sessionStorage.removeItem('munna_guest_id');
+        localStorage.removeItem('munna_guest_mode');
+        localStorage.removeItem('munna_local_user');
+        updateAuthUI(null);
+        this.showAuthScreen();
+      },
+
       showAuthScreen() {
         const el = document.getElementById('authScreenOverlay');
         if (el) { el.classList.remove('hidden'); el.style.display = 'flex'; }
@@ -192,6 +207,7 @@ replaceBetween(
       }
     };
 
+    window.MunnaAuth = MunnaAuth;
     window.showAuthScreen = () => MunnaAuth.showAuthScreen();
     window.hideAuthScreen = () => MunnaAuth.hideAuthScreen();
     window.openAuthModal = () => MunnaAuth.openModal();
