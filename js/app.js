@@ -1,5 +1,5 @@
 const SUPABASE_URL='https://ipnbebwrefxlvoqneaga.supabase.co';
-const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlwbmJlYndyZWZ4bHZvcW5lYWdhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg4ODE5NX0.1xMB8DbV__RK8D4PkuYANPARr2IkR_Rsyakh3sU8AAU';
+const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlwbmJlYndyZWZ4bHZvcW5lYWdhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg4ODE5NSwiZXhwIjoyMTA0NDU3MTk1fQ.1xMB8DbV__RK8D4PkuYANPARr2IkR_Rsyakh3sU8AAU';
 const supabase=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY,{auth:{flowType:'pkce',detectSessionInUrl:true,persistSession:true,autoRefreshToken:true}});
 const $=s=>document.querySelector(s);let session=null,guest=false,mode='chat',currentChatId=null,chatMessages=[],playingAudio=null;let historyRequest=0,saveTimer=null,saveInFlight=false,saveQueued=false;
 const MAX_INPUT=4000,MAX_MESSAGES=100,MAX_HISTORY=12;
