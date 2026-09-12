@@ -2,28 +2,36 @@ const fs = require('fs');
 const path = require('path');
 
 const indexPath = path.join(process.cwd(), 'index.html');
-const source = fs.readFileSync(indexPath, 'utf8');
+let source = fs.readFileSync(indexPath, 'utf8');
 
-const callbackPattern = /\n\s*\/\/ 2\. Handle Google OAuth redirect callback \(PKCE code in URL\)[\s\S]*?\n\s*\/\/ 3\. Check existing real session\n/;
+const startMarker = '        // 2. Handle Google OAuth redirect callback (PKCE code in URL)';
+const endMarker = '        // 3. Check existing real session';
+const start = source.indexOf(startMarker);
+const end = source.indexOf(endMarker, start);
 
-const callbackReplacement = `\n\n        // 2. OAuth callback handling is automatic. The Supabase client is configured\n        // with detectSessionInUrl=true + flowType=pkce, so it consumes the callback\n        // code during initialization and emits INITIAL_SESSION / SIGNED_IN above.\n        // Do not call exchangeCodeForSession() a second time: PKCE auth codes are single-use.\n\n        // 3. Check existing real session\n`;
-
-if (!callbackPattern.test(source)) {
+if (start === -1 || end === -1) {
   throw new Error('Expected PKCE callback block was not found in index.html');
 }
 
-let output = source.replace(callbackPattern, callbackReplacement);
+const replacement = `        // 2. OAuth callback handling is automatic. The Supabase client is configured
+        // with detectSessionInUrl=true + flowType=pkce, so it consumes the callback
+        // code during initialization and emits INITIAL_SESSION / SIGNED_IN above.
+        // Do not call exchangeCodeForSession() a second time: PKCE auth codes are single-use.
 
-const redirectPattern = /const redirectUri = \(!isLocal && window\.location\.origin && window\.location\.origin !== "null"\)\s*\n\s*\? window\.location\.origin\.replace\(\/\\\\\/$\/\, ""\)\s*\n\s*: "https:\/\/munnaai\.youmika\.site";/;
+`;
+source = source.slice(0, start) + replacement + source.slice(end);
 
-if (!redirectPattern.test(output)) {
+const oldRedirect = `const redirectUri = (!isLocal && window.location.origin && window.location.origin !== "null")
+          ? window.location.origin.replace(/\/$/, "")
+          : "https://munnaai.youmika.site";`;
+const newRedirect = `const redirectUri = (!isLocal && window.location.origin && window.location.origin !== "null")
+          ? window.location.origin + window.location.pathname
+          : "https://munnaai.youmika.site/";`;
+
+if (!source.includes(oldRedirect)) {
   throw new Error('Expected OAuth redirect URI block was not found in index.html');
 }
+source = source.replace(oldRedirect, newRedirect);
 
-output = output.replace(
-  redirectPattern,
-  `const redirectUri = (!isLocal && window.location.origin && window.location.origin !== "null")\n          ? window.location.origin + window.location.pathname\n          : "https://munnaai.youmika.site/";`
-);
-
-fs.writeFileSync(indexPath, output, 'utf8');
+fs.writeFileSync(indexPath, source, 'utf8');
 console.log('Auth build patch applied successfully.');
