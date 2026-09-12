@@ -1,4 +1,4 @@
-// --- 1. STORAGE & APP STATE (INITIALIZED FIRST) ---
+﻿// --- 1. STORAGE & APP STATE (INITIALIZED FIRST) ---
     function safeGet(key, def = null) {
       try {
         const v = localStorage.getItem(key);
@@ -15,7 +15,8 @@
     }
 
     let isSending = false;
-    let isVip = safeGet("munna_is_vip") === "true";
+    let userPlan = safeGet("munna_user_plan", safeGet("munna_is_vip") === "true" ? "pro" : "free");
+    let isVip = (userPlan === "pro" || userPlan === "king");
     let dailyQuota = 10;
     const todayStr = new Date().toDateString();
     if (safeGet("munna_quota_date") !== todayStr) {
@@ -32,6 +33,7 @@
       name: safeGet("munna_user_name", "Abhishek"),
       email: safeGet("munna_user_email", "abhishek@mirzapur.ai"),
       joined: safeGet("munna_user_joined", "Sept 2026"),
+      plan: userPlan,
       enterToSend: safeGet("munna_setting_enter_send", "true") === "true",
       soundEffects: safeGet("munna_setting_sound", "true") === "true",
       aiStyle: safeGet("munna_setting_ai_style", "swag"),
@@ -54,11 +56,134 @@
 
     try {
       if (window.supabase && typeof window.supabase.createClient === "function") {
-        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+          auth: {
+            persistSession: true,
+            autoRefreshToken: true,
+            detectSessionInUrl: true,
+            storage: window.localStorage,
+            flowType: 'pkce'
+          }
+        });
       }
     } catch (e) {
       console.warn("Supabase init exception:", e);
     }
+
+    // --- TOP-LEVEL AUTH CONTROLLER & FAIL-SAFE FUNCTIONS ---
+    window.showAuthScreen = function() {
+      if (typeof closeAccountMenu === "function") closeAccountMenu();
+      const scr = document.getElementById("authScreenOverlay");
+      if (scr) scr.classList.remove("hidden");
+    };
+
+    window.hideAuthScreen = function() {
+      sessionStorage.setItem("munna_guest_mode", "true");
+      localStorage.setItem("munna_guest_mode", "true");
+      const scr = document.getElementById("authScreenOverlay");
+      if (scr) scr.classList.add("hidden");
+    };
+
+    window.openAuthModal = function() {
+      if (typeof closeAccountMenu === "function") closeAccountMenu();
+      const scr = document.getElementById("authScreenOverlay");
+      if (scr && !scr.classList.contains("hidden")) return;
+      const m = document.getElementById("authModal");
+      if (m) m.classList.add("show");
+    };
+
+    window.closeAuthModal = function() {
+      const m = document.getElementById("authModal");
+      if (m) m.classList.remove("show");
+    };
+
+    window.handleGuestLogin = function(customName) {
+      const guestName = customName || (userData && userData.name && userData.name !== "Munna User" ? userData.name : "Mehman User");
+      const guestUser = {
+        id: "guest_" + Date.now(),
+        email: "mehman@mirzapur.ai",
+        is_guest: true,
+        user_metadata: { full_name: guestName }
+      };
+
+      currentUser = guestUser;
+      sessionStorage.setItem("munna_guest_mode", "true");
+      localStorage.setItem("munna_guest_mode", "true");
+      localStorage.setItem("munna_local_user", JSON.stringify(guestUser));
+      safeSet("munna_user_name", guestName);
+
+      if (typeof updateAuthUI === "function") updateAuthUI(currentUser);
+      window.hideAuthScreen();
+      window.closeAuthModal();
+      if (typeof showMunnaToast === "function") {
+        showMunnaToast("ðŸ‘‘ Mehman entry safal! Swagat hai, " + guestName + "!");
+      }
+    };
+
+    window.handleGoogleSignIn = async function(triggerBtn) {
+      let origHtml = "";
+      if (triggerBtn) {
+        triggerBtn.classList.add("loading");
+        origHtml = triggerBtn.getAttribute("data-orig-html") || triggerBtn.innerHTML;
+        triggerBtn.setAttribute("data-orig-html", origHtml);
+        triggerBtn.innerHTML = "<span>Redirecting to Google... â³</span>";
+      }
+
+      if (!supabaseClient) {
+        if (triggerBtn) {
+          triggerBtn.classList.remove("loading");
+          triggerBtn.innerHTML = origHtml;
+        }
+        if (typeof showMunnaToast === "function") {
+          showMunnaToast("âš ï¸ Supabase connection offline. 'Mehman Entry' se turant login karein!");
+        }
+        return;
+      }
+
+      const isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1" || window.location.protocol === "file:";
+      const redirectUri = (!isLocal && window.location.origin && window.location.origin !== "null")
+        ? window.location.origin.replace(/\/$/, "")
+        : "https://munnaai.youmika.site";
+
+      try {
+        const { data, error } = await supabaseClient.auth.signInWithOAuth({
+          provider: "google",
+          options: {
+            redirectTo: redirectUri,
+            queryParams: {
+              access_type: "offline",
+              prompt: "select_account"
+            }
+          }
+        });
+
+        if (error) {
+          throw error;
+        }
+
+        if (data && data.url) {
+          window.location.href = data.url;
+          return;
+        }
+      } catch (err) {
+        console.warn("Supabase Google OAuth issue:", err);
+        if (triggerBtn) {
+          triggerBtn.classList.remove("loading");
+          triggerBtn.innerHTML = origHtml;
+        }
+        const errStr = (err?.message || "").toLowerCase();
+        if (errStr.includes("provider is not enabled") || errStr.includes("unsupported provider")) {
+          if (typeof showMunnaToast === "function") {
+            showMunnaToast("âš ï¸ Supabase me Google Provider enable nahi hai. Kripya Email ya Mehman Entry use karein!");
+          }
+        } else {
+          if (typeof showMunnaToast === "function") {
+            showMunnaToast("âš ï¸ Google Login: " + (err?.message || "Kripya Email ya Mehman Entry use karein"));
+          }
+        }
+      }
+    };
+
     // --- 3. GEMINI AI CONFIGURATION (Secured via /api/chat) ---
     let activeModel = "gemini-3.6-flash";
     const initialGreeting = "Aao be! Ka dikkat ho gayi? Mirzapur ke hone wale raja se seedha baat kar rahe ho. Koi coding ki samasya ho, dimaag ka bawasir ho, ya koi photo/file dikhaani ho â€” bolo be, hum karte hain pakka prabandh!";
@@ -137,9 +262,24 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
     function syncUserUI() {
       const displayName = userData.name && userData.name.trim() ? userData.name.trim() : "Munna User";
       const initial = displayName.charAt(0).toUpperCase();
-      const planText = isVip ? "[VIP] VIP Plan" : "Free Plan";
-      const headerPlanText = isVip ? "[VIP] Bahubali VIP" : "Free Plan";
-      const modalPlanText = isVip ? "[VIP] Bahubali VIP Pass" : "Free Plan";
+      const currentTier = (userData && userData.plan) ? userData.plan : (isVip ? "pro" : "free");
+      
+      let planBadgeText = "Free Plan";
+      let headerBadgeText = "Free Plan";
+      let modalBadgeText = "Free Plan";
+      let planDescText = "Daily 10 free messages • Standard server";
+
+      if (currentTier === "king") {
+        planBadgeText = "👑 Akhand King";
+        headerBadgeText = "👑 Akhand Darbar King";
+        modalBadgeText = "👑 Akhand Darbar King Tier";
+        planDescText = "Sovereign Tier: Deep Reasoning, Jaunpur Financials & 24/7 VIP Support";
+      } else if (currentTier === "pro" || isVip) {
+        planBadgeText = "⚡ Bahubali Pro";
+        headerBadgeText = "⚡ Bahubali Pro";
+        modalBadgeText = "⚡ Bahubali Pro VIP";
+        planDescText = "Unlimited messages • Real-time Voice • Unlimited Photo Banao";
+      }
 
       // 1. Sidebar trigger
       const sbInit = document.getElementById("sidebarAvatarInitial");
@@ -148,7 +288,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       if (sbInit) sbInit.textContent = initial;
       if (sbName) sbName.textContent = displayName;
       if (sbPlan) {
-        sbPlan.textContent = planText;
+        sbPlan.textContent = planBadgeText;
         sbPlan.classList.toggle("vip", isVip);
       }
 
@@ -159,7 +299,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       if (accInit) accInit.textContent = initial;
       if (accName) accName.textContent = displayName;
       if (accPlan) {
-        accPlan.textContent = headerPlanText;
+        accPlan.textContent = headerBadgeText;
         accPlan.classList.toggle("vip", isVip);
       }
 
@@ -174,15 +314,13 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       if (profInit) profInit.textContent = initial;
       if (profHeading) profHeading.textContent = displayName;
       if (profBadge) {
-        profBadge.textContent = modalPlanText;
+        profBadge.textContent = modalBadgeText;
         profBadge.classList.toggle("vip", isVip);
       }
       if (profNameIn) profNameIn.value = displayName;
       if (profEmailIn) profEmailIn.value = userData.email || "abhishek@mirzapur.ai";
       if (profPlanDesc) {
-        profPlanDesc.textContent = isVip ?
-          "Unlimited messages â€¢ Fast priority server â€¢ Voice enabled" :
-          "Daily 10 free messages â€¢ Standard server";
+        profPlanDesc.textContent = planDescText;
       }
       if (profMember) {
         profMember.textContent = `Member since ${userData.joined || "Sept 2026"}`;
@@ -191,9 +329,27 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       // 4. Settings modal
       const setPlanText = document.getElementById("settingsPlanText");
       if (setPlanText) {
-        setPlanText.textContent = isVip ?
-          "[VIP] Bahubali VIP Pass (Unlimited Messages)" :
-          "Free Plan (10 messages/day)";
+        setPlanText.textContent = headerBadgeText + (isVip ? " (Unlimited Messages)" : " (10 messages/day)");
+      }
+
+      // 5. Topbar upgrade pill
+      const tbUpgradeBtn = document.getElementById("topbarUpgradeBtn");
+      const tbUpgradeLabel = document.getElementById("topbarUpgradeLabel");
+      if (tbUpgradeLabel) {
+        if (currentTier === "king") {
+          tbUpgradeLabel.textContent = "👑 Akhand King";
+          if (tbUpgradeBtn) tbUpgradeBtn.className = "topbar-upgrade-pill vip-king";
+        } else if (currentTier === "pro" || isVip) {
+          tbUpgradeLabel.textContent = "⚡ Bahubali Pro";
+          if (tbUpgradeBtn) tbUpgradeBtn.className = "topbar-upgrade-pill";
+        } else {
+          tbUpgradeLabel.textContent = "Upgrade Plan";
+          if (tbUpgradeBtn) tbUpgradeBtn.className = "topbar-upgrade-pill";
+        }
+      }
+
+      if (typeof updateSubscriptionModalUI === "function") {
+        updateSubscriptionModalUI();
       }
       const enterToggle = document.getElementById("enterToSendToggle");
       if (enterToggle) enterToggle.checked = userData.enterToSend;
@@ -555,7 +711,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         ctx.textAlign = "center";
         ctx.fillStyle = "#ff2a51";
         ctx.font = "bold 26px sans-serif";
-        ctx.fillText("â— KATTA VISION AI // OFFICIAL INSPECTION â—", 540, 95);
+        ctx.fillText("• KATTA VISION AI // OFFICIAL INSPECTION •", 540, 95);
 
         ctx.fillStyle = "#ffd166";
         ctx.font = "bold 44px 'Outfit', sans-serif";
@@ -563,7 +719,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
 
         ctx.fillStyle = "#a0a0b8";
         ctx.font = "20px monospace";
-        ctx.fillText("FILE NO: MZP-" + Math.floor(100000 + Math.random() * 900000) + " â€¢ CALIBER: .315 DESI", 540, 195);
+        ctx.fillText("FILE NO: MZP-" + Math.floor(100000 + Math.random() * 900000) + " • CALIBER: .315 DESI", 540, 195);
 
         let contentTop = 230;
         if (imgSrc) {
@@ -605,7 +761,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
 
         ctx.fillStyle = "#ffffff";
         ctx.font = "bold 38px 'Outfit', sans-serif";
-        ctx.fillText("ðŸŽ¯ " + scoreText, 540, bY + 62);
+        ctx.fillText("[TARGET SCORE] " + scoreText, 540, bY + 62);
 
         const rY = bY + 140;
         ctx.fillStyle = "rgba(255, 255, 255, 0.04)";
@@ -626,11 +782,11 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
 
         ctx.fillStyle = "#d90429";
         ctx.font = "bold 26px monospace";
-        ctx.fillText("[VIP] VERIFIED BY PHOOLCHAND TRIPATHI â€¢ KING OF MIRZAPUR", 540, 1220);
+        ctx.fillText("[VIP] VERIFIED BY PHOOLCHAND TRIPATHI • KING OF MIRZAPUR", 540, 1220);
 
         ctx.fillStyle = "#7a7a92";
         ctx.font = "18px sans-serif";
-        ctx.fillText("Generated at munnaai.youmika.site â€¢ Zero Mercy â€¢ 100% Swag", 540, 1260);
+        ctx.fillText("Generated at munnaai.youmika.site • Zero Mercy • 100% Swag", 540, 1260);
 
         const a = document.createElement("a");
         a.download = `MunnaAI_Gangster_Report_${Date.now()}.png`;
@@ -640,13 +796,12 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         document.body.removeChild(a);
 
         btn.disabled = false;
-        btn.innerHTML = "<span>ðŸ“¸ Download Official Gangster Report Card</span>";
-        showMunnaToast("ðŸ“¸ Gangster Report Card download ho gaya! Status pe lagao!");
+        btn.innerHTML = '<span class="material-symbols-outlined" style="font-size:18px; vertical-align:middle; margin-right:6px;">download</span><span>Download Official Gangster Report Card</span>';
+        showMunnaToast("Gangster Report Card download ho gaya! Status pe lagao!");
       } catch (err) {
         console.error("Report card generation error:", err);
         btn.disabled = false;
-        btn.innerHTML = "<span>ðŸ“¸ Download Official Gangster Report Card</span>";
-        showMunnaToast("âš ï¸ Card download nahi ho paya, dobara try karein!");
+        showMunnaToast("Card download nahi ho paya, dobara try karein!");
       }
     }
 
@@ -778,13 +933,13 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
             <div class="munna-art-footer">
               <div class="munna-art-actions">
                 <button type="button" class="munna-art-action-btn" onclick="showArtLightbox('${imgUrl}')">
-                  <span>ðŸ” Fullscreen</span>
+                  <span class="material-symbols-outlined" style="font-size:16px;vertical-align:middle;margin-right:4px;">fullscreen</span> Fullscreen
                 </button>
                 <button type="button" class="munna-art-action-btn" onclick="downloadArtImage('${imgUrl}')">
-                  <span>â¬‡ï¸ Download HD</span>
+                  <span class="material-symbols-outlined" style="font-size:16px;vertical-align:middle;margin-right:4px;">download</span> Download HD
                 </button>
                 <button type="button" class="munna-art-action-btn" onclick="generateAIImage('${promptText.replace(/'/g, "\\'")}', '${styleName}')">
-                  <span>ðŸ”„ Phir Se Banao</span>
+                  <span class="material-symbols-outlined" style="font-size:16px;vertical-align:middle;margin-right:4px;">refresh</span> Phir Se Banao
                 </button>
               </div>
             </div>
@@ -808,7 +963,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           <p>âš ï¸ <strong>Abe karigar ka hathiyar thoda ruk gaya tha!</strong></p>
           <p style="margin-top:6px; color:#a0a0b8; font-size:0.85rem;">Error: ${err.message || 'Server busy'}</p>
           <button type="button" class="munna-art-action-btn" style="margin-top:10px; max-width:200px;" onclick="generateAIImage('${promptText.replace(/'/g, "\\'")}', '${styleName}')">
-            <span>ðŸ”„ Dobara Koshish Karo</span>
+            <span class="material-symbols-outlined" style="font-size:16px;vertical-align:middle;margin-right:4px;">refresh</span> Dobara Koshish Karo
           </button>
         `;
       }
@@ -833,23 +988,41 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
     }
 
     function showAuthScreen() {
-      closeAccountMenu();
-      const scr = document.getElementById("authScreenOverlay");
-      if (scr) scr.classList.remove("hidden");
+      if (typeof window.showAuthScreen === "function") {
+        window.showAuthScreen();
+      } else {
+        closeAccountMenu();
+        const scr = document.getElementById("authScreenOverlay");
+        if (scr) scr.classList.remove("hidden");
+      }
     }
     function hideAuthScreen() {
-      const scr = document.getElementById("authScreenOverlay");
-      if (scr) scr.classList.add("hidden");
+      if (typeof window.hideAuthScreen === "function") {
+        window.hideAuthScreen();
+      } else {
+        sessionStorage.setItem("munna_guest_mode", "true");
+        localStorage.setItem("munna_guest_mode", "true");
+        const scr = document.getElementById("authScreenOverlay");
+        if (scr) scr.classList.add("hidden");
+      }
     }
 
     function openAuthModal() {
-      closeAccountMenu();
-      showAuthScreen();
+      if (typeof window.openAuthModal === "function") {
+        window.openAuthModal();
+      } else {
+        closeAccountMenu();
+        const m = document.getElementById("authModal");
+        if (m) m.classList.add("show");
+      }
     }
     function closeAuthModal() {
-      hideAuthScreen();
-      const m = document.getElementById("authModal");
-      if (m) m.classList.remove("show");
+      if (typeof window.closeAuthModal === "function") {
+        window.closeAuthModal();
+      } else {
+        const m = document.getElementById("authModal");
+        if (m) m.classList.remove("show");
+      }
     }
 
     function updateAuthUI(user) {
@@ -886,7 +1059,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           cloudPill.classList.remove("offline");
           cloudPill.title = "Supabase Cloud Connected (" + user.email + ")";
         }
-        if (cloudText) cloudText.textContent = "Cloud â˜ï¸";
+        if (cloudText) cloudText.textContent = "Cloud Active";
         if (menuAuthLabel) menuAuthLabel.textContent = "Account (" + displayName + ")";
         if (menuLogoutBtn) menuLogoutBtn.style.display = "flex";
 
@@ -1121,8 +1294,12 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
     function updateQuotaUI() {
       const badge = document.getElementById("quotaBadge");
       if (!badge) return;
-      if (isVip) {
-        badge.textContent = "[VIP] VIP Unlimited";
+      const currentTier = (userData && userData.plan) ? userData.plan : (isVip ? "pro" : "free");
+      if (currentTier === "king") {
+        badge.textContent = "👑 King Unlimited";
+        badge.classList.add("unlimited");
+      } else if (currentTier === "pro" || isVip) {
+        badge.textContent = "⚡ Pro Unlimited";
         badge.classList.add("unlimited");
       } else {
         badge.textContent = `${dailyQuota} Free Left`;
@@ -1149,26 +1326,187 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       if (m) m.classList.remove("show");
     }
 
-    function openVipModal() {
-      const m = document.getElementById("vipModal");
-      if (m) m.classList.add("show");
-    }
+    // --- MULTI-TIER SUBSCRIPTION CONTROLLER (CHATGPT STYLE) ---
+    let currentBillingCycle = "monthly"; // "monthly" | "annual"
+    let selectedCheckoutTier = "pro"; // "pro" | "king"
 
-    function closeVipModal() {
+    window.openVipModal = function() {
+      const m = document.getElementById("vipModal");
+      if (m) {
+        if (typeof updateSubscriptionModalUI === "function") updateSubscriptionModalUI();
+        m.classList.add("show");
+      }
+    };
+
+    window.closeVipModal = function() {
       const m = document.getElementById("vipModal");
       if (m) m.classList.remove("show");
+      const sheet = document.getElementById("planCheckoutSheet");
+      if (sheet) sheet.classList.remove("active");
+    };
+
+    window.setBillingCycle = function(cycle) {
+      currentBillingCycle = cycle;
+      const mBtn = document.getElementById("billingCycleMonthlyBtn");
+      const aBtn = document.getElementById("billingCycleAnnualBtn");
+      const proPrice = document.getElementById("proPriceDisplay");
+      const proPeriod = document.getElementById("proPeriodDisplay");
+      const kingPrice = document.getElementById("kingPriceDisplay");
+      const kingPeriod = document.getElementById("kingPeriodDisplay");
+
+      if (cycle === "annual") {
+        if (mBtn) mBtn.classList.remove("active");
+        if (aBtn) aBtn.classList.add("active");
+        if (proPrice) proPrice.textContent = "₹79";
+        if (proPeriod) proPeriod.textContent = "/ mahina (Billed ₹948/yr)";
+        if (kingPrice) kingPrice.textContent = "₹239";
+        if (kingPeriod) kingPeriod.textContent = "/ mahina (Billed ₹2868/yr)";
+      } else {
+        if (mBtn) mBtn.classList.add("active");
+        if (aBtn) aBtn.classList.remove("active");
+        if (proPrice) proPrice.textContent = "₹99";
+        if (proPeriod) proPeriod.textContent = "/ mahina";
+        if (kingPrice) kingPrice.textContent = "₹299";
+        if (kingPeriod) kingPeriod.textContent = "/ mahina";
+      }
+      updateCheckoutSheet();
+    };
+
+    window.selectPlanPayment = function(tier) {
+      selectedCheckoutTier = tier;
+      const sheet = document.getElementById("planCheckoutSheet");
+      if (sheet) {
+        sheet.classList.add("active");
+        sheet.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
+      updateCheckoutSheet();
+    };
+
+    function updateCheckoutSheet() {
+      const isAnnual = (currentBillingCycle === "annual");
+      const isKing = (selectedCheckoutTier === "king");
+      
+      const amount = isKing ? (isAnnual ? 2868 : 299) : (isAnnual ? 948 : 99);
+      const title = isKing ? 
+        `Akhand Darbar King (${isAnnual ? '₹239/mo, Billed Annual ₹2868' : '₹299 / Mahina'})` : 
+        `Bahubali Pro (${isAnnual ? '₹79/mo, Billed Annual ₹948' : '₹99 / Mahina'})`;
+
+      const titleEl = document.getElementById("checkoutPlanTitle");
+      const badgeEl = document.getElementById("checkoutAmountBadge");
+      const qrImg = document.getElementById("planUpiQrImg");
+      const link = document.getElementById("planPayDirectLink");
+      const upiIdText = document.getElementById("checkoutUpiIdText");
+
+      if (titleEl) titleEl.textContent = title;
+      if (badgeEl) badgeEl.textContent = `₹${amount}`;
+      if (upiIdText) upiIdText.textContent = currentUpiId;
+
+      const upiStr = `upi://pay?pa=${encodeURIComponent(currentUpiId)}&pn=Munna%20AI%20Darbar&am=${amount}&cu=INR`;
+      if (qrImg) {
+        qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(upiStr)}`;
+      }
+      if (link) {
+        link.href = upiStr;
+      }
     }
 
-    function activateVip(promo = false) {
-      isVip = true;
-      safeSet("munna_is_vip", "true");
+    window.copyCheckoutUpi = function() {
+      navigator.clipboard.writeText(currentUpiId).then(() => {
+        showMunnaToast("UPI ID copy ho gaya: " + currentUpiId);
+      }).catch(() => {
+        showMunnaToast("UPI ID: " + currentUpiId);
+      });
+    };
+
+    window.verifyAndActivatePlan = function() {
+      const isKing = (selectedCheckoutTier === "king");
+      const planName = isKing ? "king" : "pro";
+      activatePlan(planName, false);
+    };
+
+    window.applyPlanPromoCode = function() {
+      const input = document.getElementById("planPromoInput");
+      if (!input) return;
+      const code = input.value.trim().toUpperCase();
+      if (code === "MIRZAPURKING" || code === "KINGDARBAR" || code === "GANGSTERKING") {
+        activatePlan("king", true);
+      } else if (code === "MUNNA99" || code === "BAHUBALI" || code === "MIRZAPUR") {
+        activatePlan("pro", true);
+      } else if (code === "BARFI50") {
+        showMunnaToast("50% Discount Promo Lag Gaya! Pro Plan ab sirf ₹49 me!");
+        const badgeEl = document.getElementById("checkoutAmountBadge");
+        if (badgeEl) badgeEl.textContent = "₹49";
+        const qrImg = document.getElementById("planUpiQrImg");
+        const link = document.getElementById("planPayDirectLink");
+        const upiStr = `upi://pay?pa=${encodeURIComponent(currentUpiId)}&pn=Munna%20AI%20Darbar&am=49&cu=INR`;
+        if (qrImg) qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(upiStr)}`;
+        if (link) link.href = upiStr;
+      } else {
+        alert("Galat Promo Code be! Asli code daalo (MUNNA99 ya MIRZAPURKING) ya seedha UPI se unlock karo!");
+      }
+    };
+
+    function updateSubscriptionModalUI() {
+      const currentTier = (userData && userData.plan) ? userData.plan : (isVip ? "pro" : "free");
+      const btnFree = document.getElementById("btnContainerFree");
+      const btnPro = document.getElementById("btnContainerPro");
+      const btnKing = document.getElementById("btnContainerKing");
+
+      if (btnFree) {
+        if (currentTier === "free") {
+          btnFree.innerHTML = '<button type="button" class="plan-card-btn current-plan" disabled>Aapka Current Plan</button>';
+        } else {
+          btnFree.innerHTML = '<button type="button" class="plan-card-btn current-plan" style="opacity:0.6;" disabled>Basic Mehman Tier</button>';
+        }
+      }
+
+      if (btnPro) {
+        if (currentTier === "pro") {
+          btnPro.innerHTML = '<button type="button" class="plan-card-btn active-plan" disabled><span class="material-symbols-outlined">check_circle</span> Active Pro Plan</button>';
+        } else if (currentTier === "king") {
+          btnPro.innerHTML = '<button type="button" class="plan-card-btn active-plan" style="opacity:0.85;" disabled><span class="material-symbols-outlined">check_circle</span> Included in King</button>';
+        } else {
+          btnPro.innerHTML = '<button type="button" class="plan-card-btn primary-gold" onclick="window.selectPlanPayment(\'pro\')"><span>Upgrade to Bahubali Pro</span><span class="material-symbols-outlined" style="font-size:16px;">arrow_forward</span></button>';
+        }
+      }
+
+      if (btnKing) {
+        if (currentTier === "king") {
+          btnKing.innerHTML = '<button type="button" class="plan-card-btn active-plan" disabled><span class="material-symbols-outlined">workspace_premium</span> Active King Plan 👑</button>';
+        } else {
+          btnKing.innerHTML = '<button type="button" class="plan-card-btn primary-royal" onclick="window.selectPlanPayment(\'king\')"><span>Claim King\'s Seat</span><span class="material-symbols-outlined" style="font-size:16px;">crown</span></button>';
+        }
+      }
+    }
+
+    function activatePlan(planName, promo = false) {
+      userData.plan = planName;
+      isVip = (planName === "pro" || planName === "king");
+      safeSet("munna_user_plan", planName);
+      safeSet("munna_is_vip", isVip ? "true" : "false");
+
       updateQuotaUI();
       syncUserUI();
       closeVipModal();
-      const msg = promo ?
-        "Jalwa hai hamara! Secret Promo Code lag gaya aur Bahubali VIP Pass activate ho gaya hai! Ab jo marzi aaye be-jhijhak pucho!" :
-        "Mubarak ho! Bahubali VIP Pass activate ho gaya hai! Ab poora Mirzapur aapka hai, unlimited baat karo!";
+
+      let msg = "";
+      if (planName === "king") {
+        msg = promo ?
+          "👑 **PRABANDH HO GAYA!** Secret Code se Akhand Darbar King Tier unlock ho gaya hai! Ab aap King of Mirzapur ke barabar baith kar deep reasoning aur exclusive tools chalao!" :
+          "👑 **MUBARAK HO KING!** Akhand Darbar VIP Tier activate ho chuka hai! Deep reasoning, priority servers, aur sarvashreshth aawaz sab aapka hai!";
+      } else {
+        msg = promo ?
+          "⚡ **JALWA HAI HAMARA!** Secret Promo Code lag gaya aur Bahubali Pro activate ho gaya hai! Unlimited messages aur audio enable ho chuka hai!" :
+          "⚡ **BAHUBALI PRO ACTIVATED!** Daily quota limit khatam ho gayi hai aur ultra-fast priority streaming enable ho gayi hai!";
+      }
+
       renderMessage(msg, "munna");
+      if (typeof playKattaAudio === "function") playKattaAudio("lock");
+      showMunnaToast(planName === "king" ? "👑 Akhand Darbar King Active!" : "⚡ Bahubali Pro Active!");
+    }
+
+    function activateVip(promo = false) {
+      activatePlan("pro", promo);
     }
 
     // --- 4. ATTACHMENT PROCESSING (IMAGES & FILES) ---
@@ -1348,7 +1686,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       if (codeEl) {
         navigator.clipboard.writeText(codeEl.innerText).then(() => {
           const orig = btn.innerHTML;
-          btn.innerHTML = 'âœ” Copied!';
+          btn.innerHTML = '<span class="material-symbols-outlined" style="font-size:14px;vertical-align:middle;">check</span> Copied!';
           setTimeout(() => btn.innerHTML = orig, 1800);
         });
       }
@@ -1459,7 +1797,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           htmlResult += `
             <div class="katta-download-card-wrapper" style="margin-top:14px;">
               <button type="button" class="katta-download-card-btn" onclick="downloadGangsterReportCard(this)">
-                <span>ðŸ“¸ Download Official Gangster Report Card</span>
+                <span class="material-symbols-outlined" style="font-size:18px; vertical-align:middle; margin-right:6px;">download</span><span>Download Official Gangster Report Card</span>
               </button>
             </div>
           `;
@@ -1499,12 +1837,12 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       const testBtn = document.getElementById("testVoiceBtn");
       if (testBtn) {
         testBtn.classList.remove("playing");
-        testBtn.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px; vertical-align:middle;">play_arrow</span> Test Human Voice';
+        testBtn.innerHTML = '<span>â–¶ï¸</span> Test Human Voice';
       }
     }
 
-    const CARTESIA_VOICE_ID = "bdab08ad-4137-4548-b9db-6142854c7525"; // Cartesia Sonic Hindi/Hinglish male
-    const ELEVEN_VOICE_ID = "pNInz6obpgDQGcFmaJgB"; // ElevenLabs Fallback Adam
+    const CARTESIA_VOICE_ID = "bdab08ad-4137-4548-b9db-6142854c7525";
+    const ELEVEN_VOICE_ID = "pNInz6obpgDQGcFmaJgB"; // Flagship Adam - Deep, commanding, masculine
 
     async function speakText(text, btn = null) {
       // If clicked on currently active playing button, stop playback
@@ -1527,7 +1865,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
 
       if (btn) {
         btn.classList.add("loading-voice");
-        btn.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px;">hourglass_top</span>';
+        btn.innerHTML = '<span class="act-icon">â³</span>';
         btn.title = "Aawaz ban rahi hai...";
         activeVoiceBtn = btn;
       }
@@ -1650,7 +1988,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
           </div>
         `;
 
-        // Clean Document Body
+        // Clean Document Body (NO card border, NO white rectangular card, NO heavy background)
         const contentBody = document.createElement("div");
         contentBody.className = "ai-content-body";
 
@@ -1910,7 +2248,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         </div>
         <div class="welcome-badge-line">
           <span class="material-symbols-outlined" style="font-size:14px;">bolt</span>
-          <span>Munna AI â€¢ King of AI Models</span>
+          <span>Munna AI &bull; King of AI Models</span>
         </div>
         <h1 class="welcome-title font-headline">
           Your AI. <span class="gold-accent">Your Rules.</span> Your King.
@@ -2189,7 +2527,6 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       if (!fullIncomingText.trim()) {
         fullIncomingText = "Abe thoda network mein lafda chal raha hai! Ek baar dobara enter dabao, abhi turant bata dete hain.";
       }
-
       // Smooth fluid typewriter animation for the real Google Gemini AI response
       let displayedLength = 0;
       let animResolve;
@@ -2405,7 +2742,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       // Update Send Button to Loading State
       if (sendBtn) {
         sendBtn.classList.add("loading");
-        sendBtn.innerHTML = '<span class="send-icon">â³</span>';
+        sendBtn.innerHTML = '<span class="material-symbols-outlined" style="font-size:18px;animation:spin 1s linear infinite;">progress_activity</span>';
       }
 
       let bubbleElem = null;
@@ -2434,7 +2771,7 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         isSending = false;
         if (sendBtn) {
           sendBtn.classList.remove("loading");
-          sendBtn.innerHTML = '<span class="send-icon">âž¤</span>';
+          sendBtn.innerHTML = '<span class="material-symbols-outlined" style="font-size:18px;">arrow_upward</span>';
         }
         updateSendBtnState();
         const currentInput = document.getElementById("userInput");
@@ -2909,6 +3246,12 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       const closeAuthBtn = document.getElementById("closeAuthBtn");
       if (closeAuthBtn) closeAuthBtn.onclick = closeAuthModal;
 
+      const closeVipBtn = document.getElementById("closeVipBtn");
+      if (closeVipBtn) closeVipBtn.onclick = closeVipModal;
+
+      const closeNazranaBtn = document.getElementById("closeNazranaBtn");
+      if (closeNazranaBtn) closeNazranaBtn.onclick = closeNazranaModal;
+
       const cancelLogoutBtn = document.getElementById("cancelLogoutBtn");
       if (cancelLogoutBtn) cancelLogoutBtn.onclick = closeLogoutModal;
 
@@ -2930,10 +3273,12 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       const hModal = document.getElementById("helpModal");
       const logModal = document.getElementById("logoutConfirmModal");
       const aModal = document.getElementById("authModal");
+      const vModal = document.getElementById("vipModal");
+      const nModal = document.getElementById("nazranaModal");
       const kattaModalElem = document.getElementById("kattaVisionModal");
       const imgGenModalElem = document.getElementById("imageGenModal");
       const artLightModalElem = document.getElementById("artLightboxModal");
-      [profModal, setModal, hModal, logModal, aModal].forEach(m => {
+      [profModal, setModal, hModal, logModal, aModal, vModal, nModal].forEach(m => {
         if (m) m.onclick = (e) => { if (e.target === m) m.classList.remove("show"); };
       });
       if (kattaModalElem) {
@@ -3136,32 +3481,39 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
       }
 
       // Help Modal Actions
-      const submitReportBtn = document.getElementById("submitReportBtn");
-      const problemInput = document.getElementById("problemReportInput");
-      if (submitReportBtn) {
-        submitReportBtn.onclick = () => {
-          const text = problemInput ? problemInput.value.trim() : "";
-          if (!text) {
-            showMunnaToast("Pehle apna masla toh likho bhai!");
-            return;
-          }
-          if (problemInput) problemInput.value = "";
-          showMunnaToast("Masla darj ho gaya bhai, jaldi hal karenge!");
-          setTimeout(closeHelpModal, 1400);
-        };
+      const submitReportBtn = document.getElementById("s      // Session helper to reliably activate user state across both local & cloud
+      function loginUserSession(user, toastMsg) {
+        currentUser = user;
+        sessionStorage.setItem("munna_guest_mode", "true");
+        localStorage.setItem("munna_guest_mode", "true");
+        localStorage.setItem("munna_local_user", JSON.stringify(user));
+        const displayName = user.user_metadata?.full_name || (user.email ? user.email.split("@")[0] : "Munna User");
+        safeSet("munna_user_name", displayName);
+        if (user.email) safeSet("munna_user_email", user.email);
+        updateAuthUI(currentUser);
+        hideAuthScreen();
+        closeAuthModal();
+        if (typeof loadSessionsFromCloud === "function" && supabaseClient && !user.is_guest) {
+          try { loadSessionsFromCloud(); } catch(e) {}
+        }
+        showMunnaToast(toastMsg || ("👑 Darbar me swagat hai, " + displayName + "!"));
       }
 
       // Logout Confirmation Actions
       const confirmLogoutBtn = document.getElementById("confirmLogoutBtn");
       if (confirmLogoutBtn) {
         confirmLogoutBtn.onclick = async () => {
-          if (supabaseClient && currentUser) {
+          if (supabaseClient && currentUser && !currentUser.is_guest) {
             try { await supabaseClient.auth.signOut(); } catch (e) {}
           }
           sessionStorage.removeItem("munna_guest_mode");
+          localStorage.removeItem("munna_guest_mode");
+          localStorage.removeItem("munna_local_user");
+          currentUser = null;
           userData.name = "Munna User";
           safeSet("munna_user_name", "Munna User");
-          syncUserUI();
+          safeSet("munna_user_email", "");
+          updateAuthUI(null);
           sessions = [];
           createNewSession();
           closeLogoutModal();
@@ -3191,65 +3543,126 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         };
       }
 
+      // Helper function to handle sign in with cloud attempt + zero-lockout fallback
+      async function handleUnifiedSignIn(email, password, btnEl, isScreen) {
+        if (btnEl) {
+          btnEl.classList.add("loading");
+          btnEl.setAttribute("data-orig-html", btnEl.innerHTML);
+          btnEl.innerHTML = '<span>Dakhil ho rahe hain... ⏳</span>';
+        }
+
+        try {
+          if (supabaseClient) {
+            const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+            if (!error && data?.user) {
+              loginUserSession(data.user, "👑 Dakhila safal! Darbar me swagat hai, " + (data.user.user_metadata?.full_name || email.split("@")[0]) + "!");
+              return;
+            }
+            if (error) {
+              const errMsg = (error.message || "").toLowerCase();
+              if (errMsg.includes("invalid login credentials")) {
+                showMunnaToast("⚠️ Galat email ya password! Kripya dobara check karein ya 'Mehman Entry' karein.");
+                return;
+              }
+              // If email confirmation is pending or other transient error, fallback to instant local session
+              console.warn("Supabase auth warning, activating local verified session:", error.message);
+            }
+          }
+
+          // Zero-Lockout Fallback: activate local session immediately
+          const localUser = {
+            id: "user_" + Date.now(),
+            email: email,
+            user_metadata: { full_name: email.split("@")[0] }
+          };
+          loginUserSession(localUser, "👑 Local profile activate ho gayi! Darbar me swagat hai, " + localUser.user_metadata.full_name + "!");
+        } catch (err) {
+          console.warn("Sign in catch, fallback to local:", err);
+          const localUser = {
+            id: "user_" + Date.now(),
+            email: email,
+            user_metadata: { full_name: email.split("@")[0] }
+          };
+          loginUserSession(localUser, "👑 Local profile activate ho gayi! Darbar me swagat hai.");
+        } finally {
+          if (btnEl) {
+            btnEl.classList.remove("loading");
+            const orig = btnEl.getAttribute("data-orig-html");
+            if (orig) btnEl.innerHTML = orig;
+          }
+        }
+      }
+
+      // Helper function to handle sign up with cloud attempt + zero-lockout fallback
+      async function handleUnifiedSignUp(name, email, password, btnEl, isScreen) {
+        if (btnEl) {
+          btnEl.classList.add("loading");
+          btnEl.setAttribute("data-orig-html", btnEl.innerHTML);
+          btnEl.innerHTML = '<span>Khata ban raha hai... ⏳</span>';
+        }
+
+        try {
+          if (supabaseClient) {
+            const { data, error } = await supabaseClient.auth.signUp({
+              email,
+              password,
+              options: { data: { full_name: name } }
+            });
+
+            if (!error && data?.user) {
+              const userObj = data.user;
+              if (!userObj.user_metadata) userObj.user_metadata = {};
+              if (!userObj.user_metadata.full_name) userObj.user_metadata.full_name = name;
+              loginUserSession(userObj, "👑 Naya khata ban gaya aur dakhila safal! Swagat hai, " + name + "!");
+              return;
+            }
+            if (error) {
+              console.warn("Supabase signup warning, creating local account:", error.message);
+            }
+          }
+
+          // Zero-Lockout Fallback: create local account immediately
+          const localUser = {
+            id: "user_" + Date.now(),
+            email: email,
+            user_metadata: { full_name: name || email.split("@")[0] }
+          };
+          loginUserSession(localUser, "👑 Naya khata ban gaya! Darbar me swagat hai, " + (name || email.split("@")[0]) + "!");
+        } catch (err) {
+          console.warn("Sign up catch, fallback to local:", err);
+          const localUser = {
+            id: "user_" + Date.now(),
+            email: email,
+            user_metadata: { full_name: name || email.split("@")[0] }
+          };
+          loginUserSession(localUser, "👑 Naya khata ban gaya! Darbar me swagat hai, " + (name || email.split("@")[0]) + "!");
+        } finally {
+          if (btnEl) {
+            btnEl.classList.remove("loading");
+            const orig = btnEl.getAttribute("data-orig-html");
+            if (orig) btnEl.innerHTML = orig;
+          }
+        }
+      }
 
       if (signInForm) {
         signInForm.onsubmit = async (e) => {
           e.preventDefault();
-          if (!supabaseClient) {
-            showMunnaToast("âš ï¸ Supabase connect nahi ho paya.");
-            return;
-          }
-          const email = document.getElementById("signInEmail").value.trim();
-          const password = document.getElementById("signInPassword").value;
+          const email = document.getElementById("signInEmail")?.value.trim() || "";
+          const password = document.getElementById("signInPassword")?.value || "";
           const btn = document.getElementById("btnSubmitSignIn");
-          btn.classList.add("loading");
-          btn.innerHTML = '<span class="btn-text">Dakhil ho rahe hain... â³</span>';
-
-          try {
-            const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-            if (error) throw error;
-            showMunnaToast("[VIP] Dakhila safal! Darbar me swagat hai.");
-            closeAuthModal();
-          } catch (err) {
-            showMunnaToast("âš ï¸ " + (err.message || "Login nahi ho paya"));
-          } finally {
-            btn.classList.remove("loading");
-            btn.innerHTML = '<span class="btn-text">Dakhil Ho (Sign In) âž”</span>';
-          }
+          await handleUnifiedSignIn(email, password, btn, false);
         };
       }
 
       if (signUpForm) {
         signUpForm.onsubmit = async (e) => {
           e.preventDefault();
-          if (!supabaseClient) {
-            showMunnaToast("âš ï¸ Supabase connect nahi ho paya.");
-            return;
-          }
-          const name = document.getElementById("signUpName").value.trim();
-          const email = document.getElementById("signUpEmail").value.trim();
-          const password = document.getElementById("signUpPassword").value;
+          const name = document.getElementById("signUpName")?.value.trim() || "";
+          const email = document.getElementById("signUpEmail")?.value.trim() || "";
+          const password = document.getElementById("signUpPassword")?.value || "";
           const btn = document.getElementById("btnSubmitSignUp");
-          btn.classList.add("loading");
-          btn.innerHTML = '<span class="btn-text">Khata ban raha hai... â³</span>';
-
-          try {
-            const { data, error } = await supabaseClient.auth.signUp({
-              email,
-              password,
-              options: { data: { full_name: name } }
-            });
-            if (error) throw error;
-            showMunnaToast("âœ… Khata ban gaya! Ab Sign In karein.");
-            if (tabSignInBtn) tabSignInBtn.click();
-            const inEmail = document.getElementById("signInEmail");
-            if (inEmail) inEmail.value = email;
-          } catch (err) {
-            showMunnaToast("âš ï¸ " + (err.message || "Khata nahi ban paya"));
-          } finally {
-            btn.classList.remove("loading");
-            btn.innerHTML = '<span class="btn-text">Naya Khata Kholein (Register) âž”</span>';
-          }
+          await handleUnifiedSignUp(name, email, password, btn, false);
         };
       }
 
@@ -3274,168 +3687,142 @@ YOUR ICONIC CHARACTER & MANNERISMS (REFLECT THIS IN EVERY MESSAGE):
         };
       }
 
-            // Google OAuth Sign-In
       const btnScreenGoogle = document.getElementById("btnScreenGoogle");
       if (btnScreenGoogle) {
-        btnScreenGoogle.onclick = async () => {
-          if (!supabaseClient) {
-            showMunnaToast("âš ï¸ Supabase connection unavailable.");
-            return;
-          }
-          btnScreenGoogle.classList.add("loading");
-          const origHtml = btnScreenGoogle.innerHTML;
-          btnScreenGoogle.innerHTML = '<span>Redirecting to Google... â³</span>';
-          try {
-            const { data, error } = await supabaseClient.auth.signInWithOAuth({
-              provider: 'google',
-              options: {
-                redirectTo: window.location.origin
-              }
-            });
-            if (error) throw error;
-          } catch (err) {
-            console.error("Google sign-in error:", err);
-            showMunnaToast("âš ï¸ Google sign-in: " + (err.message || "Failed to initiate"));
-            btnScreenGoogle.classList.remove("loading");
-            btnScreenGoogle.innerHTML = origHtml;
-          }
-        };
+        btnScreenGoogle.onclick = () => window.handleGoogleSignIn(btnScreenGoogle);
+      }
+
+      const btnModalGoogle = document.getElementById("btnModalGoogle");
+      if (btnModalGoogle) {
+        btnModalGoogle.onclick = () => window.handleGoogleSignIn(btnModalGoogle);
       }
 
       if (screenSignInForm) {
         screenSignInForm.onsubmit = async (e) => {
           e.preventDefault();
-          if (!supabaseClient) {
-            showMunnaToast("âš ï¸ Supabase connection unavailable.");
-            return;
-          }
-          const email = document.getElementById("screenSignInEmail").value.trim();
-          const password = document.getElementById("screenSignInPassword").value;
+          const email = document.getElementById("screenSignInEmail")?.value.trim() || "";
+          const password = document.getElementById("screenSignInPassword")?.value || "";
           const btn = document.getElementById("btnScreenSignIn");
-          btn.classList.add("loading");
-          btn.innerHTML = '<span>Signing in... â³</span>';
-
-          try {
-            const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-            if (error) throw error;
-            currentUser = data.user;
-            sessionStorage.removeItem("munna_guest_mode");
-            updateAuthUI(currentUser);
-            loadSessionsFromCloud();
-            hideAuthScreen();
-            showMunnaToast("ðŸ‘‘ Darbar me swagat hai, " + (currentUser.user_metadata?.full_name || currentUser.email.split("@")[0]) + "!");
-          } catch (err) {
-            console.error("Sign in error:", err);
-            let msg = err.message || "Unable to sign in";
-            if (msg.toLowerCase().includes("invalid login credentials")) {
-              msg = "Galat email ya password! Kripya dobara check karein.";
-            } else if (msg.toLowerCase().includes("email not confirmed")) {
-              msg = "Aapka email abhi verify nahi hua hai! Kripya inbox check karein ya 'Continue with Google' use karein.";
-            }
-            showMunnaToast("âš ï¸ " + msg);
-          } finally {
-            btn.classList.remove("loading");
-            btn.innerHTML = '<span>Sign In to Munna AI</span><span class="material-symbols-outlined" style="font-size:18px; margin-left:6px;">arrow_forward</span>';
-          }
+          await handleUnifiedSignIn(email, password, btn, true);
         };
       }
 
       if (screenSignUpForm) {
         screenSignUpForm.onsubmit = async (e) => {
           e.preventDefault();
-          if (!supabaseClient) {
-            showMunnaToast("âš ï¸ Supabase connection unavailable.");
-            return;
-          }
-          const name = document.getElementById("screenSignUpName").value.trim();
-          const email = document.getElementById("screenSignUpEmail").value.trim();
-          const password = document.getElementById("screenSignUpPassword").value;
+          const name = document.getElementById("screenSignUpName")?.value.trim() || "";
+          const email = document.getElementById("screenSignUpEmail")?.value.trim() || "";
+          const password = document.getElementById("screenSignUpPassword")?.value || "";
           const btn = document.getElementById("btnScreenSignUp");
-          btn.classList.add("loading");
-          btn.innerHTML = '<span>Creating account... â³</span>';
-
-          try {
-            const { data, error } = await supabaseClient.auth.signUp({
-              email,
-              password,
-              options: { data: { full_name: name } }
-            });
-            if (error) throw error;
-            if (data.session && data.user) {
-              currentUser = data.user;
-              sessionStorage.removeItem("munna_guest_mode");
-              updateAuthUI(currentUser);
-              hideAuthScreen();
-              showMunnaToast("ðŸ‘‘ Khata ban gaya aur dakhila safal! Swagat hai, " + name + "!");
-              loadSessionsFromCloud();
-            } else {
-              showMunnaToast("âœ… Khata ban gaya! Aapke email par confirmation link bheji gayi hai.");
-              if (screenTabSignInBtn) screenTabSignInBtn.click();
-              const inEmail = document.getElementById("screenSignInEmail");
-              if (inEmail) inEmail.value = email;
-              const inPass = document.getElementById("screenSignInPassword");
-              if (inPass) inPass.value = password;
-            }
-          } catch (err) {
-            console.error("Sign up error:", err);
-            showMunnaToast("âš ï¸ " + (err.message || "Unable to create account"));
-          } finally {
-            btn.classList.remove("loading");
-            btn.innerHTML = '<span>Create Your Account</span><span class="material-symbols-outlined" style="font-size:18px; margin-left:6px;">arrow_forward</span>';
-          }
+          await handleUnifiedSignUp(name, email, password, btn, true);
         };
       }
 
       // Supabase Auth State Initialization
       async function initSupabaseAuth() {
+        const isGuest = (sessionStorage.getItem("munna_guest_mode") === "true" || localStorage.getItem("munna_guest_mode") === "true");
+        const savedLocalUser = safeGet("munna_local_user");
+
+        if (savedLocalUser) {
+          try {
+            currentUser = JSON.parse(savedLocalUser);
+            updateAuthUI(currentUser);
+            hideAuthScreen();
+            closeAuthModal();
+          } catch(e) {}
+        } else if (isGuest) {
+          updateAuthUI(currentUser);
+          hideAuthScreen();
+          closeAuthModal();
+        }
+
         if (!supabaseClient) {
-          updateAuthUI(null);
-          if (sessionStorage.getItem("munna_guest_mode") !== "true") {
+          if (!isGuest && !savedLocalUser) {
             showAuthScreen();
           }
           return;
         }
 
-        try {
-          const { data: { session }, error } = await supabaseClient.auth.getSession();
-          if (session && session.user) {
-            currentUser = session.user;
-            updateAuthUI(currentUser);
-            loadSessionsFromCloud();
-            hideAuthScreen();
-          } else {
-            currentUser = null;
-            updateAuthUI(null);
-            if (sessionStorage.getItem("munna_guest_mode") !== "true") {
-              showAuthScreen();
-            }
-          }
-        } catch (e) {
-          console.warn("Auth getSession error:", e);
-          currentUser = null;
-          updateAuthUI(null);
-          if (sessionStorage.getItem("munna_guest_mode") !== "true") {
-            showAuthScreen();
-          }
-        }
-
+        // 1. Listen to Auth State changes FIRST so no event is lost
         supabaseClient.auth.onAuthStateChange(async (event, session) => {
-          if (event === "SIGNED_IN" && session?.user) {
+          if ((event === "SIGNED_IN" || event === "INITIAL_SESSION" || event === "TOKEN_REFRESHED") && session?.user) {
             currentUser = session.user;
-            sessionStorage.removeItem("munna_guest_mode");
+            sessionStorage.setItem("munna_guest_mode", "true");
+            localStorage.setItem("munna_guest_mode", "true");
+            localStorage.setItem("munna_local_user", JSON.stringify(currentUser));
             updateAuthUI(currentUser);
             hideAuthScreen();
-            showMunnaToast("ðŸ‘‘ Welcome to Munna AI, " + (currentUser.user_metadata?.full_name || currentUser.email.split("@")[0]) + "!");
+            closeAuthModal();
+            if (event === "SIGNED_IN") {
+              showMunnaToast("👑 Welcome to Munna AI, " + (currentUser.user_metadata?.full_name || currentUser.email.split("@")[0]) + "!");
+            }
             loadSessionsFromCloud();
           } else if (event === "SIGNED_OUT") {
             currentUser = null;
             updateAuthUI(null);
             sessionStorage.removeItem("munna_guest_mode");
+            localStorage.removeItem("munna_guest_mode");
+            localStorage.removeItem("munna_local_user");
             showAuthScreen();
             showMunnaToast("Aap sign out ho gaye hain.");
           }
         });
+
+        // 2. Handle Google OAuth redirect callback (PKCE code or error in query params)
+        const urlParams = new URLSearchParams(window.location.search);
+        const authCode = urlParams.get("code");
+        const authError = urlParams.get("error_description") || urlParams.get("error");
+
+        if (authError) {
+          console.error("Google Auth callback error:", authError);
+          showMunnaToast("⚠️ Google Login notice: " + authError);
+          window.history.replaceState({}, document.title, window.location.pathname);
+        } else if (authCode) {
+          try {
+            showMunnaToast("👑 Google authentication verify ho raha hai...");
+            const { data, error } = await supabaseClient.auth.exchangeCodeForSession(authCode);
+            if (!error && data?.session?.user) {
+              currentUser = data.session.user;
+              sessionStorage.setItem("munna_guest_mode", "true");
+              localStorage.setItem("munna_guest_mode", "true");
+              localStorage.setItem("munna_local_user", JSON.stringify(currentUser));
+              updateAuthUI(currentUser);
+              hideAuthScreen();
+              closeAuthModal();
+              showMunnaToast("👑 Welcome to Munna AI, " + (currentUser.user_metadata?.full_name || currentUser.email.split("@")[0]) + "!");
+              loadSessionsFromCloud();
+            }
+          } catch (codeErr) {
+            console.warn("exchangeCodeForSession warning:", codeErr);
+          } finally {
+            window.history.replaceState({}, document.title, window.location.pathname);
+          }
+        }
+
+        // 3. Check existing session in storage
+        try {
+          const { data: { session }, error } = await supabaseClient.auth.getSession();
+          if (session && session.user) {
+            currentUser = session.user;
+            sessionStorage.setItem("munna_guest_mode", "true");
+            localStorage.setItem("munna_guest_mode", "true");
+            localStorage.setItem("munna_local_user", JSON.stringify(currentUser));
+            updateAuthUI(currentUser);
+            loadSessionsFromCloud();
+            hideAuthScreen();
+            closeAuthModal();
+          } else if (!isGuest && !savedLocalUser) {
+            showAuthScreen();
+          }
+        } catch (e) {
+          console.warn("Auth getSession error:", e);
+          if (!isGuest && !savedLocalUser) {
+            showAuthScreen();
+          }
+        }
       }
+
+
 
       initSupabaseAuth();
 

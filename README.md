@@ -25,11 +25,19 @@ Munna AI is a state-of-the-art conversational AI platform engineered with an **E
 
 ---
 
-## 🚀 Quick Start
+## 🚀 Quick Start & Deployment
 
-1. Clone or download the repository.
-2. Open `index.html` directly in any modern web browser (Chrome, Edge, Firefox, Safari).
-3. Authenticate with your Supabase account or Google OAuth to start chatting!
+1. **Local Preview**:
+   - Open `index.html` directly in any modern web browser, or run `.\server.ps1`.
+   - Use **"Mehman Entry"** for instant guest access or authenticate via Supabase.
+
+2. **⚡ 1-Click Vercel Deployment Shortcut**:
+   - **Double-click** [`deploy.bat`](file:///c:/Users/megwa/AI/deploy.bat) in File Explorer to automatically stage, commit, and push all changes to GitHub, triggering live Vercel deployment!
+   - Or run in PowerShell:
+     ```powershell
+     .\deploy.ps1
+     ```
+   - Live Production URL: **[https://munnaai.youmika.site](https://munnaai.youmika.site)**
 
 ---
 
