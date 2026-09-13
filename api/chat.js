@@ -88,8 +88,11 @@ export default async function handler(req) {
 
     const CANDIDATE_MODELS = [
       'gemini-2.5-flash',
+      'gemini-2.0-flash',
       'gemini-flash-latest',
       'gemini-2.5-flash-lite',
+      'gemini-2.0-flash-lite',
+      'gemini-1.5-flash',
       'gemini-2.5-pro'
     ];
 
@@ -149,6 +152,7 @@ export default async function handler(req) {
     return new Response(JSON.stringify({
       error: 'AI_GATEWAY_ERROR',
       message: 'munna ai server busy. thodi der me dobara try karo.',
+      details: lastErrorText ? lastErrorText.slice(0, 250) : undefined,
       status: geminiRes ? geminiRes.status : 502
     }), { status: 502, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
   } catch (err) {
