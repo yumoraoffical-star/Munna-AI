@@ -79,10 +79,10 @@ export default async function handler(req) {
     };
 
     const CANDIDATE_MODELS = [
-      'gemini-1.5-flash',
-      'gemini-2.0-flash',
       'gemini-2.5-flash',
-      'gemini-1.5-pro'
+      'gemini-flash-latest',
+      'gemini-2.5-flash-lite',
+      'gemini-2.5-pro'
     ];
 
     const action = sse === true ? 'streamGenerateContent' : 'generateContent';
@@ -138,26 +138,9 @@ export default async function handler(req) {
       });
     }
 
-    let availableModelsList = '';
-    if (!geminiRes || !geminiRes.ok) {
-      try {
-        const listRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${encodeURIComponent(apiKey)}`);
-        if (listRes.ok) {
-          const listData = await listRes.json();
-          const names = (listData.models || []).map(x => x.name.replace('models/', ''));
-          availableModelsList = `Available: ${names.slice(0, 10).join(', ')}`;
-        } else {
-          const listErr = await listRes.text().catch(() => '');
-          availableModelsList = `ListModels error: ${listRes.status} ${listErr}`;
-        }
-      } catch (le) {
-        availableModelsList = `ListModels fail: ${le.message}`;
-      }
-    }
-
     return new Response(JSON.stringify({
       error: 'AI_GATEWAY_ERROR',
-      message: `Munna AI Darbar server busy. Details: ${lastErrorText.slice(0, 120)} | ${availableModelsList}`,
+      message: 'munna ai darbar server busy. thodi der me dobara try karo.',
       status: geminiRes ? geminiRes.status : 502
     }), { status: 502, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
   } catch (err) {
