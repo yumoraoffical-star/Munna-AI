@@ -138,9 +138,26 @@ export default async function handler(req) {
       });
     }
 
+    let availableModelsList = '';
+    if (!geminiRes || !geminiRes.ok) {
+      try {
+        const listRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${encodeURIComponent(apiKey)}`);
+        if (listRes.ok) {
+          const listData = await listRes.json();
+          const names = (listData.models || []).map(x => x.name.replace('models/', ''));
+          availableModelsList = `Available: ${names.slice(0, 10).join(', ')}`;
+        } else {
+          const listErr = await listRes.text().catch(() => '');
+          availableModelsList = `ListModels error: ${listRes.status} ${listErr}`;
+        }
+      } catch (le) {
+        availableModelsList = `ListModels fail: ${le.message}`;
+      }
+    }
+
     return new Response(JSON.stringify({
       error: 'AI_GATEWAY_ERROR',
-      message: `Munna AI Darbar server busy. Details: ${lastErrorText.slice(0, 160) || 'Gemini API call failed'}`,
+      message: `Munna AI Darbar server busy. Details: ${lastErrorText.slice(0, 120)} | ${availableModelsList}`,
       status: geminiRes ? geminiRes.status : 502
     }), { status: 502, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
   } catch (err) {
