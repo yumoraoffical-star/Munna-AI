@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#07090d"><meta name="description" content="Munna AI — a modern multimodal AI workspace">
-<title>Munna AI — Intelligence, redesigned</title>
+<title>👑 Munna AI — King of AI Models</title>
 <link rel="stylesheet" href="/css/app.css"><link rel="stylesheet" href="/css/patch.css"><link rel="stylesheet" href="/css/enhance.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -11,28 +11,28 @@
 <div class="app">
 <aside class="sidebar" id="sidebar">
   <div class="mobile-sidebar-head"><strong>Workspace</strong><button class="icon-btn" id="mobileClose" aria-label="Close menu">×</button></div>
-  <div class="brand"><div class="brand-mark">M</div><div><strong>Munna AI</strong><small>Intelligence, redesigned</small></div></div>
-  <button class="new-chat" id="newChat">＋ New conversation</button>
-  <div class="nav-label">Workspace</div>
-  <div class="history"><button class="history-item active">✨ Welcome to Munna</button></div>
-  <div class="side-footer"><button class="settings-link" id="settingsBtn">⚙ Settings</button><div class="user-chip"><div class="avatar" id="userAvatar">?</div><div><div class="user-name" id="userName">Not signed in</div><div class="user-plan" id="userPlan">Sign in to sync</div></div><button class="logout" id="authBtn">Sign in</button></div></div>
+  <div class="brand"><div class="brand-mark">👑</div><div><strong>Munna AI</strong><small>King of AI Models</small></div></div>
+  <button class="new-chat" id="newChat">＋ Nayi Baatcheet</button>
+  <div class="nav-label">Darbar</div>
+  <div class="history"><button class="history-item active">✨ Munna Darbar me Swagat</button></div>
+  <div class="side-footer"><button class="settings-link" id="settingsBtn">⚙ Settings</button><div class="user-chip"><div class="avatar" id="userAvatar">👑</div><div><div class="user-name" id="userName">Not signed in</div><div class="user-plan" id="userPlan">Sign in to sync</div></div><button class="logout" id="authBtn">Sign in</button></div></div>
 </aside>
 <main class="main">
 <header class="topbar"><div class="top-left"><button class="mobile-menu icon-btn" id="mobileMenu" aria-label="Open menu">☰</button><div class="top-title" id="modeLabel">Chat mode</div></div><div class="top-actions"><button class="top-settings icon-btn" id="settingsBtnTop" aria-label="Settings">⚙</button><div class="status"><span class="dot"></span> Systems online</div></div></header>
 <section class="chat" id="chat"><div class="welcome" id="welcome">
-  <span class="eyebrow">✦ Next-generation AI workspace</span>
-  <h1>Think bigger.<br><span class="gradient">Build with Munna.</span></h1>
-  <p>A clean, powerful workspace for conversations, ideas, images and intelligent workflows — designed from the ground up for speed and clarity.</p>
-  <div class="welcome-actions"><button class="primary guest-hero" id="guestHero">Continue as guest</button><button class="secondary auth-hero" id="authHero">Sign in / Create account</button></div>
+  <span class="eyebrow">👑 King of Mirzapur AI Darbar</span>
+  <h1>Jalwa Hai Hamara.<br><span class="gradient">Munna AI Darbar.</span></h1>
+  <p>Aao be! Coding ho ya business, photo ho ya dimag ka bawasir — jo bologe, hum karte hain pakka prabandh!</p>
+  <div class="welcome-actions"><button class="primary guest-hero" id="guestHero">Mehman Entry (Guest)</button><button class="secondary auth-hero" id="authHero">Sign in / Khata banayein</button></div>
   <div class="quick-grid">
-    <button class="quick" data-prompt="Explain a difficult topic to me in simple Hinglish."><b>Explain anything</b><span>Learn complex ideas without the jargon.</span></button>
-    <button class="quick" data-prompt="Help me plan a smart project from idea to launch."><b>Plan a project</b><span>Turn a rough idea into clear next steps.</span></button>
-    <button class="quick" data-prompt="Give me 5 creative ideas for a modern AI product."><b>Generate ideas</b><span>Explore concepts, names and strategies.</span></button>
-    <button class="quick" data-prompt="Help me write clean, production-ready code for my idea."><b>Write code</b><span>Build faster with practical code guidance.</span></button>
-    <button class="quick" data-prompt="Summarize the key points of this content clearly."><b>Summarize</b><span>Turn long content into useful takeaways.</span></button>
+    <button class="quick" data-prompt="Abe sunno, ek mushkil topic aasan Hinglish me samjhao."><b>Kuch samjhao</b><span>Bina kisi bawasir ke aasan bhasha me.</span></button>
+    <button class="quick" data-prompt="Munna bhaiya, ek solid project ka plan banao idea se launch tak."><b>Project Plan</b><span>Idea se launch tak ka pakka prabandh.</span></button>
+    <button class="quick" data-prompt="Munna bhaiya, 5 solid aur khatarnak ideas do."><b>Solid Ideas</b><span>Market me dhoom machane wale funde.</span></button>
+    <button class="quick" data-prompt="Munna bhaiya, ek mast aur clean production-ready code likh ke do."><b>Code likho</b><span>Bahubali level fast aur solid coding.</span></button>
+    <button class="quick" data-prompt="Munna bhaiya, iska seedha aur saaf summary batao bina ghuma-phira ke."><b>Summary</b><span>Kam shabdon me poora hisaab-kitaab.</span></button>
   </div>
 </div><div class="messages" id="messages"></div></section>
-<div class="composer-wrap"><div class="composer"><div class="composer-inner"><button class="icon-btn" data-mode="image" title="Image mode">◈</button><textarea id="prompt" rows="1" placeholder="Ask Munna anything…"></textarea><button class="send" id="send" title="Send">↑</button></div><div class="composer-hint">Enter to send · Shift+Enter for a new line · Ctrl/⌘+K to focus</div></div></div>
+<div class="composer-wrap"><div class="composer"><div class="composer-inner"><button class="icon-btn" data-mode="image" title="Image mode">◈</button><textarea id="prompt" rows="1" placeholder="Munna Bhaiya se poochho kuch bhi…"></textarea><button class="send" id="send" title="Send">↑</button></div><div class="composer-hint">Enter daba ke bhejo · Shift+Enter nayi line · Ctrl/⌘+K focus</div></div></div>
 </main>
 </div>
 <div class="modal" id="authModal"><div class="auth-card"><button class="close" id="closeAuth">×</button><h2>Welcome back.</h2><p>Sign in to sync your Munna AI workspace across devices.</p><div class="field"><label>Email</label><input id="email" type="email" autocomplete="email" placeholder="you@example.com"></div><div class="field"><label>Password</label><input id="password" type="password" autocomplete="current-password" placeholder="••••••••"></div><input id="authMode" type="hidden" value="signin"><button class="primary" id="authSubmit">Sign in</button><div class="divider">OR</div><button class="google" id="google2">Continue with Google</button><button class="google" id="guest">Continue as guest</button><div class="auth-switch"><button class="link" id="switchAuth">Create a new account</button></div></div></div>
