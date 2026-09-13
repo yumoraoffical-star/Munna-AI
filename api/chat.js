@@ -78,35 +78,60 @@ export default async function handler(req) {
       ...(payload.generationConfig || {})
     };
 
-    const targetModel = 'gemini-3.6-flash';
+    const CANDIDATE_MODELS = [
+      'gemini-1.5-flash',
+      'gemini-2.0-flash',
+      'gemini-2.5-flash',
+      'gemini-1.5-pro'
+    ];
+
     const action = sse === true ? 'streamGenerateContent' : 'generateContent';
     const query = sse === true ? '?alt=sse&key=' : '?key=';
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/${targetModel}:${action}${query}${encodeURIComponent(apiKey)}`;
 
     const controller = new AbortController();
-    const timeoutMs = sse === true ? 60000 : 20000;
+    const timeoutMs = sse === true ? 60000 : 25000;
     const timer = setTimeout(() => controller.abort(), timeoutMs);
 
-    let geminiRes;
+    let geminiRes = null;
+    let usedModel = CANDIDATE_MODELS[0];
+    let lastErrorText = '';
+
     try {
-      geminiRes = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-        signal: controller.signal
-      });
+      for (const m of CANDIDATE_MODELS) {
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/${m}:${action}${query}${encodeURIComponent(apiKey)}`;
+        try {
+          const res = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+            signal: controller.signal
+          });
+          if (res.ok) {
+            geminiRes = res;
+            usedModel = m;
+            break;
+          } else {
+            const txt = await res.text().catch(() => '');
+            lastErrorText = `[${m} ${res.status}] ${txt}`;
+            console.warn(`Gemini model ${m} failed:`, res.status, txt);
+          }
+        } catch (fetchErr) {
+          lastErrorText = fetchErr?.message || String(fetchErr);
+          console.warn(`Gemini fetch error for ${m}:`, fetchErr);
+        }
+      }
     } finally {
       clearTimeout(timer);
     }
 
-    if (geminiRes.ok) {
+    if (geminiRes && geminiRes.ok) {
       return new Response(geminiRes.body, {
         status: 200,
         headers: {
           ...corsHeaders,
           'Content-Type': sse === true ? 'text/event-stream' : 'application/json',
           'Cache-Control': 'no-cache, no-transform',
-          'X-Model-Used': targetModel,
+          'X-Model-Used': usedModel,
           'X-User-Plan': auth.plan,
           'X-Quota-Remaining': String(auth.quota.remaining)
         }
@@ -115,8 +140,8 @@ export default async function handler(req) {
 
     return new Response(JSON.stringify({
       error: 'AI_GATEWAY_ERROR',
-      message: 'Munna AI Darbar server busy. Please try again in a moment.',
-      status: geminiRes.status
+      message: `Munna AI Darbar server busy. Details: ${lastErrorText.slice(0, 160) || 'Gemini API call failed'}`,
+      status: geminiRes ? geminiRes.status : 502
     }), { status: 502, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
   } catch (err) {
     const aborted = err?.name === 'AbortError';
