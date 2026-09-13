@@ -4,7 +4,7 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#07090d"><meta name="description" content="Munna AI — a modern multimodal AI workspace">
 <title>👑 Munna AI — King of AI Models</title>
-<link rel="stylesheet" href="/css/app.css"><link rel="stylesheet" href="/css/patch.css"><link rel="stylesheet" href="/css/enhance.css"><link rel="stylesheet" href="/css/features.css">
+<link rel="stylesheet" href="/css/app.css"><link rel="stylesheet" href="/css/patch.css"><link rel="stylesheet" href="/css/enhance.css"><link rel="stylesheet" href="/css/features.css"><link rel="stylesheet" href="/css/auth.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
@@ -35,9 +35,42 @@
 <div class="composer-wrap"><div class="composer"><div class="composer-inner"><button class="icon-btn" data-mode="image" title="Image mode">◈</button><textarea id="prompt" rows="1" placeholder="Munna Bhaiya se poochho kuch bhi…"></textarea><button class="send" id="send" title="Send">↑</button></div><div class="composer-hint">Enter daba ke bhejo · Shift+Enter nayi line · Ctrl/⌘+K focus · Ctrl/⌘+Shift+P prompts</div></div></div>
 </main>
 </div>
-<div class="modal" id="authModal"><div class="auth-card"><button class="close" id="closeAuth">×</button><h2>Welcome back.</h2><p>Sign in to sync your Munna AI workspace across devices.</p><div class="field"><label>Email</label><input id="email" type="email" autocomplete="email" placeholder="you@example.com"></div><div class="field"><label>Password</label><input id="password" type="password" autocomplete="current-password" placeholder="••••••••"></div><input id="authMode" type="hidden" value="signin"><button class="primary" id="authSubmit">Sign in</button><div class="divider">OR</div><button class="google" id="google2">Continue with Google</button><button class="google" id="guest">Continue as guest</button><div class="auth-switch"><button class="link" id="switchAuth">Create a new account</button></div></div></div>
+<div class="modal auth-modal-premium" id="authModal">
+  <div class="auth-screen">
+    <section class="auth-visual">
+      <button class="auth-back" id="closeAuth" aria-label="Close sign in">← Back to Darbar</button>
+      <div class="auth-visual-inner">
+        <div class="auth-logo"><span>👑</span><div><strong>Munna AI</strong><small>King of AI Models</small></div></div>
+        <span class="eyebrow">⚡ AI ka apna Darbar</span>
+        <h1>Apna khata kholo.<br><span>Munna ko saath le jao.</span></h1>
+        <p>Ek sign-in se chats, profile, history aur Pro access tumhare saath sync rahega.</p>
+        <div class="auth-benefits">
+          <div><span>✦</span><b>Cloud synced chats</b><small>Har device par apni baatcheet.</small></div>
+          <div><span>✦</span><b>Powerful AI workspace</b><small>Coding, study, creative aur business modes.</small></div>
+          <div><span>✦</span><b>Pro ready</b><small>Upgrade karke zyada AI power unlock karo.</small></div>
+        </div>
+        <div class="auth-quote">“Jahan sawaal khatam, wahan se Munna shuru.”</div>
+      </div>
+    </section>
+    <section class="auth-panel">
+      <div class="auth-panel-card">
+        <div class="auth-mobile-brand"><span>👑</span> Munna AI</div>
+        <div class="auth-heading"><span class="auth-kicker" id="authKicker">WELCOME BACK</span><h2 id="authTitle">Sign in to Munna</h2><p id="authDescription">Apne workspace me wapas aao.</p></div>
+        <button class="google auth-google" id="google2"><span class="google-g">G</span> Continue with Google</button>
+        <div class="auth-divider"><span>or continue with email</span></div>
+        <div class="field"><label for="email">Email address</label><input id="email" type="email" autocomplete="email" placeholder="you@example.com"></div>
+        <div class="field"><div class="password-label"><label for="password">Password</label><button type="button" class="link auth-small" id="forgotPassword">Forgot password?</button></div><input id="password" type="password" autocomplete="current-password" placeholder="••••••••"></div>
+        <input id="authMode" type="hidden" value="signin">
+        <button class="primary auth-submit" id="authSubmit">Sign in</button>
+        <div class="auth-switch"><span id="authSwitchText">New to Munna?</span> <button class="link" id="switchAuth">Create account</button></div>
+        <div class="guest-entry"><button class="guest-link" id="guest">Continue as guest <span>→</span></button></div>
+        <p class="auth-terms">By continuing, you agree to use Munna AI responsibly.</p>
+      </div>
+    </section>
+  </div>
+</div>
 <div class="modal" id="settingsModal"><div class="settings-card"><button class="close" id="closeSettings">×</button><span class="eyebrow">Workspace settings</span><h2>Your Munna profile</h2><p>Personalize your workspace. Cloud sync is available when you are signed in.</p><div class="field"><label>Display name</label><input id="profileName" type="text" maxlength="80" placeholder="Your name"></div><div class="profile-email" id="profileEmail">Guest mode</div><button class="primary" id="saveProfile">Save profile</button><div class="settings-divider"></div><div class="setting-row"><div><b>System diagnostics</b><span>Check backend, AI, image, voice and cloud readiness.</span></div><button class="status-btn" id="diagnosticsBtn">Check now</button></div><div class="diagnostics" id="diagnostics" hidden><div class="diagnostics-head"><div><b>System status</b><span id="diagnosticsUpdated">Not checked yet</span></div><button class="icon-btn" id="diagnosticsRefresh" aria-label="Refresh diagnostics">↻</button></div><div class="status-grid"><div class="status-item" data-check="backend"><span class="status-dot"></span><div><b>Backend</b><small id="statusBackend">Not checked</small></div></div><div class="status-item" data-check="chat"><span class="status-dot"></span><div><b>Chat AI</b><small id="statusChat">Not checked</small></div></div><div class="status-item" data-check="image"><span class="status-dot"></span><div><b>Image</b><small id="statusImage">Not checked</small></div></div><div class="status-item" data-check="tts"><span class="status-dot"></span><div><b>Voice</b><small id="statusTts">Not checked</small></div></div><div class="status-item" data-check="auth"><span class="status-dot"></span><div><b>Authentication</b><small id="statusAuth">Not checked</small></div></div><div class="status-item" data-check="history"><span class="status-dot"></span><div><b>Cloud history</b><small id="statusHistory">Not checked</small></div></div></div></div><div class="settings-divider"></div><div class="setting-row"><div><b>Keyboard shortcut</b><span>Ctrl/⌘ + K focuses the composer.</span></div><kbd>⌘K</kbd></div><div class="setting-row"><div><b>Guest storage</b><span>Remove this browser's guest identifier.</span></div><button class="danger-btn" id="clearGuest">Clear</button></div></div></div>
 <div class="modal call-modal" id="callModal"><div class="call-card"><div class="call-header"><div class="call-brand">👑 Munna Bhaiya</div><div class="call-timer" id="callTimer">Connecting…</div></div><div class="call-avatar-wrap"><div class="call-ripple ripple-1"></div><div class="call-ripple ripple-2"></div><div class="call-avatar" id="callAvatar"><span class="avatar-icon">👑</span></div></div><div class="call-status" id="callStatus">Munna Bhaiya se call connect ho raha hai…</div><div class="call-subtitles-box" id="callSubtitles"><div class="sub-line sub-user" id="subUser"></div><div class="sub-line sub-ai" id="subAi">"aao be, ka dikkat ho gayi? seedha bol kar baat karo, hum khade hain!"</div></div><div class="call-controls"><button type="button" class="call-ctrl-btn mic-toggle" id="callMicBtn" title="Mic Mute / Unmute"><span class="ctrl-icon" id="callMicIcon">🎙️</span><small id="callMicLabel">Mic On</small></button><button type="button" class="call-ctrl-btn end-call" id="callEndBtn" title="Phone Kaato"><span class="ctrl-icon">🔴</span><small>End Call</small></button></div></div></div>
 <div class="toast" id="toast"></div>
-<script src="/js/app.js"></script><script src="/js/enhance.js"></script><script src="/js/polish.js"></script><script src="/js/features.js"></script><script src="/js/billing.js"></script>
+<script src="/js/app.js"></script><script src="/js/enhance.js"></script><script src="/js/polish.js"></script><script src="/js/features.js"></script><script src="/js/billing.js"></script><script src="/js/auth-screen.js"></script>
 </body></html>
