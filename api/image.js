@@ -3,10 +3,9 @@ import { verifyAuthAndQuota, getCorsHeaders } from './_auth.js';
 export const config = { runtime: 'edge' };
 
 const STYLE_ENHANCERS = {
-  mirzapur: ', royal mirzapur mafia haveli aesthetic, rich gold and crimson cinematic lighting, 8k resolution, photorealistic masterpiece',
-  gangster: ', badass desi gangster swag, dark gritty purvanchal mafia atmosphere, dramatic rim lighting, highly detailed 8k',
-  cyberpunk: ', futuristic desi cyberpunk mirzapur, glowing neon signs in hindi, atmospheric haze, ultra detailed 8k render',
-  avatar: ', powerful royal bahubali lion with golden crown and gold chains, majestic posture, hyperrealistic 8k',
+  cinematic: ', cinematic lighting, rich colors, dramatic composition, 8k resolution, photorealistic masterpiece',
+  cyberpunk: ', futuristic cyberpunk aesthetic, glowing neon lights, atmospheric haze, ultra detailed 8k render',
+  royal: ', elegant royal aesthetic with golden accents, dignified lighting, hyperrealistic 8k',
   realistic: ', professional ultra-realistic 35mm photograph, natural lighting, sharp focus, 8k uhd'
 };
 
@@ -30,7 +29,7 @@ export default async function handler(req) {
 
   try {
     const body = await req.json();
-    const { prompt, style = 'mirzapur' } = body || {};
+    const { prompt, style = 'realistic' } = body || {};
     const width = clampDimension(body?.width, 1024);
     const height = clampDimension(body?.height, 1024);
 
@@ -41,7 +40,7 @@ export default async function handler(req) {
     }
 
     const cleanPrompt = prompt.trim().slice(0, 2000);
-    const enhancer = STYLE_ENHANCERS[style] || STYLE_ENHANCERS.mirzapur;
+    const enhancer = STYLE_ENHANCERS[style] || STYLE_ENHANCERS.realistic;
     const enhancedPrompt = `${cleanPrompt}${enhancer}`;
     const pixazoKey = process.env.PIXAZO_API_KEY || null;
 

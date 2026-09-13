@@ -148,8 +148,8 @@ export async function verifyAuthAndQuota(req, serviceName = 'chat') {
 
   if (!quotaResult.allowed) {
     const quotaMsg = isGuest
-      ? 'Mehman trial quota (5 messages/day) pura ho gaya hai! Kripya free khata banayein ya login karein.'
-      : 'Aaj ka daily message quota pura ho gaya hai! Bahubali Pro pass leke unlimited baat karein.';
+      ? 'mehman trial quota (5 messages/day) pura ho gaya hai! kripya free khata banayein ya login karein.'
+      : 'aaj ka daily message quota pura ho gaya hai! pro pass leke unlimited baatcheet karein.';
 
     return {
       ok: false,
