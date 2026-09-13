@@ -18,7 +18,7 @@
   <div class="side-footer"><button class="settings-link" id="settingsBtn">⚙ Settings</button><div class="user-chip"><div class="avatar" id="userAvatar">👑</div><div><div class="user-name" id="userName">Not signed in</div><div class="user-plan" id="userPlan">Sign in to sync</div></div><button class="logout" id="authBtn">Sign in</button></div></div>
 </aside>
 <main class="main">
-<header class="topbar"><div class="top-left"><button class="mobile-menu icon-btn" id="mobileMenu" aria-label="Open menu">☰</button><div class="top-title" id="modeLabel">Chat mode</div></div><div class="top-actions"><button class="top-settings icon-btn" id="settingsBtnTop" aria-label="Settings">⚙</button><div class="status"><span class="dot"></span> Systems online</div></div></header>
+<header class="topbar"><div class="top-left"><button class="mobile-menu icon-btn" id="mobileMenu" aria-label="Open menu">☰</button><div class="top-title" id="modeLabel">Chat mode</div></div><div class="top-actions"><button class="call-btn-pill" id="callBtnTop" title="Munna Bhaiya se Phone Call pe Baat Karein"><span class="call-dot"></span> 📞 Call Munna</button><button class="top-settings icon-btn" id="settingsBtnTop" aria-label="Settings">⚙</button><div class="status"><span class="dot"></span> Systems online</div></div></header>
 <section class="chat" id="chat"><div class="welcome" id="welcome">
   <span class="eyebrow">👑 King of Mirzapur AI Darbar</span>
   <h1>Jalwa Hai Hamara.<br><span class="gradient">Munna AI Darbar.</span></h1>
@@ -37,6 +37,36 @@
 </div>
 <div class="modal" id="authModal"><div class="auth-card"><button class="close" id="closeAuth">×</button><h2>Welcome back.</h2><p>Sign in to sync your Munna AI workspace across devices.</p><div class="field"><label>Email</label><input id="email" type="email" autocomplete="email" placeholder="you@example.com"></div><div class="field"><label>Password</label><input id="password" type="password" autocomplete="current-password" placeholder="••••••••"></div><input id="authMode" type="hidden" value="signin"><button class="primary" id="authSubmit">Sign in</button><div class="divider">OR</div><button class="google" id="google2">Continue with Google</button><button class="google" id="guest">Continue as guest</button><div class="auth-switch"><button class="link" id="switchAuth">Create a new account</button></div></div></div>
 <div class="modal" id="settingsModal"><div class="settings-card"><button class="close" id="closeSettings">×</button><span class="eyebrow">Workspace settings</span><h2>Your Munna profile</h2><p>Personalize your workspace. Cloud sync is available when you are signed in.</p><div class="field"><label>Display name</label><input id="profileName" type="text" maxlength="80" placeholder="Your name"></div><div class="profile-email" id="profileEmail">Guest mode</div><button class="primary" id="saveProfile">Save profile</button><div class="settings-divider"></div><div class="setting-row"><div><b>System diagnostics</b><span>Check backend, AI, image, voice and cloud readiness.</span></div><button class="status-btn" id="diagnosticsBtn">Check now</button></div><div class="diagnostics" id="diagnostics" hidden><div class="diagnostics-head"><div><b>System status</b><span id="diagnosticsUpdated">Not checked yet</span></div><button class="icon-btn" id="diagnosticsRefresh" aria-label="Refresh diagnostics">↻</button></div><div class="status-grid"><div class="status-item" data-check="backend"><span class="status-dot"></span><div><b>Backend</b><small id="statusBackend">Not checked</small></div></div><div class="status-item" data-check="chat"><span class="status-dot"></span><div><b>Chat AI</b><small id="statusChat">Not checked</small></div></div><div class="status-item" data-check="image"><span class="status-dot"></span><div><b>Image</b><small id="statusImage">Not checked</small></div></div><div class="status-item" data-check="tts"><span class="status-dot"></span><div><b>Voice</b><small id="statusTts">Not checked</small></div></div><div class="status-item" data-check="auth"><span class="status-dot"></span><div><b>Authentication</b><small id="statusAuth">Not checked</small></div></div><div class="status-item" data-check="history"><span class="status-dot"></span><div><b>Cloud history</b><small id="statusHistory">Not checked</small></div></div></div></div><div class="settings-divider"></div><div class="setting-row"><div><b>Keyboard shortcut</b><span>Ctrl/⌘ + K focuses the composer.</span></div><kbd>⌘K</kbd></div><div class="setting-row"><div><b>Guest storage</b><span>Remove this browser's guest identifier.</span></div><button class="danger-btn" id="clearGuest">Clear</button></div></div></div>
+<div class="modal call-modal" id="callModal">
+  <div class="call-card">
+    <div class="call-header">
+      <div class="call-brand">👑 Munna Bhaiya</div>
+      <div class="call-timer" id="callTimer">Connecting…</div>
+    </div>
+    <div class="call-avatar-wrap">
+      <div class="call-ripple ripple-1"></div>
+      <div class="call-ripple ripple-2"></div>
+      <div class="call-avatar" id="callAvatar">
+        <span class="avatar-icon">👑</span>
+      </div>
+    </div>
+    <div class="call-status" id="callStatus">Munna Bhaiya se call connect ho raha hai…</div>
+    <div class="call-subtitles-box" id="callSubtitles">
+      <div class="sub-line sub-user" id="subUser"></div>
+      <div class="sub-line sub-ai" id="subAi">"aao be, ka dikkat ho gayi? seedha bol kar baat karo, hum khade hain!"</div>
+    </div>
+    <div class="call-controls">
+      <button type="button" class="call-ctrl-btn mic-toggle" id="callMicBtn" title="Mic Mute / Unmute">
+        <span class="ctrl-icon" id="callMicIcon">🎙️</span>
+        <small id="callMicLabel">Mic On</small>
+      </button>
+      <button type="button" class="call-ctrl-btn end-call" id="callEndBtn" title="Phone Kaato">
+        <span class="ctrl-icon">🔴</span>
+        <small>End Call</small>
+      </button>
+    </div>
+  </div>
+</div>
 <div class="toast" id="toast"></div>
 <script src="/js/app.js"></script><script src="/js/enhance.js"></script><script src="/js/polish.js"></script>
 </body></html>
