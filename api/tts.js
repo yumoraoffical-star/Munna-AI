@@ -2,7 +2,8 @@ import { verifyAuthAndQuota, getCorsHeaders } from './_auth.js';
 
 export const config = { runtime: 'edge' };
 
-const DEFAULT_CARTESIA_VOICE = 'bdab08ad-4137-4548-b9db-6142854c7525';
+// Ishan - Ally: Conversational Hinglish male, perfect for Munna AI
+const DEFAULT_CARTESIA_VOICE = 'fd2ada67-c2d9-4afe-b474-6386b87d8fc3';
 const DEFAULT_ELEVEN_VOICE = 'pNInz6obpgDQGcFmaJgB';
 
 function json(data, status, headers) {
