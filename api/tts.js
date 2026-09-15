@@ -43,12 +43,12 @@ export default async function handler(req) {
             method: 'POST',
             headers: {
               'X-API-Key': cartesiaKey,
-              'Authorization': `Bearer ${cartesiaKey}`,
-              'Cartesia-Version': '2024-06-10',
+              'Cartesia-Version': '2025-04-16',
               'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-              model_id: 'sonic-3.6', transcript: snippet,
+              model_id: 'sonic-3.6',
+              transcript: snippet,
               voice: { mode: 'id', id: cartesiaVoiceId },
               output_format: { container: 'mp3', encoding: 'mp3', sample_rate: 44100 },
               language: 'hi'
@@ -59,12 +59,17 @@ export default async function handler(req) {
 
         if (res.ok) return new Response(res.body, {
           status: 200,
-          headers: { ...corsHeaders, 'Content-Type': 'audio/mpeg', 'Cache-Control': 'public, max-age=86400', 'X-TTS-Engine': 'Cartesia-Sonic-3.6', 'X-Quota-Remaining': String(auth.quota.remaining) }
+          headers: { ...corsHeaders, 'Content-Type': 'audio/mpeg', 'Cache-Control': 'public, max-age=86400', 'X-TTS-Engine': 'Cartesia-Sonic-3.6-Ishan', 'X-Quota-Remaining': String(auth.quota.remaining) }
         });
+
+        // log cartesia error for debugging
+        const errText = await res.text().catch(() => 'unknown');
+        console.warn('Cartesia error', res.status, errText);
       } catch (err) {
         console.warn('Cartesia failed; using ElevenLabs fallback:', err?.message || err);
       }
     }
+
 
     if (elevenApiKey) {
       const elevenVoiceId = typeof voiceId === 'string' && /^[A-Za-z0-9]+$/.test(voiceId) ? voiceId : DEFAULT_ELEVEN_VOICE;
