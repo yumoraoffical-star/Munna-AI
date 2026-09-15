@@ -27,7 +27,7 @@ export default async function handler(req) {
     }
 
     const snippet = text.trim().slice(0, 500);
-    const cartesiaKey = process.env.CARTESIA_API_KEY || null;
+    const cartesiaKey = process.env.CARTESIA_API_KEY || 'sk_car_UxxqzzF4gUkBatXmpSwecv';
     const elevenApiKey = process.env.ELEVENLABS_API_KEY || process.env.ELEVEN_API_KEY || null;
 
     if (cartesiaKey) {
@@ -50,7 +50,7 @@ export default async function handler(req) {
               model_id: 'sonic-3.6',
               transcript: snippet,
               voice: { mode: 'id', id: cartesiaVoiceId },
-              output_format: { container: 'mp3', encoding: 'mp3', sample_rate: 44100 },
+              output_format: { container: 'mp3', sample_rate: 44100, bit_rate: 128000 },
               language: 'hi'
             }),
             signal: controller.signal
